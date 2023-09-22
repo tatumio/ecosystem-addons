@@ -1,0 +1,30 @@
+{
+  "name": "@tatumio/configurable-extension",
+  "version": "1.0.0",
+  "description": "Tatum JS SDK extension with configuration example",
+  "author": "Tatum",
+  "repository": "https://github.com/tatumio/tatum-js/examples/configurable-extension",
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "dist/main.js",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "cli": "ts-node src/cli.ts",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx && prettier --write src/",
+    "clean": "rm -rf dist build package",
+    "ts-node": "ts-node",
+    "build": "node_modules/.bin/tsc -p tsconfig.json",
+    "build-all": "yarn clean && yarn build"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@tatumio/tatum": "^3.1.8",
+    "typescript": "^5.2.2"
+  }
+}

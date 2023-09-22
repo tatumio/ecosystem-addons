@@ -1,0 +1,23 @@
+{
+  "name": "tatum-ts-example",
+  "version": "1.0.5",
+  "description": "",
+  "scripts": {
+    "example": "ts-node src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tatumio/tatum": "^3.1.8",
+    "@tatumio/hello-world": "path_to_local.tgz",
+    "@tatumio/configurable-extension": "path_to_local.tgz.tgz",
+    "bignumber.js": "^9.1.1",
+    "csv-parser": "^3.0.0",
+    "@types/node": "^20.6.3",
+    "fast-csv": "^4.3.6"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
