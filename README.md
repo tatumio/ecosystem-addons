@@ -29,7 +29,7 @@ await tatumSdk.extension(HelloWorldExtension).sayHello()
 await tatumSdk.extension(ConfigurableExtension).sayHelloWithConfiguration()
 ```
 
-## 🛠️ Crafting Extensions
+## 🛠️ Creating Extensions
 
 ### The `TatumSdkExtension` Abstract Class
 
@@ -72,7 +72,7 @@ constructor(tatumSdkContainer: TatumSdkContainer) {
   }
 ```
 
-### Config-Centric Extensions
+### User Configurable Extensions
 
 If your extension needs to be configured by the user, you can pass any object to the extension constructor as the configuration.
 
@@ -106,7 +106,7 @@ The extension lifecycle is managed by the Tatum SDK.
 ## 🎨 Extension Showcases
 
 - 🌍 [Hello World Extension](./examples/hello-world/README.md)
-- ⚙️ [Configurable Extension](./examples/configurable-extension/README.md) - Tailor-made as per user preferences.
+- ⚙️ [Configurable Extension](./examples/configurable-extension/README.md)
 
 ### 📱 App Sample Incorporating Tatum SDK and Extensions
 
