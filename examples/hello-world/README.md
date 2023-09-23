@@ -1,30 +1,30 @@
-# Hello World Extension
+# 🌍 Hello World Extension
 
-Hello World Extension is the most basic extension use case.
+The Hello World Extension serves as a foundational example for extension use cases.
 
-## Description
+## 📖 Description
 
-Hello World Extension provides one method:
+The Hello World Extension offers a singular method:
 
-- `sayHello()` - method prints welcome method and base fee for Ethereum
+- `sayHello()`: This method displays a welcome message and the base fee for Ethereum.
 
-Extension only works with Network.ETHEREUM which is enforced by validation inside it's `init()`
+This extension is exclusively compatible with `Ethereum`, a constraint ensured by the validation within its `init()` method.
 
-## Quick Start
+## 🚀 Quick Start
 
-To create local package follow below steps:
+To package this extension locally, follow these steps:
 
-`yarn install`
+```bash
+yarn install
+yarn build
+yarn pack
+```
 
-`yarn build`
+Remember the output path of the .tgz file, as you'll need it later when updating the `package.json` of your test application.
 
-`yarn pack`
+## 🛠️ How to Use
 
-Take note of the output path for the .tgz file for later use in `package.json` of a test application.
-
-## How to use
-
-In you application you can use the extensions as follows:
+In your application, utilize the extension as depicted below:
 
 ```typescript
 const tatumSdk = await TatumSDK.init<Ethereum>({
@@ -38,7 +38,7 @@ const tatumSdk = await TatumSDK.init<Ethereum>({
 await tatumSdk.extension(HelloWorldExtension).sayHello()
 ```
 
-### Output
+### 🖨️ Output
 
 ```
 [HelloWorldExtension] initialised
@@ -49,6 +49,6 @@ await tatumSdk.extension(HelloWorldExtension).sayHello()
 [HelloWorldExtension] disposed
 ```
 
-## @tatumio/tatum package
+## 📦 @tatumio/tatum Package
 
-Tatum SDK package should be used as a dev dependency in the extension.
+The Tatum SDK package should be set as a dev dependency within the extension.

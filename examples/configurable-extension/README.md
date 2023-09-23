@@ -1,30 +1,30 @@
-# Configurable Extension
+# ⚙️️ Configurable Extension
 
-Configurable Extension is a use case where the extension is configurable by the user.
+The Configurable Extension showcases an example where the extension can be tailored to user preferences.
 
-## Description
+## 📖 Description
 
-Configurable Extension provides one method:
+The Configurable Extension comes equipped with one distinct method:
 
-- `sayHelloWithConfiguration()` - method prints welcome method, base fee for Ethereum and user defined string.
+- `sayHelloWithConfiguration()`: This method displays a welcome message, the base fee for Ethereum, and a user-defined string.
 
-Extension only works with Network.ETHEREUM which is enforced by validation inside it's `init()`
+This extension exclusively operates with `Ethereum`, a requirement validated within its `init()` method.
 
-## Quick Start
+## 🚀 Quick Start
 
-To create local package follow below steps:
+To compile this extension locally, execute the following steps:
 
-`yarn install`
+```bash
+yarn install
+yarn build
+yarn pack
+```
 
-`yarn build`
+Keep a record of the output path for the .tgz file. You'll refer to it when updating the `package.json` of your test application.
 
-`yarn pack`
+## 🛠️ How to Use
 
-Take note of the output path for the .tgz file for later use in `package.json` of a test application.
-
-## How to use
-
-In you application you can use the extensions as follows:
+In your application, incorporate the extension as outlined:
 
 ```typescript
 const tatumSdk = await TatumSDK.init<Ethereum>({
@@ -38,7 +38,7 @@ const tatumSdk = await TatumSDK.init<Ethereum>({
 await tatumSdk.extension(ConfigurableExtension).sayHelloWithConfiguration()
 ```
 
-### Output
+### 🖨️ Output
 
 ```
 [ConfigurableExtension] initialised
@@ -50,6 +50,6 @@ await tatumSdk.extension(ConfigurableExtension).sayHelloWithConfiguration()
 [ConfigurableExtension] disposed
 ```
 
-## @tatumio/tatum package
+## 📦 @tatumio/tatum Package
 
-Tatum SDK package should be used as a dev dependency in the extension.
+The Tatum SDK package should be enlisted as a dev dependency within the extension.

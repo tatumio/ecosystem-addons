@@ -1,37 +1,43 @@
+# 🛠️ Example Application
 
-# Example Application
+This is an example application demonstrating the use of various extensions. Dive in to learn more!
 
-Example Application using below extensions:
+## 📦 Extensions Used
+- [🌍 hello-world](../../examples/hello-world/README.md)
+- [⚙️ configurable-extension](../../examples/configurable-extension/README.md)
 
-- [hello-world](../../examples/hello-world/README.md)
-- [configurable-extension](../../examples/configurable-extension/README.md)
+## 🚀 Quick Start
 
-## Quick Start
-
-### Pack extensions
-For both of above extensions follow respective Quick Start sections and edit `package.json` here with local .tgz paths.
+### 1. Pack the Extensions
+For both extensions mentioned above:
+1. Follow their respective Quick Start sections.
+2. Update the `package.json` with local .tgz paths:
 
 ```
 "@tatumio/hello-world": "path_to_local.tgz",
 "@tatumio/configurable-extension": "path_to_local.tgz",
 ```
 
-then run:
+### 2. Run the Example
 
-`yarn install`
+After setting up, execute the following:
 
-`yarn example`
+```bash
+yarn install
+yarn example
+```
 
-## Description
+## 📖 Description
 
-Application has:
+The application comprises the following packages:
 - @tatumio/tatum
 - @tatumio/hello-world
-- @tatumio/configurable-extension 
+- @tatumio/configurable-extension
 
-packages installed.
+### Initialization
 
-Application first initializes Tatum SDK with two extensions:
+The application initializes Tatum SDK with two extensions:
+
 ```typescript
 const tatumSdk = await TatumSDK.init<Ethereum>({
     network: Network.ETHEREUM_SEPOLIA,
@@ -43,22 +49,28 @@ const tatumSdk = await TatumSDK.init<Ethereum>({
 })
 ```
 
-Then it calls `sayHello()` method from `HelloWorldExtension`:
+### Method Calls
+
+1. It invokes the `sayHello()` method from `HelloWorldExtension`:
 ```typescript
 await tatumSdk.extension(HelloWorldExtension).sayHello()
 ```
 
-Then it calls `sayHelloWithConfiguration()` method from `ConfigurableExtension`:
+2. It then calls the `sayHelloWithConfiguration()` method from `ConfigurableExtension`:
+
 ```typescript
 await tatumSdk.extension(ConfigurableExtension).sayHelloWithConfiguration()
 ```
 
-At the end it disposes the SDK which disposes all extensions:
+### Cleanup
+
+Finally, it disposes the SDK, which also disposes all extensions:
+
 ```typescript
 tatumSdk.dispose()
 ```
 
-### Output
+### 🖨️ Output
 
 ```
 [HelloWorldExtension] initialised
