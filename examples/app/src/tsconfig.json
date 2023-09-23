@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "es2022",
+    "lib": ["es2022", "esnext.disposable", "dom"],
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  },
+  "include": ["../**/*"]
+}
