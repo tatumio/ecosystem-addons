@@ -4,15 +4,15 @@ The Configurable Extension showcases an example where the extension can be tailo
 
 ## 📖 Description
 
-The Configurable Extension comes equipped with one distinct method:
+The Configurable Extension comes equipped with one method:
 
 - `sayHelloWithConfiguration()`: This method displays a welcome message, the base fee for Ethereum, and a user-defined string.
 
-This extension exclusively operates with `Ethereum`, a requirement validated within its `init()` method.
+This extension is exclusively compatible with `Ethereum`, a constraint ensured by the validation within its `init()` method.
 
 ## 🚀 Quick Start
 
-To compile this extension locally, execute the following steps:
+To pack this extension locally, execute the following steps:
 
 ```bash
 yarn install
