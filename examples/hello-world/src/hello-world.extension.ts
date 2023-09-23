@@ -1,4 +1,4 @@
-import { FeeEvm, TatumConfig, TatumSdkExtension, TatumSdkContainer } from "@tatumio/tatum";
+import { FeeEvm, Network, TatumConfig, TatumSdkContainer, TatumSdkExtension } from "@tatumio/tatum"
 
 export class HelloWorldExtension extends TatumSdkExtension {
   private readonly fee: FeeEvm
@@ -12,19 +12,22 @@ export class HelloWorldExtension extends TatumSdkExtension {
 
   async sayHello(){
     const fee = await this.fee.getCurrentFee()
-    console.log(`Hello World`)
-    console.log(`Getting network from TatumSDK configuration: ${this.sdkConfig.network}`)
-    console.log(`Getting base fee for the network from TatumSDK FeeEvm module: ${fee.data.gasPrice.baseFee}`)
-    console.log(`Base Fee for ${this.sdkConfig.network} is ${fee.data.gasPrice.baseFee}`)
+    console.log(`[HelloWorldExtension] Hello World`)
+    console.log(`[HelloWorldExtension] Getting network from TatumSDK configuration: ${this.sdkConfig.network}`)
+    console.log(`[HelloWorldExtension] Getting base fee for the network from TatumSDK FeeEvm module: ${fee.data.gasPrice.baseFee}`)
+    console.log(`[HelloWorldExtension] Base Fee for ${this.sdkConfig.network} is ${fee.data.gasPrice.baseFee}`)
   }
 
   init(): Promise<void> {
-    console.log(`HelloWorldExtension initialised`)
-    return Promise.resolve(undefined);
+    if (this.sdkConfig.network === Network.ETHEREUM || this.sdkConfig.network === Network.ETHEREUM_SEPOLIA) {
+      console.log(`[HelloWorldExtension] initialised`)
+      return Promise.resolve(undefined)
+    }
+    throw new Error(`HelloWorldExtension only supports ${Network.ETHEREUM} network`)
   }
 
   destroy(): void {
-    console.log(`HelloWorldExtension disposed`)
+    console.log(`[HelloWorldExtension] disposed`)
   }
 }
 
