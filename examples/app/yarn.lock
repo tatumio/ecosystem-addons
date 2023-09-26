@@ -52,18 +52,18 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@tatumio/configurable-extension@file:../Sandbox/ecosystem-addons/examples/configurable-extension/tatumio-configurable-extension-v1.0.0.tgz":
-  version "1.0.0"
-  resolved "file:../Sandbox/ecosystem-addons/examples/configurable-extension/tatumio-configurable-extension-v1.0.0.tgz#2094060f01aa8b912d2d89cbe85d11233e36fe50"
+"@tatumio/configurable-extension@file:../configurable-extension/tatumio-configurable-extension-v1.0.1.tgz":
+  version "1.0.1"
+  resolved "file:../configurable-extension/tatumio-configurable-extension-v1.0.1.tgz#d498800f676b8587dfa6640abb589f46a465d76e"
 
-"@tatumio/hello-world@file:../Sandbox/ecosystem-addons/examples/hello-world/tatumio-hello-world-v1.0.100.tgz":
-  version "1.0.100"
-  resolved "file:../Sandbox/ecosystem-addons/examples/hello-world/tatumio-hello-world-v1.0.100.tgz#3daeb2c53a7919c2b48eb8eaf34b78dfcbcbd03a"
+"@tatumio/hello-world@file:../hello-world/tatumio-hello-world-v1.0.1.tgz":
+  version "1.0.1"
+  resolved "file:../hello-world/tatumio-hello-world-v1.0.1.tgz#e9946cc79a25975e959c9fe1d5e4fd51a93359d0"
 
-"@tatumio/tatum@^3.1.8":
-  version "3.1.8"
-  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-3.1.8.tgz#ca03380bb4d84b4d3bd6566815c14005cce171fa"
-  integrity sha512-uahqg0Khl4ZSawsOnFdfLZeneTZLYn6OytFmVjaprdfC507uPwTrk/rqKIfPxtON03VYwkO4EECkWE83zncwoA==
+"@tatumio/tatum@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.0.0.tgz#11fbb7387975a6ae31208c18de9d5a78cc36f357"
+  integrity sha512-jYgBUOWaH20622F7zX9w9Qoj7tO5+q+KtLLBwgWw9uS+Lt2LmCdNLuw/1SYRz13nVymKupC5QDGGxFOT/fNfXQ==
   dependencies:
     bignumber.js "^9.1.1"
     reflect-metadata "^0.1.13"
