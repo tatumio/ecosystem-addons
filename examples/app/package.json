@@ -8,9 +8,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tatumio/tatum": "^3.1.8",
-    "@tatumio/hello-world": "path_to_local.tgz",
-    "@tatumio/configurable-extension": "path_to_local.tgz",
+    "@tatumio/tatum": "^4.0.0",
+    "@tatumio/hello-world": "/Users/piotrsmreczynski/Sandbox/ecosystem-addons/examples/hello-world/tatumio-hello-world-v1.0.101.tgz",
+    "@tatumio/configurable-extension": "/Users/piotrsmreczynski/Sandbox/ecosystem-addons/examples/configurable-extension/tatumio-configurable-extension-v1.0.1.tgz",
     "bignumber.js": "^9.1.1",
     "csv-parser": "^3.0.0",
     "@types/node": "^20.6.3",

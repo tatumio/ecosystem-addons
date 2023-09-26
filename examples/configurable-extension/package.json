@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/configurable-extension",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tatum JS SDK extension with configuration example",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/tatum-js/examples/configurable-extension",
@@ -24,7 +24,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@tatumio/tatum": "^3.1.8",
+    "@tatumio/tatum": "^4.0.0",
     "typescript": "^5.2.2"
   }
 }

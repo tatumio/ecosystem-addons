@@ -31,7 +31,7 @@ await tatumSdk.extension(ConfigurableExtension).sayHelloWithConfiguration()
 
 ## 🛠️ Creating Extensions
 
-### The `TatumSdkExtension` Abstract Class
+### `TatumSdkExtension` Abstract Class
 
 All extensions must extend the `TatumSdkExtension` abstract class. 
 This class provides the following:
@@ -39,7 +39,7 @@ This class provides the following:
 ```typescript
 export abstract class TatumSdkExtension {
     protected constructor(
-        protected readonly tatumSdkContainer: TatumSdkContainer) {
+        protected readonly tatumSdkContainer: ITatumSdkContainer) {
     }
 
     abstract init(...args: unknown[]): Promise<void>
@@ -51,9 +51,9 @@ export abstract class TatumSdkExtension {
 - The `destroy` method is called during Tatum SDK destruction.
 - The `tatumSdkContainer` property provides access to the instance specific `TatumSdkContainer`.
 
-### `TatumSdkContainer` Class
+### `ITatumSdkContainer` Interface
 
-The `TatumSdkContainer` class provides access to the SDK configuration and internal sub-modules along with other registered extensions.
+The `ITatumSdkContainer` interface provides access to the SDK configuration and internal sub-modules along with other registered extensions.
 
 ```typescript
 export interface ITatumSdkContainer {
@@ -65,7 +65,7 @@ export interface ITatumSdkContainer {
 Example of extension constructor for extension depending on SDK configuration and `FeeEvm` sub-module:
 
 ```
-constructor(tatumSdkContainer: TatumSdkContainer) {
+constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
     this.fee = this.tatumSdkContainer.get(FeeEvm)
     this.sdkConfig = this.tatumSdkContainer.getConfig()
@@ -77,7 +77,7 @@ constructor(tatumSdkContainer: TatumSdkContainer) {
 If your extension needs to be configured by the user, you can pass any object to the extension constructor as the configuration.
 
 ```
-constructor(tatumSdkContainer: TatumSdkContainer, private readonly config: { configurationValue: string }) {
+constructor(tatumSdkContainer: ITatumSdkContainer, private readonly config: { configurationValue: string }) {
     super(tatumSdkContainer)
     this.fee = this.tatumSdkContainer.get(FeeEvm)
     this.sdkConfig = this.tatumSdkContainer.getConfig()

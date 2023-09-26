@@ -1,10 +1,10 @@
-import { FeeEvm, TatumConfig, TatumSdkExtension, TatumSdkContainer, Network } from "@tatumio/tatum"
+import { FeeEvm, TatumConfig, TatumSdkExtension, ITatumSdkContainer, Network } from "@tatumio/tatum"
 
 export class ConfigurableExtension extends TatumSdkExtension {
   private readonly fee: FeeEvm
   private readonly sdkConfig: TatumConfig
 
-  constructor(tatumSdkContainer: TatumSdkContainer, private readonly config: { configurationValue: string }) {
+  constructor(tatumSdkContainer: ITatumSdkContainer, private readonly config: { configurationValue: string }) {
     super(tatumSdkContainer)
     this.fee = this.tatumSdkContainer.get(FeeEvm)
     this.sdkConfig = this.tatumSdkContainer.getConfig()
