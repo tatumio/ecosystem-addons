@@ -1,22 +1,4 @@
 import { Network } from '@tatumio/tatum'
-import { hdkey } from 'ethereumjs-wallet'
-import { mnemonicToSeed } from 'bip39'
-
-export type XpubWithMnemonic = {
-  xpub: string
-  mnemonic: string
-  derivationPath: string
-}
-
-export type EvmWallet = {
-  address: string
-  privateKey: string
-  mnemonic: string
-}
-
-export type TxPayload = {
-  [key: string]: unknown
-}
 
 export const ADDR_PREFIX = '0x'
 
@@ -82,12 +64,3 @@ export const getDefaultDerivationPath = (network: Network) => {
       return "m/44'/1'/0'/0"
   }
 }
-
-export const getHd = async (mnemonic: string, path: string) => {
-  const seed = await mnemonicToSeed(mnemonic)
-  const hdwallet = hdkey.fromMasterSeed(seed)
-
-  return hdwallet.derivePath(path)
-}
-
-export const getWalletFromHd = (hd: hdkey, index: number) => hd.deriveChild(index).getWallet()

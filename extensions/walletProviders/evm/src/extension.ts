@@ -2,17 +2,12 @@ import { TatumConfig, ITatumSdkContainer, TatumSdkWalletProvider } from '@tatumi
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 
-import {
-  ADDR_PREFIX,
-  EvmWallet,
-  getDefaultDerivationPath,
-  getHd,
-  getWalletFromHd,
-  TxPayload,
-  XpubWithMnemonic,
-} from './evm-wallet.utils'
+import { ADDR_PREFIX, getDefaultDerivationPath } from './consts'
+import { EvmTxPayload, EvmWallet, XpubWithMnemonic } from './types'
+import { getHd, getWalletFromHd } from './utils'
 
-export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, TxPayload> {
+export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPayload> {
+  // TODO: Add activeUrl from LoadBalancer
   private readonly sdkConfig: TatumConfig
 
   constructor(tatumSdkContainer: ITatumSdkContainer) {
@@ -71,7 +66,7 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, TxPayloa
     return { address, privateKey, mnemonic } as EvmWallet
   }
 
-  public async signAndBroadcast(payload: TxPayload): Promise<string> {
+  public async signAndBroadcast(payload: EvmTxPayload): Promise<string> {
     // TODO: Replace with proper implementation
     console.log(payload)
     return 'TxId'
