@@ -96,6 +96,30 @@ const tatumSdk = await TatumSDK.init<Ethereum>({
 })
 ```
 
+### Wallet Provider Extensions
+
+Wallet Provider Extensions is a special type of extension built on top of generic extension.
+
+It provides a way to integrate with the Tatum SDK Wallet Provider accessible via `tatum.walletProvider.use()`.
+
+Wallet Provider Extensions must extend the `TatumSdkWalletProvider<T,P>` abstract class - [check it here](https://github.com/tatumio/tatum-js/blob/master/src/service/extensions/tatumsdk.wallet.providers.dto.ts).
+
+Then it can be used like this:
+
+```typescript
+import { TatumSDK, Ethereum, Network, ApiVersion } from '@tatumio/tatum'
+import { HelloWorldExtension } from "@tatumio/wallet-provider-demo"
+
+const tatumSdk = await TatumSDK.init<Ethereum>({
+    network: Network.ETHEREUM_SEPOLIA,
+    configureWalletProviders: [
+        WalletProviderDemo,
+    ]
+})
+
+await tatumSdk.walletProvider.use(WalletProviderDemo).getWallet()
+```
+
 ### 🔄 Extension Lifecycle
 
 The extension lifecycle is managed by the Tatum SDK.
