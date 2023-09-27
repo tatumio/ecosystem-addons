@@ -22,10 +22,10 @@
   resolved "https://registry.yarnpkg.com/@noble/secp256k1/-/secp256k1-1.7.1.tgz#b251c70f824ce3ca7f8dc3df08d58f005cc0507c"
   integrity sha512-hOUk6AyBFmqVrv7k5WAw/LpszxVbj9gGN4JRkIX52fdFAj1UA61KXmZDvqVEm+pOyec3+fIeZB02LYa/pWOArw==
 
-"@tatumio/tatum@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.0.0.tgz#11fbb7387975a6ae31208c18de9d5a78cc36f357"
-  integrity sha512-jYgBUOWaH20622F7zX9w9Qoj7tO5+q+KtLLBwgWw9uS+Lt2LmCdNLuw/1SYRz13nVymKupC5QDGGxFOT/fNfXQ==
+"@tatumio/tatum@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.0.1.tgz#8bc32215202f34f4063bf392ff52fa668d4e5764"
+  integrity sha512-SPI/+J45zDFGKMtcM71XGgBvoMukNDcIafo6qfnXxO7HQrgzpDCEyyFjv6cCjP2V8hP6wNqdUpb54jjWHYpmBw==
   dependencies:
     bignumber.js "^9.1.1"
     reflect-metadata "^0.1.13"

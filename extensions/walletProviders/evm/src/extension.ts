@@ -96,13 +96,4 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
 
     return txResponse.hash
   }
-
-  init(): Promise<void> {
-    console.log(`[EvmWalletExtension] initialised`)
-    return Promise.resolve(undefined)
-  }
-
-  destroy(): void {
-    console.log(`[EvmWalletExtension] disposed`)
-  }
 }
