@@ -12,15 +12,13 @@ This extension is exclusively compatible with `Ethereum`, a constraint ensured b
 
 ## 🚀 Quick Start
 
-To pack this extension locally, execute the following steps:
+Install the package in your application that is using `@tatumio/tatum` SDK already in a way of your choice, e.g.:
 
-```bash
-yarn install
-yarn build
-yarn pack
-```
+`npm install @tatumio/configurable-extension`
 
-Keep a record of the output path for the .tgz file. You'll refer to it when updating the `package.json` of your test application.
+OR
+
+`yarn add @tatumio/configurable-extension`
 
 ## 🛠️ How to Use
 

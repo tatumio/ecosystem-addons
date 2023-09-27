@@ -52,13 +52,15 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@tatumio/configurable-extension@file:../configurable-extension/tatumio-configurable-extension-v1.0.1.tgz":
-  version "1.0.1"
-  resolved "file:../configurable-extension/tatumio-configurable-extension-v1.0.1.tgz#d498800f676b8587dfa6640abb589f46a465d76e"
+"@tatumio/configurable-extension@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@tatumio/configurable-extension/-/configurable-extension-1.0.3.tgz#9530cfde98a6954f7e428c7e07663bfad1c94733"
+  integrity sha512-3D++YfQtzor3KuVkD0U1HitX/JSptizDIeMuDeZsi9XBwGTfosggenhQT8pxu7VKksozNzJA7uS1h4lXUU8oKg==
 
-"@tatumio/hello-world@file:../hello-world/tatumio-hello-world-v1.0.1.tgz":
-  version "1.0.1"
-  resolved "file:../hello-world/tatumio-hello-world-v1.0.1.tgz#e9946cc79a25975e959c9fe1d5e4fd51a93359d0"
+"@tatumio/hello-world@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@tatumio/hello-world/-/hello-world-1.0.3.tgz#9dc053196ff97fe384eb1b5cea22ab411fde1b7b"
+  integrity sha512-vlo8jJ/J79pOOKkbniz8vyBnU7WgWZ75aMM/hCDHi7GBiE1Uui5E6eNSGyfa7LDu9VKC2Zo66cuCsph2rWIirQ==
 
 "@tatumio/tatum@v4.0.1":
   version "4.0.1"

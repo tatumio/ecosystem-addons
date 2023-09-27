@@ -8,20 +8,6 @@ This is an example application demonstrating the use of various extensions. Dive
 
 ## 🚀 Quick Start
 
-### 1. Pack the Extensions
-For both extensions mentioned above:
-1. Follow their respective Quick Start sections.
-2. Update Example Application's `package.json` with local .tgz paths:
-
-```
-"@tatumio/hello-world": "path_to_local.tgz",
-"@tatumio/configurable-extension": "path_to_local.tgz",
-```
-
-### 2. Run the Example
-
-After setting up, execute the following:
-
 ```bash
 yarn install
 yarn example
