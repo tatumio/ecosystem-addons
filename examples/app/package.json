@@ -8,7 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tatumio/tatum": "^4.0.0",
+    "@tatumio/tatum": "v4.0.1",
     "@tatumio/hello-world": "path_to_local.tgz",
     "@tatumio/configurable-extension": "path_to_local.tgz",
     "bignumber.js": "^9.1.1",

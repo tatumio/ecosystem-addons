@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/hello-world",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Tatum JS SDK extension example",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/tatum-js/examples/hello-world",
@@ -24,7 +24,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@tatumio/tatum": "^4.0.0",
+    "@tatumio/tatum": "v4.0.1",
     "typescript": "^5.2.2"
   }
 }

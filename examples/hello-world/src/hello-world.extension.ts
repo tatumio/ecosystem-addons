@@ -26,8 +26,9 @@ export class HelloWorldExtension extends TatumSdkExtension {
     throw new Error(`HelloWorldExtension only supports ${Network.ETHEREUM} network`)
   }
 
-  destroy(): void {
+  destroy(): Promise<void> {
     console.log(`[HelloWorldExtension] disposed`)
+    return Promise.resolve(undefined)
   }
 }
 

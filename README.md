@@ -42,13 +42,13 @@ export abstract class TatumSdkExtension {
         protected readonly tatumSdkContainer: ITatumSdkContainer) {
     }
 
-    abstract init(...args: unknown[]): Promise<void>
-    abstract destroy(): void
+    init(): Promise<void> { return Promise.resolve(undefined) }
+    destroy(): Promise<void> { return Promise.resolve(undefined) }
 }
 ```
 
-- The `init` method is called and awaited during Tatum SDK initialization.
-- The `destroy` method is called during Tatum SDK destruction.
+- The `init` method is called and awaited during Tatum SDK initialization - **override if needed**.
+- The `destroy` method is called and awaited during Tatum SDK destruction - **override if needed**.
 - The `tatumSdkContainer` property provides access to the instance specific `TatumSdkContainer`.
 
 ### `ITatumSdkContainer` Interface
@@ -125,7 +125,9 @@ await tatumSdk.walletProvider.use(WalletProviderDemo).getWallet()
 The extension lifecycle is managed by the Tatum SDK.
 
 - The `init` method is called and awaited during Tatum SDK initialization.
-- The `destroy` method is called during Tatum SDK destruction.
+- The `destroy` method is called and awaited during Tatum SDK destruction.
+
+Base `TatumSdkExtension` includes empty implementation of those methods, if your extension require some initialization or destruction logic, you can override those methods.
 
 ## 🎨 Extension Showcases
 

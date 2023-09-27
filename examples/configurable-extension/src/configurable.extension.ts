@@ -27,8 +27,9 @@ export class ConfigurableExtension extends TatumSdkExtension {
     throw new Error(`ConfigurableExtension only supports ${Network.ETHEREUM} network`)
   }
 
-  destroy(): void {
+  destroy(): Promise<void> {
     console.log(`[ConfigurableExtension] disposed`)
+    return Promise.resolve(undefined)
   }
 }
 
