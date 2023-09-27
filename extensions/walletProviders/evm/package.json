@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "bip39": "^3.1.0",
-    "ethereumjs-wallet": "^1.0.2"
+    "ethereumjs-wallet": "^1.0.2",
+    "ethers": "^6.7.1"
   },
   "devDependencies": {
     "@tatumio/tatum": "^4.0.0",
