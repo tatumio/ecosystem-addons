@@ -1,6 +1,7 @@
-import { FeeEvm, Network, TatumConfig, ITatumSdkContainer, TatumSdkExtension } from "@tatumio/tatum"
+import { FeeEvm, Network, TatumConfig, ITatumSdkContainer, TatumSdkExtension, EVM_BASED_NETWORKS } from "@tatumio/tatum"
 
 export class HelloWorldExtension extends TatumSdkExtension {
+  supportedNetworks: Network[] = EVM_BASED_NETWORKS
   private readonly fee: FeeEvm
   private readonly sdkConfig: TatumConfig
 

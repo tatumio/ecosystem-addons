@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@tatumio/tatum@v4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.0.1.tgz#8bc32215202f34f4063bf392ff52fa668d4e5764"
-  integrity sha512-SPI/+J45zDFGKMtcM71XGgBvoMukNDcIafo6qfnXxO7HQrgzpDCEyyFjv6cCjP2V8hP6wNqdUpb54jjWHYpmBw==
+"@tatumio/tatum@v4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.0.4.tgz#a8a1fc26219243f2d29e2f7746b554862fa69c63"
+  integrity sha512-PAYFqoCnrr6rz0mGSjgt5d86CKCrpcsa0zagD2HHTjG2468RhI3iXVw/BtJeSiO60HA6DK7ZBsLYJwHZ+oy9lw==
   dependencies:
     bignumber.js "^9.1.1"
     reflect-metadata "^0.1.13"

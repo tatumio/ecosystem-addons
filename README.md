@@ -42,6 +42,8 @@ export abstract class TatumSdkExtension {
         protected readonly tatumSdkContainer: ITatumSdkContainer) {
     }
 
+    abstract supportedNetworks: Network[]
+
     init(): Promise<void> { return Promise.resolve(undefined) }
     destroy(): Promise<void> { return Promise.resolve(undefined) }
 }
@@ -50,6 +52,7 @@ export abstract class TatumSdkExtension {
 - The `init` method is called and awaited during Tatum SDK initialization - **override if needed**.
 - The `destroy` method is called and awaited during Tatum SDK destruction - **override if needed**.
 - The `tatumSdkContainer` property provides access to the instance specific `TatumSdkContainer`.
+- The `supportedNetworks` property needs to be implemented by the extension defining list of supported networks.
 
 ### `ITatumSdkContainer` Interface
 

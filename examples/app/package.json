@@ -8,9 +8,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tatumio/tatum": "v4.0.1",
-    "@tatumio/hello-world": "^1.0.3",
-    "@tatumio/configurable-extension": "^1.0.3",
+    "@tatumio/tatum": "v4.0.4",
+    "@tatumio/hello-world": "^1.0.5",
+    "@tatumio/configurable-extension": "^1.0.5",
     "bignumber.js": "^9.1.1",
     "csv-parser": "^3.0.0",
     "@types/node": "^20.6.3",
