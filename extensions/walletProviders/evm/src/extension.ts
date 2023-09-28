@@ -1,6 +1,8 @@
 import {
+  EVM_BASED_NETWORKS,
   ITatumSdkContainer,
   LoadBalancer,
+  Network,
   RpcNodeType,
   TatumConfig,
   TatumSdkWalletProvider,
@@ -9,11 +11,12 @@ import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { ethers } from 'ethers'
 
-import { ADDR_PREFIX, getDefaultDerivationPath } from './consts'
+import { ADDR_PREFIX } from './consts'
 import { EvmTxPayload, EvmWallet, XpubWithMnemonic } from './types'
-import { getHd, getWalletFromHd } from './utils'
+import { getHd, getWalletFromHd, getDefaultDerivationPath } from './utils'
 
 export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPayload> {
+  supportedNetworks: Network[] = EVM_BASED_NETWORKS
   private readonly sdkConfig: TatumConfig
   private readonly loadBalancer: LoadBalancer
 
