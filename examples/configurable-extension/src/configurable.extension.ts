@@ -1,6 +1,7 @@
-import { FeeEvm, TatumConfig, TatumSdkExtension, ITatumSdkContainer, Network } from "@tatumio/tatum"
+import { FeeEvm, TatumConfig, TatumSdkExtension, ITatumSdkContainer, Network, EVM_BASED_NETWORKS } from "@tatumio/tatum"
 
 export class ConfigurableExtension extends TatumSdkExtension {
+  supportedNetworks: Network[] = EVM_BASED_NETWORKS
   private readonly fee: FeeEvm
   private readonly sdkConfig: TatumConfig
 
