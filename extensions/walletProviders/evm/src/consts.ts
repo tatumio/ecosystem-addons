@@ -35,5 +35,34 @@ export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.VECHAIN, "m/44'/818'/0'/0"],
   [Network.XDC, "m/44'/550'/0'/0"],
   [Network.XRP, "m/44'/144'/0'/0"],
-  [Network.ZILLIQA, "m/44'/313'/0'/0"]
+  [Network.ZILLIQA, "m/44'/313'/0'/0"],
+  [Network.ETHEREUM_SEPOLIA, "TODO"], //TODO: missing
+  [Network.ETHEREUM_GOERLI, "TODO"], //TODO: missing
+  [Network.AVALANCHE_C_TESTNET, "TODO"], //TODO: missing
+  [Network.POLYGON_MUMBAI, "TODO"], //TODO: missing
+  [Network.GNOSIS_TESTNET, "TODO"], //TODO: missing
+  [Network.FANTOM_TESTNET, "TODO"], //TODO: missing
+  [Network.AURORA_TESTNET, "TODO"], //TODO: missing
+  [Network.CELO_ALFAJORES, "TODO"], //TODO: missing
+  [Network.BINANCE_SMART_CHAIN_TESTNET, "TODO"], //TODO: missing
+  [Network.VECHAIN_TESTNET, "TODO"], //TODO: missing
+  [Network.XDC_TESTNET, "TODO"], //TODO: missing
+  [Network.PALM, "TODO"], //TODO: missing
+  [Network.PALM_TESTNET, "TODO"], //TODO: missing
+  [Network.CRONOS, "TODO"], //TODO: missing
+  [Network.CRONOS_TESTNET, "TODO"], //TODO: missing
+  [Network.KUCOIN_TESTNET, "TODO"], //TODO: missing
+  [Network.OASIS_TESTNET, "TODO"], //TODO: missing
+  [Network.OPTIMISM, "TODO"], //TODO: missing
+  [Network.OPTIMISM_TESTNET, "TODO"], //TODO: missing
+  [Network.HARMONY_ONE_TESTNET_SHARD_0, "TODO"], //TODO: missing
+  [Network.KLAYTN_BAOBAB, "TODO"], //TODO: missing
+  [Network.FLARE_COSTON, "TODO"], //TODO: missing
+  [Network.FLARE_COSTON_2, "TODO"], //TODO: missing
+  [Network.FLARE, "TODO"], //TODO: missing
+  [Network.FLARE_SONGBIRD, "TODO"], //TODO: missing
+  [Network.HAQQ_TESTNET, "TODO"], //TODO: missing
+  [Network.ARBITRUM_NOVA_TESTNET, "TODO"], //TODO: missing
+  [Network.HORIZEN_EON_GOBI, "TODO"], //TODO: missing
+  [Network.CHILIZ, "TODO"] //TODO: missing
 ])

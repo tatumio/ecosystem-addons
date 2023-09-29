@@ -15,7 +15,7 @@ import { ADDR_PREFIX } from './consts'
 import { EvmTxPayload, EvmWallet, XpubWithMnemonic } from './types'
 import { getHd, getWalletFromHd, getDefaultDerivationPath } from './utils'
 
-export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPayload> {
+export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPayload> {
   supportedNetworks: Network[] = EVM_BASED_NETWORKS
   private readonly sdkConfig: TatumConfig
   private readonly loadBalancer: LoadBalancer
@@ -26,12 +26,23 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
     this.loadBalancer = this.tatumSdkContainer.get(LoadBalancer)
   }
 
-  // TODO: Add comments and proper README
-
+  /**
+   * Generates a mnemonic seed phrase.
+   * @returns {string} A mnemonic seed phrase.
+   */
   public generateMnemonic() {
     return bip39GenerateMnemonic(256)
   }
 
+
+  /**
+   * Generates an extended public key (xpub) based on a mnemonic and a derivation path.
+   * If no mnemonic is provided, it is generated.
+   * If no derivation path is provided, default is used.
+   * @param {string} [mnemonic] - The mnemonic seed phrase.
+   * @param {string} [path] - The derivation path.
+   * @returns {XpubWithMnemonic} An object containing xpub, mnemonic, and derivation path.
+   */
   public async generateXpub(mnemonic?: string, path?: string) {
     mnemonic = mnemonic || this.generateMnemonic()
     path = path || getDefaultDerivationPath(this.sdkConfig.network)
@@ -44,6 +55,14 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
     } as XpubWithMnemonic
   }
 
+  /**
+   * Generates a private key based on a mnemonic, index, and a derivation path.
+   * If no derivation path is provided, default is used.
+   * @param {string} mnemonic - The mnemonic seed phrase.
+   * @param {number} index - The index to derive the private key from.
+   * @param {string} [path] - The derivation path.
+   * @returns {string} A private key in string format.
+   */
   public async generatePrivateKeyFromMnemonic(mnemonic: string, index: number, path?: string) {
     const hd = await getHd(mnemonic, path || getDefaultDerivationPath(this.sdkConfig.network))
     const wallet = getWalletFromHd(hd, index)
@@ -51,6 +70,14 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
     return wallet.getPrivateKeyString()
   }
 
+  /**
+   * Generates an address based on a mnemonic, index, and a derivation path.
+   * If no derivation path is provided, default is used.
+   * @param {string} mnemonic - The mnemonic seed phrase.
+   * @param {number} index - The index to derive the address from.
+   * @param {string} [path] - The derivation path.
+   * @returns {string} An Ethereum address in string format.
+   */
   public async generateAddressFromMnemonic(mnemonic: string, index: number, path?: string) {
     const hd = await getHd(mnemonic, path || getDefaultDerivationPath(this.sdkConfig.network))
     const wallet = getWalletFromHd(hd, index)
@@ -58,6 +85,12 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
     return wallet.getAddressString()
   }
 
+  /**
+   * Generates an address from an extended public key (xpub) and an index.
+   * @param {string} xpub - The extended public key.
+   * @param {number} index - The index to derive the address from.
+   * @returns {string} An Ethereum address in string format.
+   */
   public generateAddressFromXpub(xpub: string, index: number) {
     const hd = hdkey.fromExtendedKey(xpub)
     const wallet = getWalletFromHd(hd, index)
@@ -65,12 +98,21 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
     return wallet.getAddressString()
   }
 
+  /**
+   * Generates an address from a given private key.
+   * @param {string} privateKey - The private key in string format.
+   * @returns {string} An Ethereum address in string format.
+   */
   public generateAddressFromPrivateKey(privateKey: string) {
     const wallet = ethWallet.fromPrivateKey(Buffer.from(privateKey.replace(ADDR_PREFIX, ''), 'hex'))
 
     return wallet.getAddressString()
   }
 
+  /**
+   * Generates an EVM-compatible wallet, which includes an address, private key, and a mnemonic.
+   * @returns {EvmWallet} An object containing address, private key, and mnemonic.
+   */
   public async getWallet() {
     const mnemonic = this.generateMnemonic()
     const privateKey = await this.generatePrivateKeyFromMnemonic(mnemonic, 0)
@@ -79,6 +121,11 @@ export class EvmWalletService extends TatumSdkWalletProvider<EvmWallet, EvmTxPay
     return { address, privateKey, mnemonic } as EvmWallet
   }
 
+  /**
+   * Signs and broadcasts an EVM transaction payload.
+   * @param {EvmTxPayload} payload - The EVM transaction payload, which includes private key and transaction details.
+   * @returns {Promise<string>} A promise that resolves to the transaction hash.
+   */
   public async signAndBroadcast(payload: EvmTxPayload): Promise<string> {
     const { privateKey, ...tx } = payload
 
