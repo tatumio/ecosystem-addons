@@ -2,7 +2,7 @@ import { Network } from '@tatumio/tatum'
 
 export const ADDR_PREFIX = '0x'
 
-export const DEFAULT_DERIVATION_PATH = "m/44'/1'/0'/0"
+export const TESTNET_DERIVATION_PATH = "m/44'/1'/0'/0"
 
 const EVM_DERIVATION_PATH_COMMON = "m/44'/60'/0'/0"
 
