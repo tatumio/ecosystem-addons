@@ -4,7 +4,6 @@ export const ADDR_PREFIX = '0x'
 
 export const DEFAULT_DERIVATION_PATH = "m/44'/1'/0'/0"
 
-// TODO: Needs to be double checked, e.g. kucoin, horizen or bsc / missing cronos or palm
 const EVM_DERIVATION_PATH_COMMON = "m/44'/60'/0'/0"
 
 export const DERIVATION_PATHS = new Map<Network, string>([
@@ -12,7 +11,7 @@ export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.ARBITRUM_ONE, EVM_DERIVATION_PATH_COMMON],
   [Network.AURORA, EVM_DERIVATION_PATH_COMMON],
   [Network.AVALANCHE_C, "m/44'/9005'/0'/0"],
-  [Network.BINANCE_SMART_CHAIN, EVM_DERIVATION_PATH_COMMON],
+  [Network.BINANCE_SMART_CHAIN, "m/44'/9006'/0'/0"],
   [Network.CELO, "m/44'/52752'/0'/0"],
   [Network.CHILIZ, "m/44'/2182'/0'/0"],
   [Network.CRONOS, "m/44'/394'/0'/0"],
@@ -25,7 +24,7 @@ export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.HARMONY_ONE_SHARD_0, "m/44'/1023'/0'/0"],
   [Network.HORIZEN_EON, "m/44'/121'/0'/0"],
   [Network.KLAYTN, "m/44'/8217'/0'/0"],
-  [Network.KUCOIN, EVM_DERIVATION_PATH_COMMON],
+  [Network.KUCOIN, "m/44'/641'/0'/0"],
   [Network.OASIS, "m/44'/474'/0'/0'"],
   [Network.OPTIMISM, EVM_DERIVATION_PATH_COMMON],
   [Network.PALM, EVM_DERIVATION_PATH_COMMON],
