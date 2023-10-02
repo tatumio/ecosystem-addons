@@ -1,0 +1,33 @@
+{
+  "name": "@tatumio/evm-wallet-provider",
+  "version": "1.0.0",
+  "description": "EVM provider with local wallet operations",
+  "author": "Tatum",
+  "repository": "https://github.com/tatumio/tatum-js/extensions/walletProviders/evm",
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "dist/main.js",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "cli": "ts-node src/cli.ts",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx && prettier --write src/",
+    "clean": "rm -rf dist build package",
+    "ts-node": "ts-node",
+    "build": "node_modules/.bin/tsc -p tsconfig.json",
+    "build-all": "yarn clean && yarn build"
+  },
+  "dependencies": {
+    "bip39": "^3.1.0",
+    "ethereumjs-wallet": "^1.0.2",
+    "ethers": "^6.7.1"
+  },
+  "devDependencies": {
+    "@tatumio/tatum": "^4.0.4",
+    "typescript": "^5.2.2"
+  }
+}
