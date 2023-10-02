@@ -32,7 +32,6 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
     return bip39GenerateMnemonic(256)
   }
 
-
   /**
    * Generates an extended public key (xpub) based on a mnemonic and a derivation path.
    * If no mnemonic is provided, it is generated.
@@ -128,7 +127,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
     const { privateKey, ...tx } = payload
 
     const rpcNode = this.loadBalancer.getActiveUrl(RpcNodeType.NORMAL)
-    const provider = new ethers.JsonRpcProvider(rpcNode.url)
+    const provider = new ethers.JsonRpcProvider(rpcNode.url, undefined, { batchMaxCount: 1, batchMaxSize: 1 })
     const signer = new ethers.Wallet(privateKey, provider)
 
     const txRequest = {
@@ -139,8 +138,8 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
         payload.maxPriorityFeePerGas && ethers.parseUnits(payload.maxPriorityFeePerGas, 'gwei'),
       maxFeePerGas: payload.maxFeePerGas && ethers.parseUnits(payload.maxFeePerGas, 'gwei'),
     }
-
     const txResponse = await signer.sendTransaction(txRequest)
+    provider.destroy()
 
     return txResponse.hash
   }
