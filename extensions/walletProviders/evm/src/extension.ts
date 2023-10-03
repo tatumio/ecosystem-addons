@@ -127,7 +127,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
     const { privateKey, ...tx } = payload
 
     const rpcNode = this.loadBalancer.getActiveUrl(RpcNodeType.NORMAL)
-    const provider = new ethers.JsonRpcProvider(rpcNode.url, undefined, { batchMaxCount: 1, batchMaxSize: 1 })
+    const provider = new ethers.JsonRpcProvider(rpcNode.url, undefined, { batchMaxCount: 1 })
     const signer = new ethers.Wallet(privateKey, provider)
 
     const txRequest = {
