@@ -1,40 +1,40 @@
 import { ec as EC } from 'elliptic'
 import { keccak_256 } from 'js-sha3'
 
-const hexChar2byte = (c: string) => {
-  let d = 0
+function hexChar2byte(hexChar: string): number {
+  const charCode = hexChar.charCodeAt(0)
 
-  if (c >= 'A' && c <= 'F') d = c.charCodeAt(0) - 'A'.charCodeAt(0) + 10
-  else if (c >= 'a' && c <= 'f') d = c.charCodeAt(0) - 'a'.charCodeAt(0) + 10
-  else if (c >= '0' && c <= '9') d = c.charCodeAt(0) - '0'.charCodeAt(0)
+  if (hexChar >= 'A' && hexChar <= 'F') {
+    return charCode - 'A'.charCodeAt(0) + 10
+  }
+  if (hexChar >= 'a' && hexChar <= 'f') {
+    return charCode - 'a'.charCodeAt(0) + 10
+  }
+  if (hexChar >= '0' && hexChar <= '9') {
+    return charCode - '0'.charCodeAt(0)
+  }
 
-  return d
+  throw new Error('Invalid hexadecimal character')
 }
 
 const isHexChar = (c: string) => (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9') ? 1 : 0
 
-const hexStr2byteArray = (str: string): Uint8Array => {
-  const byteArray = []
-  let d = 0
-  let j = 0
-  let k = 0
+function hexStr2byteArray(hexString: string): Uint8Array {
+  const byteArray = new Uint8Array(Math.ceil(hexString.length / 2))
+  let byteIndex = 0
 
-  for (let i = 0; i < str.length; i++) {
-    const c = str.charAt(i)
+  for (let i = 0; i < hexString.length; i += 2) {
+    const hexChar1 = hexString.charAt(i)
+    const hexChar2 = hexString.charAt(i + 1)
 
-    if (isHexChar(c)) {
-      d <<= 4
-      d += hexChar2byte(c)
-      j++
-
-      if (0 === j % 2) {
-        byteArray[k++] = d
-        d = 0
-      }
+    if (isHexChar(hexChar1) && isHexChar(hexChar2)) {
+      byteArray[byteIndex++] = (hexChar2byte(hexChar1) << 4) + hexChar2byte(hexChar2)
+    } else {
+      throw new Error('Invalid hexadecimal string')
     }
   }
 
-  return Uint8Array.of(...byteArray)
+  return byteArray
 }
 
 const byte2hexStr = (byte: number) => {
@@ -66,21 +66,15 @@ const computeAddress = (pubBytes: Uint8Array) => {
   return hexStr2byteArray(addressHex)
 }
 
-const generatePubKey = (bytes: Buffer) => {
+const generatePubKey = (bytes: Buffer): string => {
   const ec = new EC('secp256k1')
   const key = ec.keyFromPublic(bytes, 'bytes')
-  const pubkey = key.getPublic()
-  const x = pubkey.getX()
-  const y = pubkey.getY()
-  let xHex = x.toString('hex')
-  while (xHex.length < 64) {
-    xHex = '0' + xHex
-  }
-  let yHex = y.toString('hex')
-  while (yHex.length < 64) {
-    yHex = '0' + yHex
-  }
-  return '04' + xHex + yHex
+  const publicKey = key.getPublic()
+
+  const xHex = publicKey.getX().toString('hex').padStart(64, '0')
+  const yHex = publicKey.getY().toString('hex').padStart(64, '0')
+
+  return `04${xHex}${yHex}`
 }
 
 export const generateAddress = (publicKey: Buffer) =>
