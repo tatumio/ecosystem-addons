@@ -1,26 +1,22 @@
-import {
-  ITatumSdkContainer,
-  Network,
-  TatumSdkWalletProvider,
-} from '@tatumio/tatum'
-import { generateMnemonic, mnemonicToSeed } from "bip39"
+import { ITatumSdkContainer, Network, TatumSdkWalletProvider } from '@tatumio/tatum'
+import { BIP32Factory, BIP32Interface } from 'bip32'
+import { generateMnemonic, mnemonicToSeed } from 'bip39'
+import * as ecc from 'tiny-secp256k1'
 import { TRON_DERIVATION_PATH } from './consts'
 import {
   TronTransactionHeaderInfo,
   TronTransactionValue,
   TronTxPayload,
   TronWallet,
-  XpubWithMnemonic
+  XpubWithMnemonic,
 } from './types'
 import { generateAddress, isBase58, isHex } from './utils'
-import { BIP32Factory, BIP32Interface } from "bip32"
-import * as ecc from 'tiny-secp256k1'
+import { TronTxRawBody } from '@tatumio/tatum/dist/src/dto/rpc/TronRpcSuite'
+import { TronRpc } from '@tatumio/tatum/dist/src/service/rpc/evm/TronRpc'
 // tronweb lib don't have any typings (not even in @types)
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import TronWeb from 'tronweb'
-import { TronRpc } from "@tatumio/tatum/dist/src/service/rpc/evm/TronRpc"
-import { TronTxRawBody } from "@tatumio/tatum/dist/src/dto/rpc/TronRpcSuite"
 
 export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronTxPayload> {
   private readonly tronRpc: TronRpc
@@ -121,15 +117,18 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
    * @returns {string} An Ethereum address in string format.
    */
   public generateAddressFromXpub(xpub: string, index: number) {
-    let w: BIP32Interface
+    let bip32: BIP32Interface
     if (xpub.length === 130 && isHex(xpub)) {
-      w = BIP32Factory(ecc).fromPublicKey(Buffer.from(xpub.slice(0, 66), 'hex'), Buffer.from(xpub.slice(-64), 'hex'))
+      bip32 = BIP32Factory(ecc).fromPublicKey(
+        Buffer.from(xpub.slice(0, 66), 'hex'),
+        Buffer.from(xpub.slice(-64), 'hex'),
+      )
     } else if (xpub.length === 111 && isBase58(xpub)) {
-      w = BIP32Factory(ecc).fromBase58(xpub)
+      bip32 = BIP32Factory(ecc).fromBase58(xpub)
     } else {
       throw new Error('Unknown xpub format')
     }
-    return TronWeb.address.fromHex(generateAddress(w.derive(index).publicKey))
+    return TronWeb.address.fromHex(generateAddress(bip32.derive(index).publicKey))
   }
 
   /**
@@ -167,26 +166,28 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
 
     const response = await this.tronRpc.broadcastTransaction(signedTransaction)
 
-    if(!response?.txid){
-        throw new Error(JSON.stringify(response))
+    if (!response?.txid) {
+      throw new Error(JSON.stringify(response))
     }
 
-    return response?.txid
+    return response.txid
   }
 
-  private getTx(value: TronTransactionValue, metaData: TronTransactionHeaderInfo) : TronTxRawBody {
+  private getTx(value: TronTransactionValue, metaData: TronTransactionHeaderInfo): TronTxRawBody {
     const tx = {
       visible: false,
       txID: '',
       raw_data_hex: '',
       raw_data: {
-        contract: [{
-          parameter: {
-            value,
-            type_url: `type.googleapis.com/protocol.TransferContract`,
+        contract: [
+          {
+            parameter: {
+              value,
+              type_url: `type.googleapis.com/protocol.TransferContract`,
+            },
+            type: 'TransferContract',
           },
-          type: 'TransferContract',
-        }],
+        ],
         ...metaData,
       },
     }
@@ -206,7 +207,7 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
     }
   }
 
-  private async getHeaderInfo() : Promise<TronTransactionHeaderInfo> {
+  private async getHeaderInfo(): Promise<TronTransactionHeaderInfo> {
     const block = await this.tronRpc.getNowBlock()
     return {
       ref_block_bytes: block.block_header.raw_data.number.toString(16).slice(-4).padStart(4, '0'),
@@ -216,8 +217,5 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
     }
   }
 
-  supportedNetworks: Network[] = [
-    Network.TRON,
-    Network.TRON_SHASTA,
-  ]
+  supportedNetworks: Network[] = [Network.TRON, Network.TRON_SHASTA]
 }

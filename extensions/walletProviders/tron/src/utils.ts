@@ -1,5 +1,5 @@
-import { keccak_256 } from "js-sha3"
 import { ec as EC } from 'elliptic'
+import { keccak_256 } from 'js-sha3'
 
 const hexChar2byte = (c: string) => {
   let d = 0
@@ -11,13 +11,7 @@ const hexChar2byte = (c: string) => {
   return d
 }
 
-const isHexChar = (c: string) => {
-  if ((c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9')) {
-    return 1
-  }
-
-  return 0
-}
+const isHexChar = (c: string) => (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || (c >= '0' && c <= '9') ? 1 : 0
 
 const hexStr2byteArray = (str: string): Uint8Array => {
   const byteArray = []
@@ -90,10 +84,8 @@ const generatePubKey = (bytes: Buffer) => {
 }
 
 export const generateAddress = (publicKey: Buffer) =>
-    byteArray2hexStr(computeAddress(hexStr2byteArray(generatePubKey(publicKey))))
+  byteArray2hexStr(computeAddress(hexStr2byteArray(generatePubKey(publicKey))))
 
 export const isBase58 = (value: string): boolean => /^[A-HJ-NP-Za-km-z1-9]*$/.test(value)
 
-export const isHex = (hex: string): boolean => {
-  return /^(-0x|0x)?[0-9a-f]*$/i.test(hex)
-}
+export const isHex = (hex: string): boolean => /^(-0x|0x)?[0-9a-f]*$/i.test(hex)
