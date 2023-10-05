@@ -77,3 +77,10 @@ It is built upon popular packages like `tronweb`, `bip32`, and `bip39`, ensuring
    ```
 
 Remember to always ensure the safety of mnemonics, private keys, and other sensitive data. Never expose them in client-side code or public repositories.
+
+## 🔗🔗 Supported Networks
+
+```typescript
+Network.TRON,
+Network.TRON_SHASTA
+```
