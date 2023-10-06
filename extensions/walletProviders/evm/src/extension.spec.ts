@@ -89,7 +89,7 @@ describe('TronWalletProvider', () => {
   describe('signAndBroadcast', () => {
     it('should sign and broadcast transaction', async () => {
       const txRequest = {
-        privateKey: '0x42bd7c2027ccc9075731be8cb4da92a9c88503c3fe572a7d7252ee63d38002b5',
+        privateKey: privateKey,
         to: '0xc34909c73c7ba79087a5aba844890faa13b0270b',
         value: '0.00001',
       }
