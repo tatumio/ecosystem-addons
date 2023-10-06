@@ -30,5 +30,32 @@ export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.PALM, EVM_DERIVATION_PATH_COMMON],
   [Network.POLYGON, "m/44'/966'/0'/0"],
   [Network.VECHAIN, "m/44'/818'/0'/0"],
-  [Network.XDC, "m/44'/550'/0'/0"]
+  [Network.XDC, "m/44'/550'/0'/0"],
+])
+
+export const NETWORK_CHAIN_IDS = new Map<Network, number>([
+  [Network.ARBITRUM_NOVA, 42170],
+  [Network.ARBITRUM_ONE, 42161],
+  [Network.AURORA, 1313161554],
+  [Network.AVALANCHE_C, 43114],
+  [Network.BINANCE_SMART_CHAIN, 56],
+  [Network.CELO, 42220],
+  [Network.CHILIZ, 88888],
+  [Network.CRONOS, 25],
+  [Network.ETHEREUM, 1],
+  [Network.ETHEREUM_CLASSIC, 61],
+  [Network.FANTOM, 250],
+  [Network.FLARE, 14],
+  [Network.GNOSIS, 100],
+  [Network.HAQQ, 11235],
+  [Network.HARMONY_ONE_SHARD_0, 1666600000],
+  [Network.HORIZEN_EON, 7332],
+  [Network.KLAYTN, 8217],
+  [Network.KUCOIN, 321],
+  [Network.OASIS, 42262],
+  [Network.OPTIMISM, 10],
+  [Network.PALM, 11297108109],
+  [Network.POLYGON, 137],
+  [Network.VECHAIN, 100009],
+  [Network.XDC, 50],
 ])
