@@ -1,6 +1,13 @@
 import { EvmRpc, JsonRpcCall, LogFilter, TxPayload } from '@tatumio/tatum'
 import { JsonRpcResponse } from '@tatumio/tatum/dist/src/dto'
-import { ethers, JsonRpcPayload, JsonRpcProvider, JsonRpcResult, PerformActionRequest } from 'ethers'
+import {
+  Network as EthNetwork,
+  JsonRpcPayload,
+  JsonRpcProvider,
+  JsonRpcResult,
+  PerformActionRequest,
+  ethers,
+} from 'ethers'
 
 export class TatumProvider extends JsonRpcProvider {
   constructor(private readonly chainId: number, private readonly evmRpc: EvmRpc) {
@@ -13,17 +20,11 @@ export class TatumProvider extends JsonRpcProvider {
     switch (method) {
       case 'broadcastTransaction': {
         const { signedTransaction } = rest as { signedTransaction: string }
-        const response = await this.evmRpc.sendRawTransaction(signedTransaction)
-
-        return {
-          blockNumber: await this.getBlockNumber(),
-          hash: response.result,
-          network: await this.getNetwork(),
-        }
+        return this.handleRpcResponse(this.evmRpc.sendRawTransaction(signedTransaction))
       }
       case 'call': {
         const { transaction, blockTag } = rest as { transaction: TxPayload; blockTag?: string | number }
-        return (await this.evmRpc.call(transaction, blockTag)).result
+        return this.handleRpcResponse(this.evmRpc.call(transaction, blockTag))
       }
       case 'chainId': {
         return this.chainId
@@ -35,12 +36,12 @@ export class TatumProvider extends JsonRpcProvider {
           from: transaction.from as string,
           value: ethers.toQuantity(transaction.value as string),
         }
-        const result = await this.evmRpc.estimateGas(payload)
-        return result.result?.toNumber()
+        const result = await this.handleRpcResponse(this.evmRpc.estimateGas(payload))
+        return result.toNumber()
       }
       case 'getBalance': {
         const { address, blockTag } = rest as { address: string; blockTag?: string | number }
-        return (await this.evmRpc.getBalance(address, blockTag)).result
+        return this.handleRpcResponse(this.evmRpc.getBalance(address, blockTag))
       }
       case 'getBlock': {
         const { blockTag, blockHash, includeTransactions } = rest as {
@@ -49,25 +50,26 @@ export class TatumProvider extends JsonRpcProvider {
           includeTransactions?: boolean
         }
         if (blockTag) {
-          return (await this.evmRpc.getBlockByNumber(blockTag, includeTransactions)).result
+          return this.handleRpcResponse(this.evmRpc.getBlockByNumber(blockTag, includeTransactions))
         } else if (blockHash) {
-          return (await this.evmRpc.getBlockByHash(blockHash, includeTransactions)).result
+          return this.handleRpcResponse(this.evmRpc.getBlockByHash(blockHash, includeTransactions))
         }
         throw new Error('Either blockTag or blockHash must be provided')
       }
       case 'getBlockNumber': {
-        return (await this.evmRpc.blockNumber()).result
+        const response = await this.handleRpcResponse(this.evmRpc.blockNumber())
+        return response.toNumber()
       }
       case 'getCode': {
         const { address, blockTag } = rest as { address: string; blockTag?: string | number }
-        return (await this.evmRpc.getCode(address, blockTag)).result
+        return this.handleRpcResponse(this.evmRpc.getCode(address, blockTag))
       }
       case 'getGasPrice': {
-        return (await this.evmRpc.gasPrice()).result
+        return this.handleRpcResponse(this.evmRpc.gasPrice())
       }
       case 'getLogs': {
         const { filter } = rest as { filter: LogFilter }
-        return (await this.evmRpc.getLogs(filter)).result
+        return this.handleRpcResponse(this.evmRpc.getLogs(filter))
       }
       case 'getStorage': {
         const { address, position, blockTag } = rest as {
@@ -75,27 +77,32 @@ export class TatumProvider extends JsonRpcProvider {
           position: string
           blockTag?: string | number
         }
-        return (await this.evmRpc.getStorageAt(address, position, blockTag)).result
+        return this.handleRpcResponse(this.evmRpc.getStorageAt(address, position, blockTag))
       }
       case 'getTransaction': {
         const { hash } = rest as { hash: string }
-        return (await this.evmRpc.getTransactionByHash(hash)).result
+        return this.handleRpcResponse(this.evmRpc.getTransactionByHash(hash))
       }
       case 'getTransactionCount': {
         const { address, blockTag } = rest as { address: string; blockTag?: string | number }
-        return (await this.evmRpc.getTransactionCount(address, blockTag)).result?.toNumber()
+        const response = await this.handleRpcResponse(this.evmRpc.getTransactionCount(address, blockTag))
+        return response.toNumber()
       }
       case 'getTransactionReceipt': {
         const { hash } = rest as { hash: string }
-        return (await this.evmRpc.getTransactionReceipt(hash)).result
+        return this.handleRpcResponse(this.evmRpc.getTransactionReceipt(hash))
       }
       case 'getTransactionResult': {
         const { hash } = rest as { hash: string }
-        return (await this.evmRpc.traceTransaction(hash)).result
+        return this.handleRpcResponse(this.evmRpc.traceTransaction(hash))
       }
       default:
         throw new Error(`Unsupported method: ${method}`)
     }
+  }
+
+  async getNetwork(): Promise<EthNetwork> {
+    return EthNetwork.from(this.chainId)
   }
 
   async _send(payload: JsonRpcPayload | JsonRpcPayload[]): Promise<JsonRpcResult[]> {
@@ -108,5 +115,15 @@ export class TatumProvider extends JsonRpcProvider {
       const response = await this.evmRpc.rawRpcCall<JsonRpcResponse<unknown>>(payload as JsonRpcCall)
       return [{ id: response.id as number, result: response.result }]
     }
+  }
+
+  private async handleRpcResponse<T>(promise: Promise<JsonRpcResponse<T>>): Promise<T> {
+    const response = await promise
+
+    if (!response?.result) {
+      throw Error(JSON.stringify(response.error))
+    }
+
+    return response.result
   }
 }

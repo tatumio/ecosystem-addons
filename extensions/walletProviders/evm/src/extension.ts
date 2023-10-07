@@ -1,7 +1,7 @@
 import { EvmRpc, ITatumSdkContainer, Network, TatumConfig, TatumSdkWalletProvider } from '@tatumio/tatum'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
-import { Transaction, ethers } from 'ethers'
+import { ethers } from 'ethers'
 
 import { ADDR_PREFIX, NETWORK_CHAIN_IDS } from './consts'
 import { TatumProvider } from './tatum.provider'
@@ -131,18 +131,10 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
         payload.maxPriorityFeePerGas && ethers.parseUnits(payload.maxPriorityFeePerGas, 'gwei'),
       maxFeePerGas: payload.maxFeePerGas && ethers.parseUnits(payload.maxFeePerGas, 'gwei'),
     }
-    const pop = await signer.populateTransaction(txRequest)
-    delete pop.from
-    const txObj = Transaction.from(pop)
-    const signedTransaction = await signer.signTransaction(txObj)
-    const txResponse = await this.evmRpc.sendRawTransaction(signedTransaction)
+    const txResponse = await signer.sendTransaction(txRequest)
     provider.destroy()
 
-    if (!txResponse?.result) {
-      throw Error(JSON.stringify(txResponse.error))
-    }
-
-    return txResponse.result
+    return txResponse.hash
   }
 
   supportedNetworks: Network[] = [
