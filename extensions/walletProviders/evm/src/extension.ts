@@ -1,27 +1,21 @@
-import {
-  ITatumSdkContainer,
-  LoadBalancer,
-  Network,
-  RpcNodeType,
-  TatumConfig,
-  TatumSdkWalletProvider,
-} from '@tatumio/tatum'
+import { EvmRpc, ITatumSdkContainer, Network, TatumConfig, TatumSdkWalletProvider } from '@tatumio/tatum'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { ethers } from 'ethers'
 
-import { ADDR_PREFIX } from './consts'
+import { ADDR_PREFIX, NETWORK_CHAIN_IDS } from './consts'
+import { TatumProvider } from './tatum.provider'
 import { EvmTxPayload, EvmWallet, XpubWithMnemonic } from './types'
-import { getHd, getWalletFromHd, getDefaultDerivationPath } from './utils'
+import { getDefaultDerivationPath, getHd, getWalletFromHd } from './utils'
 
 export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPayload> {
   private readonly sdkConfig: TatumConfig
-  private readonly loadBalancer: LoadBalancer
+  private readonly evmRpc: EvmRpc
 
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
     this.sdkConfig = this.tatumSdkContainer.getConfig()
-    this.loadBalancer = this.tatumSdkContainer.get(LoadBalancer)
+    this.evmRpc = this.tatumSdkContainer.get(EvmRpc)
   }
 
   /**
@@ -126,10 +120,9 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
   public async signAndBroadcast(payload: EvmTxPayload): Promise<string> {
     const { privateKey, ...tx } = payload
 
-    const rpcNode = this.loadBalancer.getActiveUrl(RpcNodeType.NORMAL)
-    const provider = new ethers.JsonRpcProvider(rpcNode.url, undefined, { batchMaxCount: 1 })
+    const chainId = NETWORK_CHAIN_IDS.get(this.sdkConfig.network) as number
+    const provider = new TatumProvider(chainId, this.evmRpc)
     const signer = new ethers.Wallet(privateKey, provider)
-
     const txRequest = {
       ...tx,
       value: payload.value && ethers.parseEther(payload.value),

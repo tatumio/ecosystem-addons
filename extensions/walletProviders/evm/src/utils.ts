@@ -1,7 +1,7 @@
-import { hdkey } from 'ethereumjs-wallet'
+import { Network } from '@tatumio/tatum'
 import { mnemonicToSeed } from 'bip39'
-import { TESTNET_DERIVATION_PATH, DERIVATION_PATHS } from "./consts";
-import { Network } from "@tatumio/tatum";
+import { hdkey } from 'ethereumjs-wallet'
+import { DERIVATION_PATHS, TESTNET_DERIVATION_PATH } from './consts'
 
 export const getHd = async (mnemonic: string, path: string) => {
   const seed = await mnemonicToSeed(mnemonic)
@@ -13,5 +13,5 @@ export const getHd = async (mnemonic: string, path: string) => {
 export const getWalletFromHd = (hd: hdkey, index: number) => hd.deriveChild(index).getWallet()
 
 export const getDefaultDerivationPath = (network: Network): string => {
-  return DERIVATION_PATHS.get(network) || TESTNET_DERIVATION_PATH;
+  return DERIVATION_PATHS.get(network) || TESTNET_DERIVATION_PATH
 }
