@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/evm-wallet-provider",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "EVM provider with local wallet operations",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/evm/README.md",
