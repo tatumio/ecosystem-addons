@@ -28,8 +28,8 @@ It is built upon popular packages like `bitcoinjs-lib`, `bip39`, and `bip32`, en
    Create an instance of Tatum SDK passing `UtxoWalletProvider` as one of wallet providers.
 
    ```typescript
-   const tatumSdk = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM,
+   const tatumSdk = await TatumSDK.init<Bitcoin>({
+        network: Network.BITCOIN,
         configureWalletProviders: [
             UtxoWalletProvider,
         ]
@@ -80,52 +80,12 @@ Remember to always ensure the safety of mnemonics, private keys, and other sensi
 ## 🔗🔗 Supported Networks
 
 ```typescript
-Network.ETHEREUM,
-Network.ETHEREUM_SEPOLIA,
-Network.ETHEREUM_CLASSIC,
-Network.ETHEREUM_GOERLI,
-Network.AVALANCHE_C,
-Network.AVALANCHE_C_TESTNET,
-Network.POLYGON,
-Network.POLYGON_MUMBAI,
-Network.GNOSIS,
-Network.GNOSIS_TESTNET,
-Network.FANTOM,
-Network.FANTOM_TESTNET,
-Network.AURORA,
-Network.AURORA_TESTNET,
-Network.CELO,
-Network.CELO_ALFAJORES,
-Network.BINANCE_SMART_CHAIN_TESTNET,
-Network.VECHAIN,
-Network.VECHAIN_TESTNET,
-Network.XDC,
-Network.XDC_TESTNET,
-Network.PALM,
-Network.PALM_TESTNET,
-Network.CRONOS,
-Network.CRONOS_TESTNET,
-Network.KUCOIN,
-Network.KUCOIN_TESTNET,
-Network.OASIS,
-Network.OASIS_TESTNET,
-Network.OPTIMISM,
-Network.OPTIMISM_TESTNET,
-Network.HARMONY_ONE_SHARD_0,
-Network.HARMONY_ONE_TESTNET_SHARD_0,
-Network.KLAYTN,
-Network.KLAYTN_BAOBAB,
-Network.FLARE_COSTON,
-Network.FLARE_COSTON_2,
-Network.FLARE,
-Network.FLARE_SONGBIRD,
-Network.HAQQ,
-Network.HAQQ_TESTNET,
-Network.ARBITRUM_NOVA,
-Network.ARBITRUM_NOVA_TESTNET,
-Network.ARBITRUM_ONE,
-Network.BINANCE_SMART_CHAIN,
-Network.HORIZEN_EON,
-Network.HORIZEN_EON_GOBI,
-Network.CHILIZ
+Network.BITCOIN,
+Network.DOGECOIN,
+Network.LITECOIN,
+Network.BITCOIN_CASH,
+Network.BITCOIN_TESTNET,
+Network.DOGECOIN_TESTNET,
+Network.LITECOIN_TESTNET,
+Network.BITCOIN_CASH_TESTNET
 ```
