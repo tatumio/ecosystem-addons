@@ -67,7 +67,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
    * @param {string} mnemonic - The mnemonic seed phrase.
    * @param {number} index - The index to derive the address from.
    * @param {string} [path] - The derivation path.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An address in string format.
    */
   public async generateAddressFromMnemonic(mnemonic: string, index: number, path?: string) {
     const hd = await getHd(mnemonic, path || getDefaultDerivationPath(this.sdkConfig.network))
@@ -80,7 +80,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
    * Generates an address from an extended public key (xpub) and an index.
    * @param {string} xpub - The extended public key.
    * @param {number} index - The index to derive the address from.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An address in string format.
    */
   public generateAddressFromXpub(xpub: string, index: number) {
     const hd = hdkey.fromExtendedKey(xpub)
@@ -92,7 +92,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
   /**
    * Generates an address from a given private key.
    * @param {string} privateKey - The private key in string format.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An address in string format.
    */
   public generateAddressFromPrivateKey(privateKey: string) {
     const wallet = ethWallet.fromPrivateKey(Buffer.from(privateKey.replace(ADDR_PREFIX, ''), 'hex'))
@@ -142,6 +142,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
     Network.ETHEREUM_SEPOLIA,
     Network.ETHEREUM_CLASSIC,
     Network.ETHEREUM_GOERLI,
+    Network.ETHEREUM_HOLESKY,
     Network.AVALANCHE_C,
     Network.AVALANCHE_C_TESTNET,
     Network.POLYGON,
