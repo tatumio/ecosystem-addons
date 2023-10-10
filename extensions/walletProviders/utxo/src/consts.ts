@@ -1,5 +1,5 @@
 import { Network } from '@tatumio/tatum'
-import { NetworkConfig } from './utils'
+import { NetworkConfig } from './types'
 
 export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.BITCOIN, "m/44'/0'/0'/0"],
@@ -8,8 +8,6 @@ export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.LITECOIN_TESTNET, "m/44'/2'/0'/0"],
   [Network.DOGECOIN, "m/44'/3'/0'/0"],
   [Network.DOGECOIN_TESTNET, "m/44'/3'/0'/0"],
-  [Network.BITCOIN_CASH, "m/44'/145'/0'/0"],
-  [Network.BITCOIN_CASH_TESTNET, "m/44'/145'/0'/0"],
 ])
 
 export const NETWORK_CONFIG = new Map<Network, NetworkConfig>([
@@ -95,34 +93,6 @@ export const NETWORK_CONFIG = new Map<Network, NetworkConfig>([
       pubKeyHash: 0x71,
       scriptHash: 0xc4,
       wif: 0xf1,
-    },
-  ],
-  [
-    Network.BITCOIN_CASH,
-    {
-      messagePrefix: '\x19BitcoinCash Signed Message:\n',
-      bech32: '',
-      bip32: {
-        public: 76067358,
-        private: 76066276,
-      },
-      pubKeyHash: 0,
-      scriptHash: 5,
-      wif: 128,
-    },
-  ],
-  [
-    Network.BITCOIN_CASH_TESTNET,
-    {
-      messagePrefix: '\x19BitcoinCash Signed Message:\n',
-      bech32: '',
-      bip32: {
-        public: 70617039,
-        private: 70615956,
-      },
-      pubKeyHash: 111,
-      scriptHash: 196,
-      wif: 239,
     },
   ],
 ])

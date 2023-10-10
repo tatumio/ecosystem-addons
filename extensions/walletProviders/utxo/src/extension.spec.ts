@@ -1,5 +1,6 @@
 import { Bitcoin, Network, TatumSDK } from '@tatumio/tatum'
 import { UtxoWalletProvider } from './extension'
+import { UtxoTxPayload } from './types'
 
 describe('UtxoWalletProvider', () => {
   let tatumSdk: Bitcoin
@@ -87,15 +88,39 @@ describe('UtxoWalletProvider', () => {
   })
 
   describe('signAndBroadcast', () => {
-    it('should sign and broadcast transaction', async () => {
-      const txRequest = {
-        privateKey: privateKey,
-        to: '0xc34909c73c7ba79087a5aba844890faa13b0270b',
-        value: '0.00001',
+    it('should sign and broadcast transaction from address', async () => {
+      const txRequest: UtxoTxPayload = {
+        fromAddress: [
+          {
+            address: 'tb1qjzjyd3l3vh8an8w4mkr6dwur59lan60367kr04',
+            privateKey: privateKey,
+          },
+        ],
+        to: [{ address: 'tb1q5gtkjxguam0mlvevwxf2q9ldnq8ladenlhn3mw', value: 0.0001 }],
+        fee: '0.00001',
+        changeAddress: 'tb1qjzjyd3l3vh8an8w4mkr6dwur59lan60367kr04',
       }
       const txHash = await tatumSdk.walletProvider.use(UtxoWalletProvider).signAndBroadcast(txRequest)
       expect(txHash).toBeTruthy()
-      expect(txHash).toHaveLength(66)
+      expect(txHash).toHaveLength(64)
+    })
+  })
+
+  describe('signAndBroadcast', () => {
+    it('should sign and broadcast transaction from UTXO', async () => {
+      const txRequest: UtxoTxPayload = {
+        fromUTXO: [
+          {
+            txHash: '9bfddffd79a7af830a4070173b1f93547ee4eae9cdb542b153e2daaea1885f3d',
+            index: 1,
+            privateKey: privateKey,
+          },
+        ],
+        to: [{ address: 'tb1q5gtkjxguam0mlvevwxf2q9ldnq8ladenlhn3mw', value: 0.004 }],
+      }
+      const txHash = await tatumSdk.walletProvider.use(UtxoWalletProvider).signAndBroadcast(txRequest)
+      expect(txHash).toBeTruthy()
+      expect(txHash).toHaveLength(64)
     })
   })
 })

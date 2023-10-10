@@ -25,11 +25,13 @@
     "bip39": "^3.1.0",
     "bip32": "^4.0.0",
     "bitcoinjs-lib": "^6.1.5",
+    "bitcore-lib": "^10.0.11",
     "ecpair": "^2.1.0",
-    "tiny-secp256k1": "^2.2.3"
+    "tiny-secp256k1": "^2.2.3",
+    "bignumber.js": "^9.1.2"
   },
   "devDependencies": {
-    "@tatumio/tatum": "^4.0.7",
+    "@tatumio/tatum": "^4.0.16",
     "typescript": "^5.2.2",
     "@types/elliptic": "^6.4.15",
     "@types/jest": "^29.5.5",
@@ -44,6 +46,7 @@
     "@types/node": "^18.15.11",
     "ts-node": "^10.7.0",
     "crypto": "^1.0.1",
-    "undici": "^5.21.0"
+    "undici": "^5.21.0",
+    "@types/bitcore-lib": "^0.15.4"
   }
 }

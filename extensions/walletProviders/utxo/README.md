@@ -69,9 +69,11 @@ It is built upon popular packages like `bitcoinjs-lib`, `bip39`, and `bip32`, en
 
    ```typescript
    const payload = {
-     privateKey: 'YOUR_PRIVATE_KEY',
-     // other fields for your transaction...
-   }
+      fromAddress: [{ address: 'tb1qjzjyd3l3vh8an8w4mkr6dwur59lan60367kr04', privateKey: 'YOUR_PRIVATE_KEY'}],
+      to: [{ address: 'tb1q5gtkjxguam0mlvevwxf2q9ldnq8ladenlhn3mw', value: 0.0001 }],
+      fee: '0.00001',
+      changeAddress: 'tb1qjzjyd3l3vh8an8w4mkr6dwur59lan60367kr04',
+      }
    const txHash = await tatumSdk.walletProvider.use(UtxoWalletProvider).signAndBroadcast(payload);
    ```
 
@@ -83,9 +85,7 @@ Remember to always ensure the safety of mnemonics, private keys, and other sensi
 Network.BITCOIN,
 Network.DOGECOIN,
 Network.LITECOIN,
-Network.BITCOIN_CASH,
 Network.BITCOIN_TESTNET,
 Network.DOGECOIN_TESTNET,
-Network.LITECOIN_TESTNET,
-Network.BITCOIN_CASH_TESTNET
+Network.LITECOIN_TESTNET
 ```

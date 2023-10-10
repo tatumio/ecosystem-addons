@@ -89,7 +89,7 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
    * @param {string} mnemonic - The mnemonic seed phrase.
    * @param {number} index - The index to derive the address from.
    * @param {string} [path] - The derivation path.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An address in string format.
    */
   public async generateAddressFromMnemonic(mnemonic: string, index: number, path?: string) {
     path = path || TRON_DERIVATION_PATH
@@ -114,7 +114,7 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
    * Generates an address from an extended public key (xpub) and an index.
    * @param {string} xpub - The extended public key.
    * @param {number} index - The index to derive the address from.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An address in string format.
    */
   public generateAddressFromXpub(xpub: string, index: number) {
     let bip32: BIP32Interface
@@ -134,14 +134,14 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
   /**
    * Generates an address from a given private key.
    * @param {string} privateKey - The private key in string format.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An address in string format.
    */
   public generateAddressFromPrivateKey(privateKey: string) {
     return TronWeb.address.fromPrivateKey(privateKey)
   }
 
   /**
-   * Generates an EVM-compatible wallet, which includes an address, private key, and a mnemonic.
+   * Generates a Tron wallet, which includes an address, private key, and a mnemonic.
    * @returns {TronWallet} An object containing address, private key, and mnemonic.
    */
   public async getWallet() {
