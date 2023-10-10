@@ -11,7 +11,7 @@ The UTXO Wallet Provider provides an array of tools for:
 - Deriving private keys and addresses from mnemonics and xpubs.
 - Signing and broadcasting transactions to the UTXO-based networks.
 
-It is built upon popular packages like `bitcoinjs-lib`, `bip39`, and `bip32`, ensuring a robust and secure foundation.
+It is built upon popular packages like `bitcoinjs-lib`, `bitcore-lib`, `bip39`, and `bip32`, ensuring a robust and secure foundation.
 
 ## 🚀 Quick Start
 
@@ -32,6 +32,19 @@ It is built upon popular packages like `bitcoinjs-lib`, `bip39`, and `bip32`, en
         network: Network.BITCOIN,
         configureWalletProviders: [
             UtxoWalletProvider,
+        ]
+    })
+   ```
+
+## ⚙️ Configuration
+
+   You can configure the `UtxoWalletProvider` as below to have all the checks skipped. This is useful for development and testing purposes.
+
+   ```typescript
+   const tatumSdk = await TatumSDK.init<Bitcoin>({
+        network: Network.BITCOIN,
+        configureWalletProviders: [
+           {type: UtxoWalletProvider, config: {skipAllChecks: true}},
         ]
     })
    ```
