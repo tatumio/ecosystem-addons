@@ -11,13 +11,17 @@ import { BIP32Factory } from 'bip32'
 import { generateMnemonic as bip39GenerateMnemonic, mnemonicToSeed } from 'bip39'
 import { payments } from 'bitcoinjs-lib'
 import { PrivateKey, Script, Transaction } from 'bitcore-lib'
+// no types for this guy sadly
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { PrivateKey as DogePrivateKey, Script as DogeScript, Transaction as DogeTransaction } from 'bitcore-lib-doge'
 import ECPairFactory from 'ecpair'
 import * as ecc from 'tiny-secp256k1'
 import {
   BtcBasedTransaction,
-  BtcTransactionFromAddress, BtcTransactionFromAddressSource,
-  BtcTransactionFromUTXO,
-  BtcUTXO,
+  TransactionFromAddress, TransactionFromAddressSource,
+  TransactionFromUTXO,
+  UTXO,
   FeeBtcBased, UtxoResponse,
   UtxoTxPayload,
   UtxoWallet,
@@ -150,6 +154,32 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
    * @returns {Promise<string>} A promise that resolves to the transaction hash.
    */
   public async signAndBroadcast(payload: UtxoTxPayload): Promise<string> {
+    let rawTransaction: string
+
+    switch (this.sdkConfig.network) {
+        case Network.BITCOIN:
+        case Network.BITCOIN_TESTNET:
+        case Network.LITECOIN:
+        case Network.LITECOIN_TESTNET:
+          rawTransaction = await this.getRawTransaction(payload)
+            break
+        case Network.DOGECOIN:
+        case Network.DOGECOIN_TESTNET:
+            rawTransaction = await this.getRawTransactionDoge(payload)
+            break
+        default:
+            throw new Error('Unsupported network')
+    }
+    const response = await this.utxoRpc.sendRawTransaction(rawTransaction)
+
+    if (!response?.result) {
+      throw new Error(JSON.stringify(response.error))
+    }
+
+    return response.result
+  }
+
+  private async getRawTransaction(payload: UtxoTxPayload) {
     const tx: BtcBasedTransaction = new Transaction()
     let privateKeysToSign: string[] = []
 
@@ -173,15 +203,78 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
       tx.sign(new PrivateKey(key))
     })
 
-    const rawTransaction = tx.serialize(this.config?.skipAllChecks)
+    return tx.serialize(this.config?.skipAllChecks)
+  }
 
-    const response = await this.utxoRpc.sendRawTransaction(rawTransaction)
+  private async getRawTransactionDoge(payload: UtxoTxPayload) {
+    const { to, fee, changeAddress } = payload
+    this.validateDogeBody(payload)
+    const transaction = new DogeTransaction()
 
-    if (!response?.result) {
-      throw new Error(JSON.stringify(response.error))
+    const hasFeeAndChange = !!(changeAddress && fee)
+    let totalOutputs = hasFeeAndChange ? toSatoshis(fee) : 0
+
+    for (const item of to) {
+      const amount = toSatoshis(item.value)
+      totalOutputs += amount
+      transaction.to(item.address, amount)
     }
 
-    return response.result
+    let totalInputs = 0
+    const privateKeysToSign = []
+    if ('fromUTXO' in payload) {
+      for (const item of payload.fromUTXO) {
+        if(!item.value){
+          throw new Error('Value is required for each fromUTXO')
+        }
+        const satoshis = toSatoshis(item.value)
+        totalInputs += satoshis
+        transaction.from([
+          Transaction.UnspentOutput.fromObject({
+            txId: item.txHash,
+            outputIndex: item.index,
+            script: DogeScript.fromAddress(item.address).toString(),
+            satoshis,
+          }),
+        ])
+        privateKeysToSign.push(item.privateKey)
+      }
+    } else if ('fromAddress' in payload) {
+      for (const item of payload.fromAddress) {
+        if (totalInputs >= totalOutputs) {
+          break
+        }
+        const utxos = await this.getUtxos(item, totalOutputs, totalInputs)
+        for (const utxo of utxos) {
+          const satoshis = toSatoshis(utxo.value)
+          totalInputs += satoshis
+          transaction.from([
+            Transaction.UnspentOutput.fromObject({
+              txId: utxo.txHash,
+              outputIndex: utxo.index,
+              script: DogeScript.fromAddress(utxo.address).toString(),
+              satoshis,
+            }),
+          ])
+
+          privateKeysToSign.push(item.privateKey)
+        }
+      }
+    }
+
+    if (hasFeeAndChange) {
+      transaction.change(changeAddress)
+      transaction.fee(toSatoshis(fee))
+    }
+
+    const shouldHaveChangeOutput = totalInputs > totalOutputs && hasFeeAndChange
+    this.checkDustAmountInChange(transaction, payload, shouldHaveChangeOutput)
+
+    for (const pk of privateKeysToSign) {
+      transaction.sign(DogePrivateKey.fromWIF(pk))
+    }
+
+    return transaction.serialize()
   }
 
   supportedNetworks: Network[] = [
@@ -193,9 +286,42 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     Network.LITECOIN_TESTNET,
   ]
 
+  /**
+   * In case if change amount is dust, its amount will be appended to fee.
+   * We need to check it to prevent implicit amounts change
+   */
+  private checkDustAmountInChange(
+      transaction: Transaction,
+      body: UtxoTxPayload,
+      shouldHaveChangeOutput: boolean,
+  ){
+    const outputsCount = transaction.outputs.length
+    const expectedOutputsCount = body.to.length + (shouldHaveChangeOutput ? 1 : 0)
+    if (outputsCount !== expectedOutputsCount) {
+      throw new Error('Transaction would result in dust amount being appended to the fee.')
+    }
+  }
+
+  private validateDogeBody(body: UtxoTxPayload){
+    if (!('fromUTXO' in body) && !('fromAddress' in body)) {
+      throw new Error('Either fromUTXO or fromAddress must be provided')
+    }
+
+    if (
+        ('fromUTXO' in body && body.fromUTXO.length === 0) ||
+        ('fromAddress' in body && body.fromAddress.length === 0)
+    ) {
+      throw new Error('Either fromUTXO or fromAddress must be provided')
+    }
+
+    if ((body.fee && !body.changeAddress) || (!body.fee && body.changeAddress)) {
+      throw new Error('Either fee and changeAddress must be provided or none of them')
+    }
+  }
+
   private async privateKeysFromAddress(
     transaction: BtcBasedTransaction,
-    body: BtcTransactionFromAddress,
+    body: TransactionFromAddress,
   ): Promise<Array<string>> {
     if (body.fromAddress.length === 0 && !this.config?.skipAllChecks) {
       throw new Error('No fromAddress provided')
@@ -232,7 +358,7 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     return privateKeysToSign
   }
 
-  private async getUtxos(item: BtcTransactionFromAddressSource, totalOutputs: number, totalInputs: number) {
+  private async getUtxos(item: TransactionFromAddressSource, totalOutputs: number, totalInputs: number) {
     return this.connector.get<UtxoResponse>({
       path: `/v3/data/utxos?chain=${this.sdkConfig.network}&address=${
           item.address
@@ -242,14 +368,14 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
 
   private async privateKeysFromUTXO(
     transaction: Transaction,
-    body: BtcTransactionFromUTXO,
+    body: TransactionFromUTXO,
   ): Promise<Array<string>> {
     if (body.fromUTXO.length === 0 && !this.config?.skipAllChecks) {
       throw new Error('No fromUTXO provided')
     }
 
     const privateKeysToSign: string[] = []
-    const utxos: BtcUTXO[] = []
+    const utxos: UTXO[] = []
 
     const filteredUtxos = await this.getUtxoBatch(body)
 
@@ -280,9 +406,9 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     return privateKeysToSign
   }
 
-  private async getUtxoBatch(body: BtcTransactionFromUTXO) {
+  private async getUtxoBatch(body: TransactionFromUTXO) {
     const fromUTXOs = body.fromUTXO.map((item) => ({ txHash: item.txHash, index: item.index }))
-    const utxos: (BtcUTXO | null)[] = []
+    const utxos: (UTXO | null)[] = []
     for (const utxoItem of fromUTXOs) {
       const utxo = await this.getUtxoSilent(utxoItem.txHash, utxoItem.index)
       if (utxo === null || !utxo.address) {
@@ -294,17 +420,17 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     return utxos
   }
 
-  private async getUtxoSilent(hash: string, index: number): Promise<BtcUTXO | null> {
+  private async getUtxoSilent(hash: string, index: number): Promise<UTXO | null> {
     try {
-      return await this.connector.get<BtcUTXO>({
-        path: `/v3/bitcoin/utxo/${hash}/${index}`,
+      return await this.connector.get<UTXO>({
+        path: `/v3/${this.getChainForUtxo()}/utxo/${hash}/${index}`,
       })
     } catch (e) {
       return null
     }
   }
 
-  private async validateBalanceFromUTXO(body: UtxoTxPayload, utxos: BtcUTXO[]) {
+  private async validateBalanceFromUTXO(body: UtxoTxPayload, utxos: UTXO[]) {
     const totalBalance = utxos.reduce((sum, u) => sum.plus(new BigNumber(u.value ?? 0)), new BigNumber(0))
 
     const totalFee = body.fee ? new BigNumber(body.fee) : await this.getEstimateFeeFromUtxo(body, utxos)
@@ -316,7 +442,7 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     }
   }
 
-  private async getEstimateFeeFromUtxo(body: UtxoTxPayload, utxos: BtcUTXO[]): Promise<BigNumber> {
+  private async getEstimateFeeFromUtxo(body: UtxoTxPayload, utxos: UTXO[]): Promise<BigNumber> {
     const fromUTXO = utxos.map((utxo) => ({ txHash: utxo.hash, index: utxo.index }))
 
     const fee = await this.connector.post<FeeBtcBased>({
@@ -347,6 +473,28 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
       case Network.DOGECOIN:
       case Network.DOGECOIN_TESTNET:
         chain = 'DOGE'
+        break
+      default:
+        throw new Error('Unsupported network')
+    }
+    return chain
+  }
+
+  private getChainForUtxo() {
+    let chain: string
+
+    switch (this.sdkConfig.network) {
+      case Network.BITCOIN:
+      case Network.BITCOIN_TESTNET:
+        chain = 'bitcoin'
+        break
+      case Network.LITECOIN:
+      case Network.LITECOIN_TESTNET:
+        chain = 'litecoin'
+        break
+      case Network.DOGECOIN:
+      case Network.DOGECOIN_TESTNET:
+        chain = 'dogecoin'
         break
       default:
         throw new Error('Unsupported network')

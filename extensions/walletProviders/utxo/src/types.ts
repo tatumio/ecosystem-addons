@@ -30,19 +30,19 @@ export interface BtcBasedTransaction extends Transaction {
   serialize(unchecked?: boolean): string
 }
 
-export type UtxoTxPayload = BtcTransactionFromAddress | BtcTransactionFromUTXO
+export type UtxoTxPayload = TransactionFromAddress | TransactionFromUTXO
 
-export type BtcTransactionFromAddress = {
+export type TransactionFromAddress = {
   /**
    * The array of blockchain addresses to send the assets from and their private keys. For each address, the last 100 transactions are scanned for any UTXO to be included in the transaction.
    */
-  fromAddress: Array<BtcTransactionFromAddressSource>
+  fromAddress: Array<TransactionFromAddressSource>
   /**
-   * The array of blockchain addresses to send the assets to and the amounts that each address should receive (in BTC). The difference between the UTXOs calculated in the <code>fromAddress</code> section and the total amount to receive calculated in the <code>to</code> section will be used as the gas fee. To explicitly specify the fee amount and the blockchain address where any extra funds remaining after covering the fee will be sent, set the <code>fee</code> and <code>changeAddress</code> parameters.
+   * The array of blockchain addresses to send the assets to and the amounts that each address should receive. The difference between the UTXOs calculated in the <code>fromAddress</code> section and the total amount to receive calculated in the <code>to</code> section will be used as the gas fee. To explicitly specify the fee amount and the blockchain address where any extra funds remaining after covering the fee will be sent, set the <code>fee</code> and <code>changeAddress</code> parameters.
    */
-  to: Array<BtcTransactionTarget>
+  to: Array<TransactionTarget>
   /**
-   * The fee to be paid for the transaction (in BTC); if you are using this parameter, you have to also use the <code>changeAddress</code> parameter because these two parameters only work together.
+   * The fee to be paid for the transaction; if you are using this parameter, you have to also use the <code>changeAddress</code> parameter because these two parameters only work together.
    */
   fee?: string
   /**
@@ -51,17 +51,17 @@ export type BtcTransactionFromAddress = {
   changeAddress?: string
 }
 
-export type BtcTransactionFromUTXO = {
+export type TransactionFromUTXO = {
   /**
    * The array of transaction hashes, indexes of its UTXOs, and the private keys of the associated blockchain addresses
    */
-  fromUTXO: Array<BtcTransactionFromUTXOSource>
+  fromUTXO: Array<TransactionFromUTXOSource>
   /**
-   * The array of blockchain addresses to send the assets to and the amounts that each address should receive (in BTC). The difference between the UTXOs calculated in the <code>fromUTXO</code> section and the total amount to receive calculated in the <code>to</code> section will be used as the gas fee. To explicitly specify the fee amount and the blockchain address where any extra funds remaining after covering the fee will be sent, set the <code>fee</code> and <code>changeAddress</code> parameters.
+   * The array of blockchain addresses to send the assets to and the amounts that each address should receive. The difference between the UTXOs calculated in the <code>fromUTXO</code> section and the total amount to receive calculated in the <code>to</code> section will be used as the gas fee. To explicitly specify the fee amount and the blockchain address where any extra funds remaining after covering the fee will be sent, set the <code>fee</code> and <code>changeAddress</code> parameters.
    */
-  to: Array<BtcTransactionTarget>
+  to: Array<TransactionTarget>
   /**
-   * The fee to be paid for the transaction (in BTC); if you are using this parameter, you have to also use the <code>changeAddress</code> parameter because these two parameters only work together.
+   * The fee to be paid for the transaction; if you are using this parameter, you have to also use the <code>changeAddress</code> parameter because these two parameters only work together.
    */
   fee?: string
   /**
@@ -70,7 +70,7 @@ export type BtcTransactionFromUTXO = {
   changeAddress?: string
 }
 
-export type BtcTransactionFromAddressSource = {
+export type TransactionFromAddressSource = {
   /**
    * The blockchain address to send the assets from
    */
@@ -81,18 +81,18 @@ export type BtcTransactionFromAddressSource = {
   privateKey: string
 }
 
-export type BtcTransactionTarget = {
+export type TransactionTarget = {
   /**
    * The blockchain address to receive the assets
    */
   address: string
   /**
-   * The amount to receive (in BTC)
+   * The amount to receive
    */
   value: number
 }
 
-export type BtcTransactionFromUTXOSource = {
+export type TransactionFromUTXOSource = {
   /**
    * The transaction hash of the UTXO to be spent
    */
@@ -105,9 +105,17 @@ export type BtcTransactionFromUTXOSource = {
    * The private key of the blockchain address that holds the UTXO to be spent
    */
   privateKey: string
+  /**
+   * The amount to send (in DOGE)
+   */
+  value?: string;
+  /**
+   * The blockchain address to receive the assets (DOGE)
+   */
+  address?: string;
 }
 
-export type BtcUTXO = {
+export type UTXO = {
   /**
    * The version of the transaction
    */
