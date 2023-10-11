@@ -459,46 +459,34 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
   }
 
   private getChainForFee() {
-    let chain: string
-
     switch (this.sdkConfig.network) {
       case Network.BITCOIN:
       case Network.BITCOIN_TESTNET:
-        chain = 'BTC'
-        break
+        return 'BTC'
       case Network.LITECOIN:
       case Network.LITECOIN_TESTNET:
-        chain = 'LTC'
-        break
+        return 'LTC'
       case Network.DOGECOIN:
       case Network.DOGECOIN_TESTNET:
-        chain = 'DOGE'
-        break
+        return 'DOGE'
       default:
         throw new Error('Unsupported network')
     }
-    return chain
   }
 
   private getChainForUtxo() {
-    let chain: string
-
     switch (this.sdkConfig.network) {
       case Network.BITCOIN:
       case Network.BITCOIN_TESTNET:
-        chain = 'bitcoin'
-        break
+        return 'bitcoin'
       case Network.LITECOIN:
       case Network.LITECOIN_TESTNET:
-        chain = 'litecoin'
-        break
+        return 'litecoin'
       case Network.DOGECOIN:
       case Network.DOGECOIN_TESTNET:
-        chain = 'dogecoin'
-        break
+        return'dogecoin'
       default:
         throw new Error('Unsupported network')
     }
-    return chain
   }
 }
