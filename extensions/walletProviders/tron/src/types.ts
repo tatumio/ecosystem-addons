@@ -14,7 +14,7 @@ export type TronTxPayload = {
   /**
    * Private key of the address, from which the TRX will be sent.
    */
-  fromPrivateKey: string
+  privateKey: string
   /**
    * Recipient address of TRON account in Base58 format.
    */

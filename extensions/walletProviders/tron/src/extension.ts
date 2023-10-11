@@ -162,7 +162,7 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
     const metaData = await this.getHeaderInfo()
     const tx = this.getTx(value, metaData)
 
-    const signedTransaction = TronWeb.utils.crypto.signTransaction(payload.fromPrivateKey, tx)
+    const signedTransaction = TronWeb.utils.crypto.signTransaction(payload.privateKey, tx)
 
     const response = await this.tronRpc.broadcastTransaction(signedTransaction)
 
@@ -202,7 +202,7 @@ export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronT
   private getTransactionValue(payload: TronTxPayload): TronTransactionValue {
     return {
       to_address: TronWeb.address.toHex(payload.to),
-      owner_address: TronWeb.address.toHex(TronWeb.address.fromPrivateKey(payload.fromPrivateKey)),
+      owner_address: TronWeb.address.toHex(TronWeb.address.fromPrivateKey(payload.privateKey)),
       amount: parseInt(TronWeb.toSun(payload.amount)),
     }
   }
