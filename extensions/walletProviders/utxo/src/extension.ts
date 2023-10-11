@@ -27,6 +27,7 @@ import {
   UtxoWallet,
   XpubWithMnemonic,
   DogeUTXO,
+  TransactionTarget,
 } from './types'
 import { fromSatoshis, getDefaultDerivationPath, getNetworkConfig, toSatoshis } from './utils'
 
@@ -184,14 +185,10 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     const tx: BtcBasedTransaction = new Transaction()
     let privateKeysToSign: string[] = []
 
-    if (payload.changeAddress) {
-      tx.change(payload.changeAddress)
-    }
-    if (payload.fee) {
-      tx.fee(toSatoshis(payload.fee))
-    }
+    this.setChangeAddress(payload, tx)
+    this.setFee(payload, tx)
     payload.to.forEach((to) => {
-      tx.to(to.address, toSatoshis(to.value))
+      this.setToAddress(tx, to)
     })
 
     if ('fromAddress' in payload) {
@@ -207,6 +204,34 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     return tx.serialize(this.config?.skipAllChecks)
   }
 
+  private setToAddress(tx: BtcBasedTransaction, to: TransactionTarget) {
+    try {
+      tx.to(to.address, toSatoshis(to.value))
+    } catch (e) {
+      throw new Error(`'${to.address}' is not a valid address`)
+    }
+  }
+
+  private setChangeAddress(payload: UtxoTxPayload, tx: BtcBasedTransaction) {
+    if (payload.changeAddress) {
+      try {
+        tx.change(payload.changeAddress)
+      } catch (e) {
+        throw new Error(`'${payload.changeAddress}' is not a valid change address`)
+      }
+    }
+  }
+
+  private setFee(payload: UtxoTxPayload, tx: BtcBasedTransaction) {
+    if (payload.fee) {
+      try {
+        tx.fee(toSatoshis(payload.fee))
+      } catch (e) {
+        throw new Error(`'${payload.fee}' is not a valid fee value`)
+      }
+    }
+  }
+
   private async getRawTransactionDoge(payload: UtxoTxPayload) {
     const { to, fee, changeAddress } = payload
     this.validateDogeBody(payload)
@@ -218,18 +243,20 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     for (const item of to) {
       const amount = toSatoshis(item.value)
       totalOutputs += amount
-      transaction.to(item.address, amount)
+      this.setToAddress(transaction, item)
     }
 
     let totalInputs = 0
     const privateKeysToSign = []
     if ('fromUTXO' in payload) {
       const filteredUtxos = await this.getDogeUtxoBatch(payload)
-
+      let validUtxoFound = false
       for (let i = 0; i < filteredUtxos.length; i++) {
         const utxo = filteredUtxos[i]
         const address = utxo?.scriptPubKey?.addresses?.[0]
         if (utxo === null || utxo.scriptPubKey === null || !address) continue
+
+        validUtxoFound = true
 
         const utxoItem = payload.fromUTXO[i]
 
@@ -243,6 +270,10 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
         ])
 
         privateKeysToSign.push(utxoItem.privateKey)
+      }
+
+      if (!validUtxoFound) {
+        throw new Error("No valid UTXOs found. They are probably already spent.");
       }
     } else if ('fromAddress' in payload) {
       for (const item of payload.fromAddress) {
@@ -268,8 +299,8 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     }
 
     if (hasFeeAndChange) {
-      transaction.change(changeAddress)
-      transaction.fee(toSatoshis(fee))
+      this.setChangeAddress(payload, transaction)
+      this.setFee(payload, transaction)
     }
 
     const shouldHaveChangeOutput = totalInputs > totalOutputs && hasFeeAndChange
@@ -384,9 +415,13 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
 
     const filteredUtxos = await this.getUtxoBatch(body)
 
+    let validUtxoFound = false
+
     for (let i = 0; i < filteredUtxos.length; i++) {
       const utxo = filteredUtxos[i]
       if (utxo === null || !utxo.address) continue
+
+      validUtxoFound = true
 
       const utxoItem = body.fromUTXO[i]
 
@@ -402,6 +437,10 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
       ])
 
       privateKeysToSign.push(utxoItem.privateKey)
+    }
+
+    if (!validUtxoFound) {
+      throw new Error("No valid UTXOs found. They are probably already spent.");
     }
 
     if (!this.config?.skipAllChecks) {
