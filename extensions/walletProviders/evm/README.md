@@ -41,26 +41,26 @@ It is built upon popular packages like `ethereumjs-wallet`, `ethers`, and `bip39
 1. **Generate Mnemonic**
 
    ```typescript
-   const mnemonic = tatumSdk.walletProvider.use(EvmWalletProvider).generateMnemonic();
+   const mnemonic = tatumSdk.walletProvider.use(EvmWalletProvider).generateMnemonic()
    ```
 
 2. **Generate xpub with or without Mnemonic**
 
    ```typescript
-   const xpubDetails = await tatumSdk.walletProvider.use(EvmWalletProvider).generateXpub(mnemonic);
+   const xpubDetails = await tatumSdk.walletProvider.use(EvmWalletProvider).generateXpub(mnemonic)
    ```
 
 3. **Generate Private Key from Mnemonic**
 
    ```typescript
-   const privateKey = await tatumSdk.walletProvider.use(EvmWalletProvider).generatePrivateKeyFromMnemonic(mnemonic, 0);
+   const privateKey = await tatumSdk.walletProvider.use(EvmWalletProvider).generatePrivateKeyFromMnemonic(mnemonic, 0)
    ```
 
 4. **Generate Address from Mnemonic or xpub**
 
    ```typescript
-   const addressFromMnemonic = await tatumSdk.walletProvider.use(EvmWalletProvider).generateAddressFromMnemonic(mnemonic, 0);
-   const addressFromXpub = await tatumSdk.walletProvider.use(EvmWalletProvider).generateAddressFromXpub(xpubDetails.xpub, 0);
+   const addressFromMnemonic = await tatumSdk.walletProvider.use(EvmWalletProvider).generateAddressFromMnemonic(mnemonic, 0)
+   const addressFromXpub = await tatumSdk.walletProvider.use(EvmWalletProvider).generateAddressFromXpub(xpubDetails.xpub, 0)
    ```
 
 5. **Sign and Broadcast a Transaction**
@@ -68,11 +68,12 @@ It is built upon popular packages like `ethereumjs-wallet`, `ethers`, and `bip39
    Define your payload according to the `EvmTxPayload` type:
 
    ```typescript
-   const payload = {
-     privateKey: 'YOUR_PRIVATE_KEY',
-     // other fields for your transaction...
+   const payloadEvm = {
+      privateKey: 'YOUR_PRIVATE_KEY',
+      to: 'TARGET_WALLET_ADDRESS',
+      value: '0.00001', // ETH_AMOUNT
    }
-   const txHash = await tatumSdk.walletProvider.use(EvmWalletProvider).signAndBroadcast(payload);
+   const txHash = await tatumSdk.walletProvider.use(EvmWalletProvider).signAndBroadcast(payloadEvm)
    ```
 
 Remember to always ensure the safety of mnemonics, private keys, and other sensitive data. Never expose them in client-side code or public repositories.

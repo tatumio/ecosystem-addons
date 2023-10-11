@@ -8,6 +8,24 @@
     "dist/"
   ],
   "license": "MIT",
+  "keywords": [
+    "Tatum",
+    "SDK",
+    "Extension",
+    "WalletProvider",
+    "Wallet",
+    "EVM",
+    "Ethereum",
+    "BSC",
+    "Binance Smart Chain",
+    "Polygon",
+    "Celo",
+    "Horizen EON",
+    "Chiliz",
+    "Testnet",
+    "Mainnet",
+    "Blockchain"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },

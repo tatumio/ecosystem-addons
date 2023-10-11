@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/utxo-wallet-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "UTXO provider with local wallet operations",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/utxo/README.md",
@@ -8,6 +8,23 @@
     "dist/"
   ],
   "license": "MIT",
+  "keywords": [
+    "Tatum",
+    "SDK",
+    "Extension",
+    "WalletProvider",
+    "Wallet",
+    "UTXO",
+    "Bitcoin",
+    "BTC",
+    "Litecoin",
+    "LTC",
+    "Dogecoin",
+    "DOGE",
+    "Testnet",
+    "Mainnet",
+    "Blockchain"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },

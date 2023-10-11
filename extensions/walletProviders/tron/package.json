@@ -8,6 +8,17 @@
     "dist/"
   ],
   "license": "MIT",
+  "keywords": [
+    "Tatum",
+    "SDK",
+    "Extension",
+    "WalletProvider",
+    "Wallet",
+    "Tron",
+    "Testnet",
+    "Mainnet",
+    "Blockchain"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
