@@ -105,14 +105,6 @@ export type TransactionFromUTXOSource = {
    * The private key of the blockchain address that holds the UTXO to be spent
    */
   privateKey: string
-  /**
-   * The amount to send (in DOGE)
-   */
-  value?: string;
-  /**
-   * The blockchain address to receive the assets (DOGE)
-   */
-  address?: string;
 }
 
 export type UTXO = {
@@ -148,6 +140,22 @@ export type UTXO = {
    * The index of the transaction output checked for the UTXO
    */
   index?: number
+}
+
+export interface DogeUTXO {
+  confirmations: number
+  coinbase: boolean
+  bestblock: string
+  version: number
+  value: number
+  n: number
+  scriptPubKey: {
+    asm: string
+    hex: string
+    regSigs: number
+    type: string
+    addresses: string[]
+  }
 }
 
 export type FeeBtcBased = {

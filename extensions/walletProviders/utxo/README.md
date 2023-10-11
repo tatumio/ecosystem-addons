@@ -54,40 +54,58 @@ It is built upon popular packages like `bitcoinjs-lib`, `bitcore-lib`, `bip39`, 
 1. **Generate Mnemonic**
 
    ```typescript
-   const mnemonic = tatumSdk.walletProvider.use(UtxoWalletProvider).generateMnemonic();
+   const mnemonic = tatumSdk.walletProvider.use(UtxoWalletProvider).generateMnemonic()
    ```
 
 2. **Generate xpub with or without Mnemonic**
 
    ```typescript
-   const xpubDetails = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateXpub(mnemonic);
+   const xpubDetails = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateXpub(mnemonic)
    ```
 
 3. **Generate Private Key from Mnemonic**
 
    ```typescript
-   const privateKey = await tatumSdk.walletProvider.use(UtxoWalletProvider).generatePrivateKeyFromMnemonic(mnemonic, 0);
+   const privateKey = await tatumSdk.walletProvider.use(UtxoWalletProvider).generatePrivateKeyFromMnemonic(mnemonic, 0)
    ```
 
 4. **Generate Address from Mnemonic or xpub**
 
    ```typescript
-   const addressFromMnemonic = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateAddressFromMnemonic(mnemonic, 0);
-   const addressFromXpub = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateAddressFromXpub(xpubDetails.xpub, 0);
+   const addressFromMnemonic = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateAddressFromMnemonic(mnemonic, 0)
+   const addressFromXpub = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateAddressFromXpub(xpubDetails.xpub, 0)
    ```
 
 5. **Sign and Broadcast a Transaction**
 
-   Define your payload according to the `UtxoTxPayload` type:
+   Define your payload according to the `UtxoTxPayload` type using address as the source of payments:
 
    ```typescript
-   const payload = {
-      fromAddress: [{ address: 'tb1qjzjyd3l3vh8an8w4mkr6dwur59lan60367kr04', privateKey: 'YOUR_PRIVATE_KEY'}],
-      to: [{ address: 'tb1q5gtkjxguam0mlvevwxf2q9ldnq8ladenlhn3mw', value: 0.0001 }],
-      fee: '0.00001',
-      changeAddress: 'tb1qjzjyd3l3vh8an8w4mkr6dwur59lan60367kr04',
+   const payloadUtxo = {
+      fromAddress: [{ address: 'YOUR_WALLET_ADDRESS', privateKey: 'YOUR_PRIVATE_KEY'}],
+      to: [{ address: 'TARGET_WALLET_ADDRESS', value: 0.0001 }], // BTC_AMOUNT
+      fee: '0.00001', // BTC_AMOUNT
+      changeAddress: 'CHANGE_WALLET_ADDRESS',
       }
-   const txHash = await tatumSdk.walletProvider.use(UtxoWalletProvider).signAndBroadcast(payload);
+   const txHash = await tatumSdk.walletProvider.use(UtxoWalletProvider).signAndBroadcast(payloadUtxo)
+   ```
+
+   or using UTXOs as the source of payments:
+
+   ```typescript
+   const payloadUtxo = {
+      fromUTXO: [
+         {
+            txHash: '9bfddffd79a7af830a4070173b1f93547ee4eae9cdb542b153e2daaea1885f3d',
+            index: 1,
+            privateKey: 'YOUR_PRIVATE_KEY',
+         },
+        ],
+      to: [{ address: 'TARGET_WALLET_ADDRESS', value: 0.0001 }], // BTC_AMOUNT
+      fee: '0.00001', // BTC_AMOUNT
+      changeAddress: 'CHANGE_WALLET_ADDRESS',
+      }
+   const txHash = await tatumSdk.walletProvider.use(UtxoWalletProvider).signAndBroadcast(payloadUtxo)
    ```
 
 Remember to always ensure the safety of mnemonics, private keys, and other sensitive data. Never expose them in client-side code or public repositories.
