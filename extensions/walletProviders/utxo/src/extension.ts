@@ -26,6 +26,7 @@ import {
   UtxoTxPayload,
   UtxoWallet,
   XpubWithMnemonic,
+  DogeUTXO,
 } from './types'
 import { fromSatoshis, getDefaultDerivationPath, getNetworkConfig, toSatoshis } from './utils'
 
@@ -223,21 +224,25 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     let totalInputs = 0
     const privateKeysToSign = []
     if ('fromUTXO' in payload) {
-      for (const item of payload.fromUTXO) {
-        if(!item.value){
-          throw new Error('Value is required for each fromUTXO')
-        }
-        const satoshis = toSatoshis(item.value)
-        totalInputs += satoshis
+      const filteredUtxos = await this.getDogeUtxoBatch(payload)
+
+      for (let i = 0; i < filteredUtxos.length; i++) {
+        const utxo = filteredUtxos[i]
+        const address = utxo?.scriptPubKey?.addresses?.[0]
+        if (utxo === null || utxo.scriptPubKey === null || !address) continue
+
+        const utxoItem = payload.fromUTXO[i]
+
         transaction.from([
-          Transaction.UnspentOutput.fromObject({
-            txId: item.txHash,
-            outputIndex: item.index,
-            script: DogeScript.fromAddress(item.address).toString(),
-            satoshis,
+          DogeTransaction.UnspentOutput.fromObject({
+            txId: utxoItem.txHash,
+            outputIndex: utxoItem.index,
+            script: Script.fromAddress(address).toString(),
+            satoshis: utxo.value,
           }),
         ])
-        privateKeysToSign.push(item.privateKey)
+
+        privateKeysToSign.push(utxoItem.privateKey)
       }
     } else if ('fromAddress' in payload) {
       for (const item of payload.fromAddress) {
@@ -406,11 +411,25 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     return privateKeysToSign
   }
 
-  private async getUtxoBatch(body: TransactionFromUTXO) {
+  private async getDogeUtxoBatch(body: TransactionFromUTXO) : Promise<(DogeUTXO | null)[]> {
+    const fromUTXOs = body.fromUTXO.map((item) => ({ txHash: item.txHash, index: item.index }))
+    const utxos: (DogeUTXO | null)[] = []
+    for (const utxoItem of fromUTXOs) {
+      const utxo = await this.getUtxoSilent<DogeUTXO>(utxoItem.txHash, utxoItem.index)
+      if (utxo === null || !utxo.scriptPubKey?.addresses?.[0]) {
+        utxos.push(null)
+      } else {
+        utxos.push(utxo)
+      }
+    }
+    return utxos
+  }
+
+  private async getUtxoBatch(body: TransactionFromUTXO) : Promise<(UTXO | null)[]> {
     const fromUTXOs = body.fromUTXO.map((item) => ({ txHash: item.txHash, index: item.index }))
     const utxos: (UTXO | null)[] = []
     for (const utxoItem of fromUTXOs) {
-      const utxo = await this.getUtxoSilent(utxoItem.txHash, utxoItem.index)
+      const utxo = await this.getUtxoSilent<UTXO>(utxoItem.txHash, utxoItem.index)
       if (utxo === null || !utxo.address) {
         utxos.push(null)
       } else {
@@ -420,9 +439,9 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     return utxos
   }
 
-  private async getUtxoSilent(hash: string, index: number): Promise<UTXO | null> {
+  private async getUtxoSilent<T>(hash: string, index: number): Promise<T | null> {
     try {
-      return await this.connector.get<UTXO>({
+      return await this.connector.get<T>({
         path: `/v3/${this.getChainForUtxo()}/utxo/${hash}/${index}`,
       })
     } catch (e) {

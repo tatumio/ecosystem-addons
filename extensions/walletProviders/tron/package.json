@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/tron-wallet-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tron provider with local wallet operations",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/tron/README.md",
@@ -8,6 +8,17 @@
     "dist/"
   ],
   "license": "MIT",
+  "keywords": [
+    "Tatum",
+    "SDK",
+    "Extension",
+    "WalletProvider",
+    "Wallet",
+    "Tron",
+    "Testnet",
+    "Mainnet",
+    "Blockchain"
+  ],
   "engines": {
     "node": ">=18.0.0"
   },
