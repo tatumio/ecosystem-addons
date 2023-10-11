@@ -37,6 +37,7 @@ export const NETWORK_CHAIN_IDS = new Map<Network, number>([
   [Network.ETHEREUM, 1],
   [Network.ETHEREUM_SEPOLIA, 11155111],
   [Network.ETHEREUM_GOERLI, 5],
+  [Network.ETHEREUM_HOLESKY, 17000],
   [Network.ETHEREUM_CLASSIC, 61],
   [Network.AVALANCHE_C, 43114],
   [Network.AVALANCHE_C_TESTNET, 43113],
