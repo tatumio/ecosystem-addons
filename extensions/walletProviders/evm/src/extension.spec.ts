@@ -1,7 +1,7 @@
 import { Ethereum, Network, TatumSDK } from '@tatumio/tatum'
 import { EvmWalletProvider } from './extension'
 
-describe('TronWalletProvider', () => {
+describe('EvmWalletProvider', () => {
   let tatumSdk: Ethereum
 
   beforeEach(async () => {

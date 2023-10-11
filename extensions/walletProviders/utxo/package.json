@@ -1,0 +1,53 @@
+{
+  "name": "@tatumio/utxo-wallet-provider",
+  "version": "1.0.0",
+  "description": "UTXO provider with local wallet operations",
+  "author": "Tatum",
+  "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/utxo/README.md",
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "dist/main.js",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "cli": "ts-node src/cli.ts",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx && prettier --write src/",
+    "clean": "rm -rf dist build package",
+    "ts-node": "ts-node",
+    "build": "node_modules/.bin/tsc -p tsconfig.json",
+    "build-all": "yarn clean && yarn build"
+  },
+  "dependencies": {
+    "bip39": "^3.1.0",
+    "bip32": "^4.0.0",
+    "bitcoinjs-lib": "^6.1.5",
+    "bitcore-lib": "^10.0.11",
+    "bitcore-lib-doge": "^10.0.11",
+    "ecpair": "^2.1.0",
+    "tiny-secp256k1": "^2.2.3",
+    "bignumber.js": "^9.1.2"
+  },
+  "devDependencies": {
+    "@tatumio/tatum": "^4.0.16",
+    "typescript": "^5.2.2",
+    "@types/elliptic": "^6.4.15",
+    "@types/jest": "^29.5.5",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^8.14.0",
+    "jest": "^29.7.0",
+    "prettier": "^2.8.4",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.5.0",
+    "@types/node": "^18.15.11",
+    "ts-node": "^10.7.0",
+    "crypto": "^1.0.1",
+    "undici": "^5.21.0",
+    "@types/bitcore-lib": "^0.15.4"
+  }
+}
