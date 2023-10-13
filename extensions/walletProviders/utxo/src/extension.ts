@@ -43,7 +43,7 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
     super(tatumSdkContainer)
     this.sdkConfig = this.tatumSdkContainer.getConfig()
     this.connector = this.tatumSdkContainer.get(TatumConnector)
-    this.utxoRpc = this.tatumSdkContainer.get(UtxoRpc)
+    this.utxoRpc = this.tatumSdkContainer.getRpc<UtxoRpc>()
   }
 
   /**
