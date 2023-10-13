@@ -1,4 +1,10 @@
-import { EvmRpc, ITatumSdkContainer, Network, TatumConfig, TatumSdkWalletProvider } from '@tatumio/tatum'
+import {
+  EvmRpc,
+  ITatumSdkContainer,
+  Network,
+  TatumConfig,
+  TatumSdkWalletProvider
+} from '@tatumio/tatum'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { ethers } from 'ethers'
@@ -15,7 +21,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
     this.sdkConfig = this.tatumSdkContainer.getConfig()
-    this.evmRpc = this.tatumSdkContainer.get(EvmRpc)
+    this.evmRpc = this.tatumSdkContainer.getRpc<EvmRpc>()
   }
 
   /**

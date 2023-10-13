@@ -58,19 +58,23 @@ export abstract class TatumSdkExtension {
 
 The `ITatumSdkContainer` interface provides access to the SDK configuration and internal sub-modules along with other registered extensions.
 
+`getRpc` method provides access to the RPC sub-module of the SDK managed based on the SDK configuration (LoadBalancer, archive nodes, etc.). 
+
 ```typescript
 export interface ITatumSdkContainer {
     get<T>(type: ServiceConstructor<T>): T
+    getRpc<T>(): T
     getConfig(): TatumConfig
 }
 ```
 
-Example of extension constructor for extension depending on SDK configuration and `FeeEvm` sub-module:
+Example of extension constructor for extension depending on SDK configuration, `FeeEvm` sub-module and `EvmRpc` sub-module:
 
 ```
 constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
     this.fee = this.tatumSdkContainer.get(FeeEvm)
+    this.evmRpc = this.tatumSdkContainer.getRpc<EvmRpc>()
     this.sdkConfig = this.tatumSdkContainer.getConfig()
   }
 ```

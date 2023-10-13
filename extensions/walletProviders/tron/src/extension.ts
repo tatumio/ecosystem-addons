@@ -12,18 +12,18 @@ import {
 } from './types'
 import { generateAddress, isBase58, isHex } from './utils'
 import { TronTxRawBody } from '@tatumio/tatum/dist/src/dto/rpc/TronRpcSuite'
-import { TronRpc } from '@tatumio/tatum/dist/src/service/rpc/evm/TronRpc'
 // tronweb lib don't have any typings (not even in @types)
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import TronWeb from 'tronweb'
+import { TronRpc } from "@tatumio/tatum/dist/src/service/rpc/evm/TronRpc"
 
 export class TronWalletProvider extends TatumSdkWalletProvider<TronWallet, TronTxPayload> {
   private readonly tronRpc: TronRpc
 
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
-    this.tronRpc = this.tatumSdkContainer.get(TronRpc)
+    this.tronRpc = this.tatumSdkContainer.getRpc<TronRpc>()
   }
 
   /**

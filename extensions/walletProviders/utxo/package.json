@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/utxo-wallet-provider",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "UTXO provider with local wallet operations",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/utxo/README.md",
@@ -49,7 +49,7 @@
     "bignumber.js": "^9.1.2"
   },
   "devDependencies": {
-    "@tatumio/tatum": "^4.0.18",
+    "@tatumio/tatum": "^4.1.4",
     "typescript": "^5.2.2",
     "@types/elliptic": "^6.4.15",
     "@types/jest": "^29.5.5",
