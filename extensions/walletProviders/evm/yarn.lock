@@ -673,10 +673,10 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@tatumio/tatum@^4.1.4":
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.1.4.tgz#8ca3a8d811c9e1c7ea9491a3ac17ace16dd55e9f"
-  integrity sha512-dAmAnMKVTqlgvGh/g31EkzGj84shUoq4kUh+AgfirLr3Vmy00LwDUoBXJe5GOVRhLtQAUlhopWRgdL9oe3ChKw==
+"@tatumio/tatum@^4.1.7":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.1.7.tgz#88acc9687e9b3df1855c4f6f3f67630f6f9dcec5"
+  integrity sha512-D7EmtWugflaDa9YAe9Y1183Oa4YRRGuIcizpOWdgwoZeLQmtVhmasHGCZbxGgxTUTKa6EJNcZ7AH8ZbbdAm1Aw==
   dependencies:
     bignumber.js "^9.1.1"
     reflect-metadata "^0.1.13"

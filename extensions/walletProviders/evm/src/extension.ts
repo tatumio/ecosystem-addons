@@ -3,13 +3,14 @@ import {
   ITatumSdkContainer,
   Network,
   TatumConfig,
-  TatumSdkWalletProvider
+  TatumSdkWalletProvider,
+  TatumUtils
 } from '@tatumio/tatum'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { ethers } from 'ethers'
 
-import { ADDR_PREFIX, NETWORK_CHAIN_IDS } from './consts'
+import { ADDR_PREFIX } from './consts'
 import { TatumProvider } from './tatum.provider'
 import { EvmTxPayload, EvmWallet, XpubWithMnemonic } from './types'
 import { getDefaultDerivationPath, getHd, getWalletFromHd } from './utils'
@@ -126,7 +127,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
   public async signAndBroadcast(payload: EvmTxPayload): Promise<string> {
     const { privateKey, ...tx } = payload
 
-    const chainId = NETWORK_CHAIN_IDS.get(this.sdkConfig.network) as number
+    const chainId = TatumUtils.getChainId(this.sdkConfig.network)
     const provider = new TatumProvider(chainId, this.evmRpc)
     const signer = new ethers.Wallet(privateKey, provider)
     const txRequest = {
