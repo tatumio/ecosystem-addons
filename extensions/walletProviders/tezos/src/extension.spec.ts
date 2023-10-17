@@ -17,7 +17,6 @@ describe('TezosWalletProvider', () => {
   const privateKey =
     'edskRvJQqeNih91dkoRkTG1PWxV5AruYbtrkp5DKibL2iMkPGWBbdYp8jpsY3N3skCNrwf9socTv9Sstonkckc4jTb4vMQCSpn'
   const address = 'tz1cCRCbBwnazV6howgD84a6fuhikKTnsWHZ'
-  const recipient = 'tz1f1nboqWEhZJHwZnxnokQ9QoTiT21qMZxG'
 
   describe('generateMnemonic', () => {
     it('should generate 24 word mnemonic', () => {
@@ -26,18 +25,18 @@ describe('TezosWalletProvider', () => {
     })
   })
 
-  describe('generatePrivateKeyFromMnemonic', () => {
-    it('should generate private key, public key and public key hash', async () => {
+  describe('generatePrivateKeyAndAddressFromMnemonic', () => {
+    it('should generate private key and address', async () => {
       const result = await tatumSdk.walletProvider
         .use(TezosWalletProvider)
-        .generatePrivateAndPublicKeyFromMnemonic(mnemonic)
+        .generatePrivateKeyAndAddressFromMnemonic(mnemonic)
       expect(result.privateKey).toBe(privateKey)
       expect(result.address).toBe(address)
     })
   })
 
   describe('getWallet', () => {
-    it('should generate wallet', async () => {
+    it('should get a wallet', async () => {
       const wallet = await tatumSdk.walletProvider.use(TezosWalletProvider).getWallet()
       expect(wallet.address).toBeTruthy()
       expect(wallet.privateKey).toBeTruthy()
@@ -46,25 +45,12 @@ describe('TezosWalletProvider', () => {
     })
   })
 
-  describe('getPublicKeyFromPrivateKey', () => {
-    it('should get public address', async () => {
+  describe('generateAddressFromPrivateKey', () => {
+    it('should generate an address from private key', async () => {
       const result = await tatumSdk.walletProvider
         .use(TezosWalletProvider)
-        .getPublicKeyFromPrivateKey(privateKey)
+        .generateAddressFromPrivateKey(privateKey)
       expect(result).toBe(address)
-    })
-  })
-
-  describe('signAndBroadcast', () => {
-    it('should sign and broadcast transaction', async () => {
-      const payload = {
-        privateKey,
-        to: recipient,
-        amount: 0.01,
-      }
-      const txHash = await tatumSdk.walletProvider.use(TezosWalletProvider).signAndBroadcast(payload)
-      expect(txHash).toBeTruthy()
-      expect(txHash).toHaveLength(51)
     })
   })
 })

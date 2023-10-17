@@ -33,8 +33,6 @@
     "build-all": "yarn clean && yarn build"
   },
   "dependencies": {
-    "@taquito/signer": "^17.3.2",
-    "@taquito/taquito": "^17.3.2",
     "sotez": "^13.0.1"
   },
   "devDependencies": {
