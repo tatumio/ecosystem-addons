@@ -43,12 +43,12 @@ It is built upon popular packages like `sotez`, ensuring a robust and secure fou
    const mnemonic = tatumSdk.walletProvider.use(TezosWalletProvider).generateMnemonic()
    ```
 
-2. **Generate Private Key and Address from Mnemonic**
+2. **Generate Private Key from Mnemonic**
 
    ```typescript
-   const { privateKey, address } = await tatumSdk.walletProvider
+   const privateKey = await tatumSdk.walletProvider
      .use(TezosWalletProvider)
-     .generatePrivateKeyAndAddressFromMnemonic(mnemonic)
+     .generatePrivateKeyFromMnemonic(mnemonic)
    ```
 
 3. **Generate Address from Private key**

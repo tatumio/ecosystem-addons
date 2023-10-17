@@ -17,17 +17,17 @@ export class TezosWalletProvider extends TatumSdkWalletProvider<TezosWallet, Tez
     return generateMnemonic(256)
   }
   /**
-   * Generates a private key and address based on a mnemonic and a derivation path.
+   * Generates a private key based on a mnemonic and a derivation path.
    * If no derivation path is provided, default is used.
    * @param {string} mnemonic - The mnemonic seed phrase.
    * @param {string} [path] - The derivation path.
-   * @returns {{privateKey: string, publicKey: string, address: string}} A private key and address in a string format.
+   * @returns {string} A private key in a string format.
    */
-  public async generatePrivateKeyAndAddressFromMnemonic(mnemonic: string, path?: string) {
+  public async generatePrivateKeyFromMnemonic(mnemonic: string, path?: string) {
     path = path || TEZOS_DERIVATION_PATH
-    const { sk: privateKey, pkh: address } = await cryptoUtils.generateKeys(mnemonic, undefined, path)
+    const { sk: privateKey } = await cryptoUtils.generateKeys(mnemonic, undefined, path)
 
-    return { privateKey, address }
+    return privateKey
   }
 
   /**
@@ -48,7 +48,9 @@ export class TezosWalletProvider extends TatumSdkWalletProvider<TezosWallet, Tez
   public async getWallet() {
     const mnemonic = this.generateMnemonic()
 
-    const { privateKey, address } = await this.generatePrivateKeyAndAddressFromMnemonic(mnemonic)
+    const privateKey = await this.generatePrivateKeyFromMnemonic(mnemonic)
+
+    const address = await this.generateAddressFromPrivateKey(privateKey)
 
     return { address, privateKey, mnemonic } as TezosWallet
   }

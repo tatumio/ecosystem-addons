@@ -25,13 +25,12 @@ describe('TezosWalletProvider', () => {
     })
   })
 
-  describe('generatePrivateKeyAndAddressFromMnemonic', () => {
-    it('should generate private key and address', async () => {
+  describe('generatePrivateKeyFromMnemonic', () => {
+    it('should generate private key', async () => {
       const result = await tatumSdk.walletProvider
         .use(TezosWalletProvider)
-        .generatePrivateKeyAndAddressFromMnemonic(mnemonic)
-      expect(result.privateKey).toBe(privateKey)
-      expect(result.address).toBe(address)
+        .generatePrivateKeyFromMnemonic(mnemonic)
+      expect(result).toBe(privateKey)
     })
   })
 
