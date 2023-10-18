@@ -1,0 +1,54 @@
+{
+  "name": "@tatumio/tezos-wallet-provider",
+  "version": "1.0.0",
+  "description": "Tezos provider with local wallet operations",
+  "author": "Tatum",
+  "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/tezos/README.md",
+  "files": [
+    "dist/"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "Tatum",
+    "SDK",
+    "Extension",
+    "WalletProvider",
+    "Wallet",
+    "Tezos",
+    "Testnet",
+    "Mainnet",
+    "Blockchain"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "main": "dist/main.js",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "cli": "ts-node src/cli.ts",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx && prettier --write src/",
+    "clean": "rm -rf dist build package",
+    "ts-node": "ts-node",
+    "build": "node_modules/.bin/tsc -p tsconfig.json",
+    "build-all": "yarn clean && yarn build"
+  },
+  "dependencies": {
+    "sotez": "^13.0.1"
+  },
+  "devDependencies": {
+    "@tatumio/tatum": "^4.1.7",
+    "@types/jest": "^27.4.1",
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^8.14.0",
+    "jest": "27.0.0",
+    "prettier": "^2.8.4",
+    "prettier-plugin-organize-imports": "^3.2.2",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
+    "tslib": "^2.5.0",
+    "typescript": "^5.2.2",
+    "undici": "^5.21.0"
+  }
+}
