@@ -29,9 +29,7 @@ It is built upon popular packages like `sotez`, ensuring a robust and secure fou
    ```typescript
    const tatumSdk = await TatumSDK.init<Tezos>({
      network: Network.TEZOS,
-     configureWalletProviders: [
-       { type: TezosWalletProvider, config: { rpcUrl: 'https://ghostnet.ecadinfra.com' } },
-     ],
+     configureWalletProviders: [TezosWalletProvider],
    })
    ```
 
