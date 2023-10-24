@@ -1243,11 +1243,6 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypto@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
-  integrity sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==
-
 debug@^4.1.0, debug@^4.1.1, debug@^4.3.2, debug@^4.3.4:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
@@ -2194,11 +2189,6 @@ jest@^29.7.0:
     "@jest/types" "^29.6.3"
     import-local "^3.0.2"
     jest-cli "^29.7.0"
-
-js-sha3@^0.9.2:
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/js-sha3/-/js-sha3-0.9.2.tgz#a5ba3967ddf5a095f7b3389ef14a6297b10d6409"
-  integrity sha512-8kgvwd03wNGQG1GRvl3yy1Yt40sICAcIMsDU2ZLgoL0Z6z9rkRmf9Vd+bi/gYSzgAqMUGl/jiDKu0J8AWFd+BQ==
 
 js-tokens@^4.0.0:
   version "4.0.0"
