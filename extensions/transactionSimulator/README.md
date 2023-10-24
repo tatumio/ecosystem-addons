@@ -53,8 +53,10 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
 
     ```typescript
     const transferPayload: Transfer = {
-      to: 'recipient_address',
-      from: 'sender_address',
+      to: '0x0Ae9E7437092BB7E7Bd6Eccf0eF1ad05591f5B47',
+      from: '0xDce92f40cAdDE2C4e3EA78b8892c540e6bFe2f81',
+      gas: '0x5208', // optional
+      gasPrice: '0x4BA1C7B8C', //optional
       value: 1000, // example amount to send in wei
     };
     ```
@@ -102,6 +104,8 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
     const tokenTransferPayload: TokenTransfer = {
       to: 'recipient_address',
       from: 'sender_address',
+      gas: '0xB411', // optional
+      gasPrice: '0x4B16C370A', //optional
       value: 500, // example token amount to send
       tokenContractAddress: 'your_erc20_token_contract_address'
     };
@@ -153,8 +157,13 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
    }
    ```
 
-
 By using the above methods, you can efficiently predict the behavior and costs of your transactions before actually broadcasting them, ensuring optimized and error-free transactions.
+
+### Gas Price Estimation:
+
+   - Methods accept `gasPrice` as a parameter. If you don't provide it, the gas price will be estimated using the `eth_gasPrice` method.
+   - Methods accept `gas` as a parameter. If you don't provide it, the gas limit will be estimated using the `eth_estimateGas` method.
+
 
 ## 🔗🔗 Supported Networks
 
