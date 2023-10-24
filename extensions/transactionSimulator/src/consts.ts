@@ -1,0 +1,1 @@
+export const ERC20_TRANSFER_METHOD_SIGNATURE = '0xa9059cbb'
