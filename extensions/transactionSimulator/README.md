@@ -68,6 +68,31 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
 
    This method simulates the transaction, estimates the fees, and returns the expected result of the transaction.
 
+3. **Check simulation results**:
+
+   ```json
+   {
+     "transactionDetails": {
+       "from": "0xDce92f40cAdDE2C4e3EA78b8892c540e6bFe2f81",
+       "to": "0x0Ae9E7437092BB7E7Bd6Eccf0eF1ad05591f5B47",
+       "value": 10000,
+       "gasLimit": 21000,
+       "gasPrice": 20302297996
+     },
+     "status": "success",
+     "balanceChanges": {
+       "0xDce92f40cAdDE2C4e3EA78b8892c540e6bFe2f81": {
+         "from": 243323659206289750000,
+         "to": 243323232858031850000
+       },
+       "0x0Ae9E7437092BB7E7Bd6Eccf0eF1ad05591f5B47": {
+         "from": 8951104779026672,
+         "to": 8951104779036672
+       }
+     }
+   }
+   ```
+
 ### ERC20 Token Transfers:
 
 1. **Define Your Token Transfer Payload**:
@@ -90,6 +115,44 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
     ```
 
    This method fetches token details, simulates the transaction, and returns an estimation of the transaction's outcome along with the necessary gas fees.
+
+3. **Check simulation results**:
+
+   ```json
+   {
+     "transactionDetails": {
+       "from": "0xDce92f40cAdDE2C4e3EA78b8892c540e6bFe2f81",
+       "to": "0xaf758da9f7bdaa7590175193388e9c99427cc2d2",
+       "tokenContractAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+       "data": "0xa9059cbb000000000000000000000000af758da9f7bdaa7590175193388e9c99427cc2d2000000000000000000000000000000000000000000000000000000001908b100",
+       "gasLimit": 46097,
+       "gasPrice": 20156528394
+     },
+     "status": "success",
+     "balanceChanges": {
+       "0xDce92f40cAdDE2C4e3EA78b8892c540e6bFe2f81": {
+         "from": 243656557299636170000,
+         "to": 243655628144146780000
+       }
+     },
+     "tokenTransfers": {
+       "0xdac17f958d2ee523a2206206994597c13d831ec7": {
+         "name": "TetherUSD",
+         "symbol": "USDT",
+         "decimals": 6,
+         "0xDce92f40cAdDE2C4e3EA78b8892c540e6bFe2f81": {
+           "from": 2387468.080258,
+           "to": 2387048.080258
+         },
+         "0xaf758da9f7bdaa7590175193388e9c99427cc2d2": {
+           "from": 422.304,
+           "to": 842.304
+         }
+       }
+     }
+   }
+   ```
+
 
 By using the above methods, you can efficiently predict the behavior and costs of your transactions before actually broadcasting them, ensuring optimized and error-free transactions.
 

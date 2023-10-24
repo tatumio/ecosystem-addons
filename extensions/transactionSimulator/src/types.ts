@@ -129,10 +129,10 @@ export type TokenTransferDetail = {
 }
 
 export type TokenInfo = {
-  name: string // Assuming it's a string, adjust as necessary
-  symbol: string // Assuming it's a string, adjust as necessary
-  decimals: number // Assuming it's a number, adjust as necessary
-  [address: string]: TokenTransferDetail | string | number // Using a string key to capture any address
+  name: string
+  symbol: string
+  decimals: number
+  [address: string]: TokenTransferDetail | string | number
 }
 
 export type TokenTransfers = {
@@ -193,7 +193,7 @@ export type StateDiff = {
 export type TraceErc20 = {
   trace: {
     [index: number]: {
-      error?: string // Assuming this could be any type; better to narrow it down if possible
+      error?: string
     }
   }
   stateDiff: StateDiff
