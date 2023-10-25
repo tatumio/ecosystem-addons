@@ -7,7 +7,7 @@ export const matchStorageSlotsToAddresses = (
   const matchedAddresses: Record<string, string> = {}
 
   for (const address of addresses) {
-    for (let position = 0; position <= 100; position++) {
+    for (let position = 0; position <= 1000; position++) {
       const soliditySlot = getStorageSlotSolidity(address, position)
       const vyperSlot = getStorageSlotVyper(address, position)
 

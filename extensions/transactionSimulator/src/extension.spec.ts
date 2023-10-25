@@ -1,11 +1,14 @@
-import { Ethereum, Network, TatumSDK } from '@tatumio/tatum'
+import { Network, TatumSDK } from '@tatumio/tatum'
+import { BaseEvmClass } from '@tatumio/tatum/dist/src/service/tatum/tatum'
+import BigNumber from 'bignumber.js'
 import { TransactionSimulator } from './extension'
+import { TokenTransferDetail } from './types'
 
-describe('Transaction Simulator', () => {
-  let tatumSdk: Ethereum
+describe('Transaction Simulator - Ethereum', () => {
+  let tatumSdk: BaseEvmClass
 
-  beforeEach(async () => {
-    tatumSdk = await TatumSDK.init<Ethereum>({
+  beforeAll(async () => {
+    tatumSdk = await TatumSDK.init({
       network: Network.ETHEREUM,
       configureExtensions: [TransactionSimulator],
       verbose: true,
@@ -39,19 +42,21 @@ describe('Transaction Simulator', () => {
         status: 'success',
         balanceChanges: {
           [fromAddress]: {
-            from: expect.any(Number),
-            to: expect.any(Number),
+            from: expect.any(BigNumber),
+            to: expect.any(BigNumber),
           },
           [toAddress]: {
-            from: expect.any(Number),
-            to: expect.any(Number),
+            from: expect.any(BigNumber),
+            to: expect.any(BigNumber),
           },
         },
       })
       expect(
-        result.balanceChanges[fromAddress].from - result.balanceChanges[fromAddress].to,
+        result.balanceChanges[fromAddress].from.toNumber() - result.balanceChanges[fromAddress].to.toNumber(),
       ).toBeGreaterThanOrEqual(value)
-      expect(result.balanceChanges[toAddress].to - result.balanceChanges[toAddress].from).toBe(value)
+      expect(
+        result.balanceChanges[toAddress].to.toNumber() - result.balanceChanges[toAddress].from.toNumber(),
+      ).toBe(value)
     })
     describe('simulateTransferErc20', () => {
       it('should simulate token transaction', async () => {
@@ -78,8 +83,8 @@ describe('Transaction Simulator', () => {
           status: 'success',
           balanceChanges: {
             [fromAddress]: {
-              from: expect.any(Number),
-              to: expect.any(Number),
+              from: expect.any(BigNumber),
+              to: expect.any(BigNumber),
             },
           },
           tokenTransfers: {
@@ -88,16 +93,141 @@ describe('Transaction Simulator', () => {
               symbol: 'USDT',
               decimals: 6,
               [fromAddress]: {
-                from: expect.any(Number),
-                to: expect.any(Number),
+                from: expect.any(BigNumber),
+                to: expect.any(BigNumber),
               },
               [toAddress]: {
-                from: expect.any(Number),
-                to: expect.any(Number),
+                from: expect.any(BigNumber),
+                to: expect.any(BigNumber),
               },
             },
           },
         })
+        expect(
+          (result.tokenTransfers[tokenContractAddress][fromAddress] as TokenTransferDetail).from
+            .minus((result.tokenTransfers[tokenContractAddress][fromAddress] as TokenTransferDetail).to)
+            .toNumber(),
+        ).toBe(value)
+        expect(
+          (result.tokenTransfers[tokenContractAddress][toAddress] as TokenTransferDetail).to
+            .minus((result.tokenTransfers[tokenContractAddress][toAddress] as TokenTransferDetail).from)
+            .toNumber(),
+        ).toBe(value)
+      })
+    })
+  })
+})
+
+describe('Transaction Simulator - Chiliz', () => {
+  let tatumSdk: BaseEvmClass
+
+  beforeAll(async () => {
+    tatumSdk = await TatumSDK.init({
+      network: Network.CHILIZ,
+      configureExtensions: [TransactionSimulator],
+      verbose: true,
+    })
+  })
+
+  afterAll(async () => {
+    await tatumSdk.destroy()
+  })
+
+  describe('simulateTransfer', () => {
+    it('should simulate native transaction', async () => {
+      const fromAddress = '0x72917f88100893b3ba5a3d338c9176621ac3a01d'
+      const toAddress = '0x3a7927bf4870309efc957b30ef9a655292369515'
+      const value = 10000
+
+      const txRequest = {
+        from: fromAddress,
+        to: toAddress,
+        value: value,
+      }
+      const result = await tatumSdk.extension(TransactionSimulator).simulateTransfer(txRequest)
+      expect(result).toEqual({
+        transactionDetails: {
+          from: fromAddress,
+          to: toAddress,
+          value: value,
+          gasLimit: expect.any(Number),
+          gasPrice: expect.any(Number),
+        },
+        status: 'success',
+        balanceChanges: {
+          [fromAddress]: {
+            from: expect.any(BigNumber),
+            to: expect.any(BigNumber),
+          },
+          [toAddress]: {
+            from: expect.any(BigNumber),
+            to: expect.any(BigNumber),
+          },
+        },
+      })
+      expect(
+        result.balanceChanges[fromAddress].from.minus(result.balanceChanges[fromAddress].to).toNumber(),
+      ).toBeGreaterThanOrEqual(value)
+      expect(
+        result.balanceChanges[toAddress].to.minus(result.balanceChanges[toAddress].from).toNumber(),
+      ).toBe(value)
+    })
+    describe('simulateTransferErc20', () => {
+      it('should simulate token transaction', async () => {
+        const fromAddress = '0xaaADB5a0bD733CDb9c1f61Be20Ed648D2809b476'
+        const toAddress = '0xce04d9bcfe631fdfc1ba23c42b5c72a2f2c3872d'
+        const value = 2
+        const tokenContractAddress = '0xd1723eb9e7c6ee7c7e2d421b2758dc0f2166eddc'
+        const txRequest = {
+          from: fromAddress,
+          to: toAddress,
+          value: value,
+          tokenContractAddress: tokenContractAddress,
+        }
+        const result = await tatumSdk.extension(TransactionSimulator).simulateTransferErc20(txRequest)
+        expect(result).toEqual({
+          transactionDetails: {
+            from: fromAddress,
+            to: toAddress,
+            data: '0xa9059cbb000000000000000000000000ce04d9bcfe631fdfc1ba23c42b5c72a2f2c3872d0000000000000000000000000000000000000000000000000000000000000002',
+            gasLimit: expect.any(Number),
+            gasPrice: expect.any(Number),
+            tokenContractAddress: tokenContractAddress,
+          },
+          status: 'success',
+          balanceChanges: {
+            [fromAddress]: {
+              from: expect.any(BigNumber),
+              to: expect.any(BigNumber),
+            },
+          },
+          tokenTransfers: {
+            [tokenContractAddress]: {
+              name: 'Flamengo',
+              symbol: 'MENGO',
+              decimals: 0,
+              [fromAddress]: {
+                from: expect.any(BigNumber),
+                to: expect.any(BigNumber),
+              },
+              [toAddress]: {
+                from: expect.any(BigNumber),
+                to: expect.any(BigNumber),
+              },
+            },
+          },
+        })
+
+        expect(
+          (result.tokenTransfers[tokenContractAddress][fromAddress] as TokenTransferDetail).from
+            .minus((result.tokenTransfers[tokenContractAddress][fromAddress] as TokenTransferDetail).to)
+            .toNumber(),
+        ).toBe(value)
+        expect(
+          (result.tokenTransfers[tokenContractAddress][toAddress] as TokenTransferDetail).to
+            .minus((result.tokenTransfers[tokenContractAddress][toAddress] as TokenTransferDetail).from)
+            .toNumber(),
+        ).toBe(value)
       })
     })
   })
