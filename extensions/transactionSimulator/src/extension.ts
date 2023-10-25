@@ -135,7 +135,7 @@ export class TransactionSimulator extends TatumSdkExtension {
       data: data,
     }
   }
-  // fault: function(log) {},
+
   private async getTraceCall(payload: TransferPayload | TokenTransferPayload) {
     const jsonRpcResponse = await this.evmRpc.debugTraceCall(payload, 'latest', {
       tracer: this.minifiedTracer,
