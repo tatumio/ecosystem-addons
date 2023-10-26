@@ -16,4 +16,7 @@ module.exports = {
     "@typescript-eslint/return-await": ["error", "in-try-catch"],
     "@typescript-eslint/no-explicit-any": "error"
   },
+  ignorePatterns: [
+    "src/tracer.js",
+  ]
 };

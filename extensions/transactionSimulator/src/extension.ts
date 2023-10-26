@@ -1,7 +1,8 @@
 import { EvmRpc, ITatumSdkContainer, Network, TatumSdkExtension } from '@tatumio/tatum'
 import BigNumber from 'bignumber.js'
-import { ethers } from 'ethers'
+import { ethers, toBeHex } from 'ethers'
 import { ERC20_TRANSFER_METHOD_SIGNATURE } from './consts'
+import { TRACER } from './tracer'
 import {
   SimulationResult,
   TokenDetails,
@@ -17,10 +18,24 @@ import { matchStorageSlotsToAddresses } from './utils'
 
 export class TransactionSimulator extends TatumSdkExtension {
   private readonly evmRpc: EvmRpc
+  private minifiedTracer: string
 
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
     this.evmRpc = this.tatumSdkContainer.getRpc<EvmRpc>()
+  }
+
+  init(): Promise<void> {
+    this.minifiedTracer = TRACER
+        .replace(/\s+/g, ' ')
+        .replace(/\s*{\s*/g, '{')
+        .replace(/\s*}\s*/g, '}')
+        .replace(/\s*\(\s*/g, '(')
+        .replace(/\s*\)\s*/g, ')')
+        .replace(/\s*:\s*/g, ':')
+        .replace(/\s*,\s*/g, ',')
+
+    return Promise.resolve()
   }
 
   public async simulateTransfer(payload: Transfer): Promise<SimulationResult> {
@@ -122,7 +137,11 @@ export class TransactionSimulator extends TatumSdkExtension {
   }
 
   private async getTraceCall(payload: TransferPayload | TokenTransferPayload) {
-    const jsonRpcResponse = await this.evmRpc.traceCall(payload, ['trace', 'stateDiff'], 'latest')
+    const jsonRpcResponse = await this.evmRpc.debugTraceCall(payload, 'latest', {
+      tracer: this.minifiedTracer,
+      tracerConfig: { onlyTopCall: false, timeout: '10s' },
+    })
+
     if (!jsonRpcResponse.result)
       throw new Error(`Failed to trace call: ${JSON.stringify(jsonRpcResponse.error)}`)
 
@@ -149,12 +168,12 @@ export class TransactionSimulator extends TatumSdkExtension {
       status: 'success',
       balanceChanges: {
         [payload.from]: {
-          from: parseInt(balanceStateDiffFromAddress.from, 16),
-          to: parseInt(balanceStateDiffFromAddress.to, 16),
+          from: new BigNumber(balanceStateDiffFromAddress.from, 16),
+          to: new BigNumber(balanceStateDiffFromAddress.to, 16),
         },
         [payload.to]: {
-          from: parseInt(balanceStateDiffToAddress.from, 16),
-          to: parseInt(balanceStateDiffToAddress.to, 16),
+          from: new BigNumber(balanceStateDiffToAddress.from, 16),
+          to: new BigNumber(balanceStateDiffToAddress.to, 16),
         },
       },
     }
@@ -193,8 +212,8 @@ export class TransactionSimulator extends TatumSdkExtension {
       status: 'success',
       balanceChanges: {
         [payload.from]: {
-          from: parseInt(balanceStateDiffFromAddress.from, 16),
-          to: parseInt(balanceStateDiffFromAddress.to, 16),
+          from: new BigNumber(balanceStateDiffFromAddress.from, 16),
+          to: new BigNumber(balanceStateDiffFromAddress.to, 16),
         },
       },
       tokenTransfers: {
@@ -203,12 +222,20 @@ export class TransactionSimulator extends TatumSdkExtension {
           symbol: tokenDetails.tokenSymbol,
           decimals: tokenDetails.decimals.toNumber(),
           [payload.from]: {
-            from: parseInt(storageStateDiffFromAddress.from, 16) / 10 ** tokenDetails.decimals.toNumber(),
-            to: parseInt(storageStateDiffFromAddress.to, 16) / 10 ** tokenDetails.decimals.toNumber(),
+            from: new BigNumber(storageStateDiffFromAddress.from, 16).dividedBy(
+              new BigNumber(10).pow(tokenDetails.decimals.toNumber()),
+            ),
+            to: new BigNumber(storageStateDiffFromAddress.to, 16).dividedBy(
+              new BigNumber(10).pow(tokenDetails.decimals.toNumber()),
+            ),
           },
           [payload.to]: {
-            from: parseInt(storageStateDiffToAddress.from, 16) / 10 ** tokenDetails.decimals.toNumber(),
-            to: parseInt(storageStateDiffToAddress.to, 16) / 10 ** tokenDetails.decimals.toNumber(),
+            from: new BigNumber(storageStateDiffToAddress.from, 16).dividedBy(
+              new BigNumber(10).pow(tokenDetails.decimals.toNumber()),
+            ),
+            to: new BigNumber(storageStateDiffToAddress.to, 16).dividedBy(
+              new BigNumber(10).pow(tokenDetails.decimals.toNumber()),
+            ),
           },
         },
       },
@@ -216,13 +243,11 @@ export class TransactionSimulator extends TatumSdkExtension {
   }
 
   private generateErc20TransferData(toAddress: string, amount: number, tokenDetails: TokenDetails): string {
-    if (!toAddress.startsWith('0x')) {
-      throw new Error('Addresses should start with 0x')
-    }
-
-    const amountWithDecimals = new BigNumber(amount).multipliedBy(10 ** tokenDetails.decimals.toNumber())
-    const encodedAddress = ethers.zeroPadValue(toAddress, 32).slice(2)
-    const encodedAmount = ethers.zeroPadValue('0x' + amountWithDecimals.toString(16), 32).slice(2)
+    const amountWithDecimals = new BigNumber(amount).multipliedBy(
+      new BigNumber(10).pow(tokenDetails.decimals.toNumber()),
+    )
+    const encodedAddress = ethers.zeroPadValue(toBeHex(toAddress), 32).slice(2)
+    const encodedAmount = ethers.zeroPadValue(toBeHex(amountWithDecimals.toString()), 32).slice(2)
 
     return `${ERC20_TRANSFER_METHOD_SIGNATURE}${encodedAddress}${encodedAmount}`
   }

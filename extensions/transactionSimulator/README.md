@@ -13,9 +13,9 @@ By leveraging these simulations, developers can:
 
 1. **Estimate Fees Accurately:** One of the primary challenges in sending blockchain transactions is determining an optimal gas fee that ensures quick confirmation without overpaying. By simulating a transaction before sending it, developers can get a precise estimate of the gas fee, saving costs and improving user experience.
 
-2. **Enhance Safety:** Simulating transactions allows developers to anticipate and catch potential errors or vulnerabilities in transaction logic. By identifying these issues in a simulation environment, developers can prevent costly mistakes when deploying actual transactions.
+2. **Enhance Safety:** Simulating transactions allows developers to anticipate and catch potential errors or vulnerabilities in transaction logic. By identifying these issues in a simulated call, developers can prevent costly mistakes when deploying actual transactions.
 
-3. **Optimize Transaction Parameters:** Beyond just estimating fees, simulating transactions can help developers fine-tune other parameters, such as gas limit or nonce, to optimize transaction performance.
+3. **Optimize Transaction Parameters:** Beyond just estimating fees, simulating transactions can help developers fine-tune other parameters, such as gas limit, to optimize transaction performance.
 
 It is built upon popular packages like `ethers`, ensuring a robust, reliable, and secure foundation for all simulation activities.
 
@@ -65,7 +65,7 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
    Pass the defined payload to the `simulateTransfer` method.
 
     ```typescript
-    const simulationResult = await simulateTransfer(transferPayload);
+    const simulationResult = await tatumSdk.extension(TransactionSimulator).simulateTransfer(transferPayload);
     ```
 
    This method simulates the transaction, estimates the fees, and returns the expected result of the transaction.
@@ -115,7 +115,7 @@ The Transaction Simulator provides methods to simulate native and ERC20 token tr
    With your `TokenTransfer` payload ready, pass it to the `simulateTransferErc20` method.
 
     ```typescript
-    const tokenSimulationResult = await simulateTransferErc20(tokenTransferPayload);
+    const tokenSimulationResult = await tatumSdk.extension(TransactionSimulator).simulateTransferErc20(tokenTransferPayload);
     ```
 
    This method fetches token details, simulates the transaction, and returns an estimation of the transaction's outcome along with the necessary gas fees.

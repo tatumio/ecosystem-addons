@@ -43,8 +43,8 @@ export type TokenTransactionDetails = {
 }
 
 export type BalanceChange = {
-  from: number
-  to: number
+  from: BigNumber
+  to: BigNumber
 }
 
 export type BalanceChanges = {
@@ -105,7 +105,6 @@ export interface TokenTransfer extends Transfer {
   tokenContractAddress: string
 }
 
-
 export interface TransferPayload {
   to: string
   from: string
@@ -124,8 +123,8 @@ export interface TokenTransferPayload {
 }
 
 export type TokenTransferDetail = {
-  from: number
-  to: number
+  from: BigNumber
+  to: BigNumber
 }
 
 export type TokenInfo = {
