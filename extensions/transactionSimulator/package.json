@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/transaction-simulator",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Transaction Simulation Extension",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/transactionSimulator/README.md",
