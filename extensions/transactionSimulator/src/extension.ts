@@ -88,9 +88,9 @@ export class TransactionSimulator extends TatumSdkExtension {
       tokenSymbolPromise,
     ])
 
-    if (!decimals.result) throw new Error(`Failed to retrieve decimals for contract: ${payload.to}`)
-    if (!tokenName.result) throw new Error(`Failed to retrieve token name for contract: ${payload.to}`)
-    if (!tokenSymbol.result) throw new Error(`Failed to retrieve token symbol for contract: ${payload.to}`)
+    if (!decimals.result) throw new Error(`Failed to retrieve decimals for contract: ${payload.to} - ${JSON.stringify(decimals.error)}`)
+    if (!tokenName.result) throw new Error(`Failed to retrieve token name for contract: ${payload.to} - ${JSON.stringify(tokenName.error)}`)
+    if (!tokenSymbol.result) throw new Error(`Failed to retrieve token symbol for contract: ${payload.to} - ${JSON.stringify(tokenSymbol.error)}`)
     return { decimals: decimals.result, tokenName: tokenName.result, tokenSymbol: tokenSymbol.result }
   }
 
@@ -144,6 +144,9 @@ export class TransactionSimulator extends TatumSdkExtension {
 
     if (!jsonRpcResponse.result)
       throw new Error(`Failed to trace call: ${JSON.stringify(jsonRpcResponse.error)}`)
+
+    if (!Object.keys(jsonRpcResponse.result).length)
+      throw new Error(`Failed to trace call - tracing returned empty result`)
 
     return jsonRpcResponse.result
   }
@@ -253,29 +256,21 @@ export class TransactionSimulator extends TatumSdkExtension {
   }
 
   supportedNetworks: Network[] = [
-    Network.ETHEREUM,
-    Network.ETHEREUM_SEPOLIA,
-    Network.ETHEREUM_CLASSIC,
-    Network.ETHEREUM_GOERLI,
-    Network.ETHEREUM_HOLESKY,
+    Network.ARBITRUM_ONE,
     Network.AVALANCHE_C,
-    Network.POLYGON,
-    Network.POLYGON_MUMBAI,
     Network.CELO,
     Network.CELO_ALFAJORES,
+    Network.CHILIZ,
+    Network.ETHEREUM,
+    Network.ETHEREUM_SEPOLIA,
+    Network.ETHEREUM_GOERLI,
+    Network.ETHEREUM_HOLESKY,
+    Network.ETHEREUM_CLASSIC,
+    Network.POLYGON,
+    Network.POLYGON_MUMBAI,
+    Network.BINANCE_SMART_CHAIN,
     Network.BINANCE_SMART_CHAIN_TESTNET,
-    Network.KUCOIN,
-    Network.KUCOIN_TESTNET,
     Network.OPTIMISM,
     Network.OPTIMISM_TESTNET,
-    Network.HARMONY_ONE_TESTNET_SHARD_0,
-    Network.FLARE_COSTON,
-    Network.FLARE_COSTON_2,
-    Network.FLARE,
-    Network.FLARE_SONGBIRD,
-    Network.ARBITRUM_ONE,
-    Network.BINANCE_SMART_CHAIN,
-    Network.HORIZEN_EON,
-    Network.CHILIZ,
   ]
 }
