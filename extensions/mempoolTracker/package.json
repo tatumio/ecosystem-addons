@@ -41,7 +41,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "@tatumio/tatum": "^4.1.19",
+    "@tatumio/tatum": "^4.1.20",
     "typescript": "^5.2.2",
     "@types/elliptic": "^6.4.15",
     "@types/jest": "^29.5.5",
