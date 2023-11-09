@@ -65,6 +65,20 @@ It is built upon popular packages like `sotez`, ensuring a robust and secure fou
      .getWallet()
    ```
 
+5. **Sign and Broadcast a Transaction**
+
+   Define your payload according to the `EvmTxPayload` type:
+
+   ```typescript
+   const tezosTxPayload = {
+        privateKey: privateKey,
+        to: address,
+        amount: 0.1,
+      }
+
+   const txHash = await tatumSdk.walletProvider.use(TezosWalletProvider).signAndBroadcast(tezosTxPayload)
+   ```
+
 Remember to always ensure the safety of mnemonics, private keys, and other sensitive data. Never expose them in client-side code or public repositories.
 
 ## 🔗🔗 Supported Networks
