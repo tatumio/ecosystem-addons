@@ -6,8 +6,9 @@ describe('TezosWalletProvider', () => {
 
   beforeEach(async () => {
     tatumSdk = await TatumSDK.init<Tezos>({
-      network: Network.TEZOS,
+      network: Network.TEZOS_TESTNET,
       configureWalletProviders: [TezosWalletProvider],
+      verbose: true,
     })
   })
 
@@ -48,6 +49,20 @@ describe('TezosWalletProvider', () => {
         .use(TezosWalletProvider)
         .generateAddressFromPrivateKey(privateKey)
       expect(result).toBe(address)
+    })
+  })
+
+  describe('signAndBroadcast', () => {
+    it('should sign and broadcast transaction', async () => {
+      const tezosTxPayload = {
+        privateKey: privateKey,
+        to: address,
+        amount: 0.1,
+      }
+
+      const txHash = await tatumSdk.walletProvider.use(TezosWalletProvider).signAndBroadcast(tezosTxPayload)
+      expect(txHash).toBeTruthy()
+      expect(txHash).toHaveLength(51)
     })
   })
 })

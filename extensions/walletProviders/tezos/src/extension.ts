@@ -1,12 +1,21 @@
+import { InMemorySigner } from '@taquito/signer'
+import { TezosToolkit } from '@taquito/taquito'
 import { ITatumSdkContainer, Network, TatumSdkWalletProvider } from '@tatumio/tatum'
+import { TezosRpcInterface } from '@tatumio/tatum/dist/src/dto/rpc/TezosRpcSuite'
 import { generateMnemonic } from 'bip39'
 import { cryptoUtils } from 'sotez'
 import { TEZOS_DERIVATION_PATH } from './consts'
+import { TatumProvider } from './tatum.provider'
 import { TezosTxPayload, TezosWallet } from './types'
 
 export class TezosWalletProvider extends TatumSdkWalletProvider<TezosWallet, TezosTxPayload> {
+  private readonly rpc: TezosRpcInterface
+  private readonly chain: string
+
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
+    this.rpc = this.tatumSdkContainer.getRpc<TezosRpcInterface>() as TezosRpcInterface
+    this.chain = 'main'
   }
 
   /**
@@ -57,12 +66,22 @@ export class TezosWalletProvider extends TatumSdkWalletProvider<TezosWallet, Tez
 
   /**
    * Signs and broadcasts a Tezos transaction payload.
-   * @param {EvmTxPayload} payload - The Tezos transaction payload, which includes private key and transaction details.
+   * @param {TezosTxPayload} payload - The Tezos transaction payload, which includes private key and transaction details.
    * @returns {Promise<string>} A promise that resolves to the transaction hash.
    */
-  //@ts-ignore
   public async signAndBroadcast(payload: TezosTxPayload): Promise<string> {
-    throw new Error('Method not implemented.')
+    const tezos = new TezosToolkit(new TatumProvider(this.rpc, this.chain))
+
+    tezos.setProvider({
+      signer: await InMemorySigner.fromSecretKey(payload.privateKey),
+    })
+
+    const op = await tezos.contract.transfer({
+      to: payload.to,
+      amount: payload.amount,
+    })
+
+    return op.hash
   }
 
   supportedNetworks: Network[] = [Network.TEZOS, Network.TEZOS_TESTNET]
