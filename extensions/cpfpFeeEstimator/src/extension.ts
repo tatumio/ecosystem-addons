@@ -56,8 +56,8 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
 
     console.log('Pending txs count:', this.pendingTxs.length)
     console.log('Pending txs total size:', totalSize)
-    console.log('Total current fee of pending transactions:', totalCurrentFee, 'satoshis')
-    console.log('Current fast fee: ', currentFee.toFixed(3), 'sat/byte')
+    console.log('Total current fee of pending transactions:', totalCurrentFee.toFixed(0), 'satoshis')
+    console.log(`Current ${feeTransactionSpeed} fee: `, currentFee.toFixed(3), 'sat/byte')
     console.log('Total fee required for CPFP to push all children:', totalRequiredFee.toFixed(0), 'satoshis')
     console.log(
       'Additional fee needed for CPFP:',
