@@ -49,6 +49,19 @@ To estimate the additional fee required for a CPFP transaction:
    This method processes the parent transaction and its descendants to calculate the total additional fee required to expedite their confirmations.
    Note that the additional fee required should be increased by the fee of the transaction spending the outputs.
 
+   **Return Type**:
+```typescript
+export interface CPFPFeeEstimation {
+  transactionsInChain: Transaction[]
+  totalSizeBytes: number // Total size of all transactions in the pending chain
+  totalCurrentFee: string // Total fee of all transactions in the pending chain
+  targetTransactionSpeed: FeeTransactionSpeed
+  targetFeePerByte: string // Target fee per byte for chosen transaction speed
+  totalRequiredFee: string // Total fee required to confirm all transactions in the pending chain
+  additionalFeeNeeded: string // Additional fee required to confirm all transactions in the pending chain (totalRequiredFee - totalCurrentFee)
+}
+```
+
 ## 🔗 Supported Networks
 
 The CPFP Fee Estimator supports the following networks:

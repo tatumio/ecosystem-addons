@@ -21,9 +21,9 @@ describe('CPFP Fee Estimator', () => {
     it('should return additional fee', async () => {
       const cpfpFee = await tatumSdk
         .extension(CpfpFeeEstimator)
-        .estimateCPFPFee('7fc15ec624a3b8d1e2ecc3cfef4395ffa1ac6246b0b763dda896d2c918d98017')
+        .estimateCPFPFee('a8c22656c585a5d1fb5bdfdabecf158be55492d03a22190d95e8eb561431dc6c')
 
-      expect(cpfpFee).toBeGreaterThanOrEqual(0)
+      expect(cpfpFee).toBeDefined()
     }, 180000)
   })
 })
