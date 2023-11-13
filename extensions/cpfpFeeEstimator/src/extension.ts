@@ -13,18 +13,18 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
     this.feeUtxo = this.tatumSdkContainer.get(FeeUtxo)
   }
 
-  private readonly pendingTxs: Transaction[] = []
-  private readonly txCache: Record<string, Transaction> = {}
-
   public async estimateCPFPFee(
     txId: string,
     feeTransactionSpeed: FeeTransactionSpeed = FeeTransactionSpeed.FAST,
   ): Promise<CPFPFeeEstimation> {
-    await this.processTransaction(txId)
+    const pendingTxs: Transaction[] = []
+    const txCache: Record<string, Transaction> = {}
+
+    await this.processTransaction(txId, pendingTxs, txCache)
 
     let totalSize = 0
     let totalCurrentFee = new BigNumber(0)
-    for (const tx of this.pendingTxs) {
+    for (const tx of pendingTxs) {
       totalSize += tx.size
       totalCurrentFee = totalCurrentFee.plus(tx.fee)
     }
@@ -53,7 +53,7 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
     const additionalFeeNeeded = totalRequiredFee.minus(totalCurrentFee)
 
     return {
-      transactionsInChain: this.pendingTxs,
+      transactionsInChain: pendingTxs,
       totalSizeBytes: totalSize,
       totalCurrentFee: totalCurrentFee.toFixed(0),
       targetTransactionSpeed: feeTransactionSpeed,
@@ -63,8 +63,12 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
     }
   }
 
-  private async processTransaction(txId: string): Promise<void> {
-    const transaction: Transaction = await this.tryGetFromCache(txId)
+  private async processTransaction(
+    txId: string,
+    pendingTxs: Transaction[],
+    txCache: Record<string, Transaction>,
+  ): Promise<void> {
+    const transaction: Transaction = await this.tryGetFromCache(txId, txCache)
 
     if (transaction.confirmations) {
       return
@@ -72,7 +76,7 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
 
     let inputValue = new BigNumber(0)
     for (const input of transaction.vin) {
-      const inputTx = await this.tryGetFromCache(input.txid)
+      const inputTx = await this.tryGetFromCache(input.txid, txCache)
       const inputVout = inputTx.vout[input.vout]
       inputValue = inputValue.plus(inputVout.value)
     }
@@ -81,18 +85,18 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
 
     const fee = inputValue.minus(outputValue)
 
-    this.pendingTxs.push({ ...transaction, fee: fee, feePerByte: fee.dividedBy(transaction.size) })
+    pendingTxs.push({ ...transaction, fee: fee, feePerByte: fee.dividedBy(transaction.size) })
 
     for (const { txid } of transaction.vin) {
-      await this.processTransaction(txid)
+      await this.processTransaction(txid, pendingTxs, txCache)
     }
   }
 
-  private async tryGetFromCache(txId: string): Promise<Transaction> {
-    if (!this.txCache[txId]) {
+  private async tryGetFromCache(txId: string, txCache: Record<string, Transaction>): Promise<Transaction> {
+    if (!txCache[txId]) {
       const txResult = await this.utxoRpc.getRawTransaction(txId, true)
       if (txResult.result) {
-        this.txCache[txId] = {
+        txCache[txId] = {
           txid: txResult.result.txid,
           size: txResult.result.size,
           fee: new BigNumber(0),
@@ -112,7 +116,7 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
       }
     }
 
-    return this.txCache[txId]
+    return txCache[txId]
   }
 
   supportedNetworks: Network[] = [Network.BITCOIN, Network.BITCOIN_TESTNET]
