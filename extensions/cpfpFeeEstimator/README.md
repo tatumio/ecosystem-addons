@@ -2,6 +2,8 @@
 
 The CPFP Fee Estimator is a powerful extension of the Tatum SDK, designed specifically to provide accurate fee estimation for Child Pays for Parent (CPFP) transactions on Bitcoin and Bitcoin Testnet networks.
 
+If your transaction is stuck due to low fees, the CPFP Fee Estimator can help you estimate the additional fee required to expedite its confirmation no matter the length of the chain of pending transactions.
+
 ## 📖 Description
 
 The CPFP Fee Estimator enhances the efficiency and reliability of Bitcoin transactions. It is particularly useful in scenarios where unconfirmed transactions are stuck due to low fees. Key features include:
@@ -55,12 +57,30 @@ export interface CPFPFeeEstimation {
   transactionsInChain: Transaction[]
   totalSizeBytes: number // Total size of all transactions in the pending chain
   totalCurrentFee: string // Total fee of all transactions in the pending chain
-  targetTransactionSpeed: FeeTransactionSpeed
-  targetFeePerByte: string // Target fee per byte for chosen transaction speed
-  totalRequiredFee: string // Total fee required to confirm all transactions in the pending chain
-  additionalFeeNeeded: string // Additional fee required to confirm all transactions in the pending chain (totalRequiredFee - totalCurrentFee)
+  fast: {
+    targetFeePerByte: string
+    totalRequiredFee: string
+    additionalFeeNeeded: string
+  },
+  medium: {
+    targetFeePerByte: string
+    totalRequiredFee: string
+    additionalFeeNeeded: string
+  },
+  slow: {
+    targetFeePerByte: string
+    totalRequiredFee: string
+    additionalFeeNeeded: string
+  }
 }
 ```
+
+`targetFeePerByte` - The target fee per byte for the chosen transaction speed. This is the fee that should be used for the CPFP transaction.
+
+`totalRequiredFee` - The total fee required to confirm all transactions in the pending chain.
+
+`additionalFeeNeeded` - The additional fee required to confirm all transactions in the pending chain (totalRequiredFee - totalCurrentFee).
+
 
 ## 🔗 Supported Networks
 

@@ -24,7 +24,12 @@ export interface CPFPFeeEstimation {
   transactionsInChain: Transaction[]
   totalSizeBytes: number
   totalCurrentFee: string
-  targetTransactionSpeed: FeeTransactionSpeed
+  fast: FeeForSpeed
+  medium: FeeForSpeed
+  slow: FeeForSpeed
+}
+
+export interface FeeForSpeed {
   targetFeePerByte: string
   totalRequiredFee: string
   additionalFeeNeeded: string

@@ -1,7 +1,14 @@
-import { FeeUtxo, ITatumSdkContainer, Network, TatumSdkExtension, UtxoRpc } from '@tatumio/tatum'
+import {
+  CurrentUtxoFee,
+  FeeUtxo,
+  ITatumSdkContainer,
+  Network,
+  TatumSdkExtension,
+  UtxoRpc,
+} from '@tatumio/tatum'
 import { Status } from '@tatumio/tatum/dist/src/util/error'
 import BigNumber from 'bignumber.js'
-import { CPFPFeeEstimation, FeeTransactionSpeed, Transaction } from './types'
+import { CPFPFeeEstimation, FeeForSpeed, FeeTransactionSpeed, Transaction } from './types'
 
 export class CpfpFeeEstimator extends TatumSdkExtension {
   private readonly utxoRpc: UtxoRpc
@@ -13,10 +20,7 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
     this.feeUtxo = this.tatumSdkContainer.get(FeeUtxo)
   }
 
-  public async estimateCPFPFee(
-    txId: string,
-    feeTransactionSpeed: FeeTransactionSpeed = FeeTransactionSpeed.FAST,
-  ): Promise<CPFPFeeEstimation> {
+  public async estimateCPFPFee(txId: string): Promise<CPFPFeeEstimation> {
     const pendingTxs: Transaction[] = []
     const txCache: Record<string, Transaction> = {}
 
@@ -35,17 +39,48 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
       throw new Error('Failed to get current fee')
     }
 
+    return {
+      transactionsInChain: pendingTxs,
+      totalSizeBytes: totalSize,
+      totalCurrentFee: totalCurrentFee.toFixed(0),
+      fast: this.getFeesForSpeed(
+        FeeTransactionSpeed.FAST,
+        currentFeeResponse.data,
+        totalSize,
+        totalCurrentFee,
+      ),
+      medium: this.getFeesForSpeed(
+        FeeTransactionSpeed.MEDIUM,
+        currentFeeResponse.data,
+        totalSize,
+        totalCurrentFee,
+      ),
+      slow: this.getFeesForSpeed(
+        FeeTransactionSpeed.SLOW,
+        currentFeeResponse.data,
+        totalSize,
+        totalCurrentFee,
+      ),
+    }
+  }
+
+  private getFeesForSpeed(
+    feeTransactionSpeed: FeeTransactionSpeed,
+    currentUtxoFee: CurrentUtxoFee,
+    totalSize: number,
+    totalCurrentFee: BigNumber,
+  ): FeeForSpeed {
     let currentFee: BigNumber
 
     switch (feeTransactionSpeed) {
       case FeeTransactionSpeed.SLOW:
-        currentFee = new BigNumber(currentFeeResponse.data.slow)
+        currentFee = new BigNumber(currentUtxoFee.slow)
         break
       case FeeTransactionSpeed.MEDIUM:
-        currentFee = new BigNumber(currentFeeResponse.data.medium)
+        currentFee = new BigNumber(currentUtxoFee.medium)
         break
       case FeeTransactionSpeed.FAST:
-        currentFee = new BigNumber(currentFeeResponse.data.fast)
+        currentFee = new BigNumber(currentUtxoFee.fast)
         break
     }
 
@@ -53,10 +88,6 @@ export class CpfpFeeEstimator extends TatumSdkExtension {
     const additionalFeeNeeded = totalRequiredFee.minus(totalCurrentFee)
 
     return {
-      transactionsInChain: pendingTxs,
-      totalSizeBytes: totalSize,
-      totalCurrentFee: totalCurrentFee.toFixed(0),
-      targetTransactionSpeed: feeTransactionSpeed,
       targetFeePerByte: currentFee.toFixed(3),
       totalRequiredFee: totalRequiredFee.toFixed(0),
       additionalFeeNeeded: additionalFeeNeeded.gte(0) ? additionalFeeNeeded.toFixed(0) : '0',
