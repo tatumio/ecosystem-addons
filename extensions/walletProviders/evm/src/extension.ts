@@ -1,11 +1,5 @@
-import {
-  EvmRpc,
-  ITatumSdkContainer,
-  Network,
-  TatumConfig,
-  TatumSdkWalletProvider,
-  TatumUtils
-} from '@tatumio/tatum'
+import { EvmRpc, ITatumSdkContainer, Network, TatumConfig, TatumSdkWalletProvider } from '@tatumio/tatum'
+import { NetworkUtils } from '@tatumio/tatum/dist/src/util/network.utils'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { ethers } from 'ethers'
@@ -127,7 +121,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
   public async signAndBroadcast(payload: EvmTxPayload): Promise<string> {
     const { privateKey, ...tx } = payload
 
-    const chainId = TatumUtils.getChainId(this.sdkConfig.network)
+    const chainId = NetworkUtils.getChainId(this.sdkConfig.network)
     const provider = new TatumProvider(chainId, this.evmRpc)
     const signer = new ethers.Wallet(privateKey, provider)
     const txRequest = {
@@ -165,8 +159,8 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
     Network.BINANCE_SMART_CHAIN_TESTNET,
     Network.VECHAIN,
     Network.VECHAIN_TESTNET,
-    Network.XDC,
-    Network.XDC_TESTNET,
+    Network.XINFIN,
+    Network.XINFIN_TESTNET,
     Network.PALM,
     Network.PALM_TESTNET,
     Network.CRONOS,

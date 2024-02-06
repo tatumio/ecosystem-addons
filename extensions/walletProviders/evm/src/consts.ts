@@ -30,5 +30,5 @@ export const DERIVATION_PATHS = new Map<Network, string>([
   [Network.PALM, EVM_DERIVATION_PATH_COMMON],
   [Network.POLYGON, "m/44'/966'/0'/0"],
   [Network.VECHAIN, "m/44'/818'/0'/0"],
-  [Network.XDC, "m/44'/550'/0'/0"],
+  [Network.XINFIN, "m/44'/550'/0'/0"],
 ])
