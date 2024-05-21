@@ -670,12 +670,13 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@tatumio/tatum@^4.1.7":
-  version "4.1.7"
-  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.1.7.tgz#88acc9687e9b3df1855c4f6f3f67630f6f9dcec5"
-  integrity sha512-D7EmtWugflaDa9YAe9Y1183Oa4YRRGuIcizpOWdgwoZeLQmtVhmasHGCZbxGgxTUTKa6EJNcZ7AH8ZbbdAm1Aw==
+"@tatumio/tatum@^4.2.27":
+  version "4.2.28"
+  resolved "https://registry.yarnpkg.com/@tatumio/tatum/-/tatum-4.2.28.tgz#9813f58faa9aceeaef16cf2e4c75c13c0562a955"
+  integrity sha512-5aATHPfB7hcIWaRt7xi/AYOz2ocTsoBLQu0c9Tm+dPColhgZPxFb3KCWcawx1urSaD5amYRp3n+0hlocvPRY5A==
   dependencies:
     bignumber.js "^9.1.1"
+    chalk "^4.1.2"
     reflect-metadata "^0.1.13"
     typedi "^0.10.0"
 
@@ -1140,7 +1141,7 @@ chalk@^2.4.2:
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
 
-chalk@^4.0.0:
+chalk@^4.0.0, chalk@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-4.1.2.tgz#aac4e2b7734a740867aeb16bf02aad556a1e7a01"
   integrity sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==

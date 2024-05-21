@@ -1,19 +1,13 @@
-import {
-  EvmRpc,
-  ITatumSdkContainer,
-  Network,
-  TatumConfig,
-  TatumSdkWalletProvider
-} from '@tatumio/tatum'
+import { EvmRpc, ITatumSdkContainer, Network, TatumConfig, TatumSdkWalletProvider } from '@tatumio/tatum'
 import { generateMnemonic as bip39GenerateMnemonic } from 'bip39'
 import ethWallet, { hdkey } from 'ethereumjs-wallet'
 import { ethers } from 'ethers'
 
+import { NetworkUtils } from '@tatumio/tatum/dist/src/util/network.utils'
 import { ADDR_PREFIX } from './consts'
 import { TatumProvider } from './tatum.provider'
 import { EvmTxPayload, EvmWallet, XpubWithMnemonic } from './types'
 import { getDefaultDerivationPath, getHd, getWalletFromHd } from './utils'
-import { NetworkUtils } from "@tatumio/tatum/dist/src/util/network.utils";
 
 export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPayload> {
   private readonly sdkConfig: TatumConfig
@@ -152,7 +146,7 @@ export class EvmWalletProvider extends TatumSdkWalletProvider<EvmWallet, EvmTxPa
     Network.AVALANCHE_C,
     Network.AVALANCHE_C_TESTNET,
     Network.POLYGON,
-    Network.POLYGON_MUMBAI,
+    Network.POLYGON_AMOY,
     Network.GNOSIS,
     Network.GNOSIS_TESTNET,
     Network.FANTOM,
