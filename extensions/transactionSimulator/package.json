@@ -45,7 +45,7 @@
     "ethers": "^6.8.0"
   },
   "devDependencies": {
-    "@tatumio/tatum": "^4.1.7",
+    "@tatumio/tatum": "^4.2.27",
     "typescript": "^5.2.2",
     "@types/elliptic": "^6.4.15",
     "@types/jest": "^29.5.5",

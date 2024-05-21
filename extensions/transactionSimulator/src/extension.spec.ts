@@ -1,5 +1,4 @@
-import { Network, TatumSDK } from '@tatumio/tatum'
-import { BaseEvmClass } from '@tatumio/tatum/dist/src/service/tatum/tatum'
+import { Ethereum, Network, TatumSDK } from '@tatumio/tatum'
 import BigNumber from 'bignumber.js'
 import { TransactionSimulator } from './extension'
 import { TokenTransferDetail } from './types'
@@ -43,7 +42,7 @@ const testData = [{
 ]
 
 describe.each(testData)('Transaction Simulator - $network', (testData) => {
-  let tatumSdk: BaseEvmClass
+  let tatumSdk: Ethereum
 
   beforeAll(async () => {
     tatumSdk = await TatumSDK.init({
