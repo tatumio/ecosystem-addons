@@ -17,3 +17,8 @@ export type KadenaTxPayload = {
   command: IUnsignedCommand
 
 }
+
+export enum KadenaNetworkId {
+  MAINNET = 'mainnet01',
+  TESTNET = 'testnet04'
+}

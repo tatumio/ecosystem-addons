@@ -20,23 +20,22 @@ import {
   NFT_BURN_AMOUNT,
   MARMALADE_BURN_POLICY
 } from "./consts";
+import { KadenaLoadBalancerRpc } from "@tatumio/tatum/dist/src/service/rpc/other/KadenaLoadBalancerRpc";
 
 export class KadenaUtils extends TatumSdkExtension {
-  //private readonly kadenaRpc: KadenaRpcInterface
+  private readonly kadenaRpc: KadenaLoadBalancerRpc
   private readonly sdkConfig: TatumConfig
 
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
     this.sdkConfig = this.tatumSdkContainer.getConfig()
-    //this.kadenaRpc = this.tatumSdkContainer.getRpc<KadenaRpcInterface>()
+    this.kadenaRpc = this.tatumSdkContainer.get(KadenaLoadBalancerRpc)
   }
 
   public async mintBasicNFT(uri: string | PactReference, publicKey: string, chainId: ChainId) : Promise<IUnsignedCommand> {
-    const networkId = this.getKadenaNetworkId();
-    const guard : KadenaGuard = this.getGuardFromKey(publicKey)
 
-    const host = `https://api.testnet.chainweb.com/chainweb/0.0/${networkId}/chain/${chainId}/pact`
-    const client = createClient(host);
+    const guard : KadenaGuard = this.getGuardFromKey(publicKey)
+    const {networkId, client} = this.getTatumKadenaClient(chainId);
 
     const createTokenIdCommand = Pact.builder
       .execution(
@@ -84,6 +83,15 @@ export class KadenaUtils extends TatumSdkExtension {
       })
       .setNetworkId(networkId)
       .createTransaction();
+  }
+
+  private getTatumKadenaClient(chainId: ChainId) {
+    const networkId = this.getKadenaNetworkId();
+    const nodeUrl = this.kadenaRpc.getRpcNodeUrl()
+    const host = `${nodeUrl}/chainweb/0.0/${networkId}/chain/${chainId}/pact`
+    console.log(`host: ${host}`)
+    const client = createClient(host);
+    return {networkId, client};
   }
 
   public async burnNFT(id: string, publicKey: string, chainId: ChainId) : Promise<IUnsignedCommand> {
