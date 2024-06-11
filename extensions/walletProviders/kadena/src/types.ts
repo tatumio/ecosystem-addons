@@ -1,9 +1,9 @@
-import { IUnsignedCommand } from "@kadena/client";
+import { IUnsignedCommand } from '@kadena/client'
 
 export type KadenaWallet = {
   address: string
-  publicKey: string;
-  secretKey: string;
+  publicKey: string
+  secretKey: string
 }
 
 export type KadenaTxPayload = {
@@ -15,10 +15,9 @@ export type KadenaTxPayload = {
    * Unsigned command to be broadcasted.
    */
   command: IUnsignedCommand
-
 }
 
 export enum KadenaNetworkId {
   MAINNET = 'mainnet01',
-  TESTNET = 'testnet04'
+  TESTNET = 'testnet04',
 }

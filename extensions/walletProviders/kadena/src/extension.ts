@@ -1,10 +1,10 @@
+import { ChainId, ICommand, createClient, createSignWithKeypair } from '@kadena/client'
+import { restoreKeyPairFromSecretKey } from '@kadena/cryptography-utils'
+import { genKeyPair } from '@kadena/cryptography-utils/lib/genKeyPair'
+import { ICommandPayload } from '@kadena/types'
 import { ITatumSdkContainer, Network, TatumConfig, TatumSdkWalletProvider } from '@tatumio/tatum'
+import { KadenaLoadBalancerRpc } from '@tatumio/tatum/dist/src/service/rpc/other/KadenaLoadBalancerRpc'
 import { KadenaNetworkId, KadenaTxPayload, KadenaWallet } from './types'
-import { genKeyPair } from "@kadena/cryptography-utils/lib/genKeyPair";
-import { restoreKeyPairFromSecretKey } from "@kadena/cryptography-utils";
-import { ChainId, createClient, createSignWithKeypair, ICommand } from "@kadena/client";
-import { ICommandPayload } from "@kadena/types";
-import { KadenaLoadBalancerRpc } from "@tatumio/tatum/dist/src/service/rpc/other/KadenaLoadBalancerRpc";
 
 export class KadenaWalletProvider extends TatumSdkWalletProvider<KadenaWallet, KadenaTxPayload> {
   private readonly kadenaRpc: KadenaLoadBalancerRpc
@@ -24,7 +24,7 @@ export class KadenaWalletProvider extends TatumSdkWalletProvider<KadenaWallet, K
     const keyPair = genKeyPair()
     const address = 'k:' + keyPair.publicKey
 
-    return { address, publicKey: keyPair.publicKey, secretKey: keyPair.secretKey} as KadenaWallet
+    return { address, publicKey: keyPair.publicKey, secretKey: keyPair.secretKey } as KadenaWallet
   }
 
   /**
@@ -39,25 +39,23 @@ export class KadenaWalletProvider extends TatumSdkWalletProvider<KadenaWallet, K
 
     const chainId = payload.meta.chainId
 
-    if(!chainId)
-    {
+    if (!chainId) {
       throw new Error('Chain ID is required to sign and broadcast a Kadena transaction.')
     }
 
-    const { client} = this.getTatumKadenaClient(chainId);
+    const { client } = this.getTatumKadenaClient(chainId)
 
-    const signedCommand = await signWithKeypair(txPayload.command);
+    const signedCommand = await signWithKeypair(txPayload.command)
     const result = await client.submit(signedCommand as ICommand)
     return result.requestKey
   }
 
   private getTatumKadenaClient(chainId: ChainId) {
-    const networkId = this.getKadenaNetworkId();
+    const networkId = this.getKadenaNetworkId()
     const nodeUrl = this.kadenaRpc.getRpcNodeUrl()
     const host = `${nodeUrl}/chainweb/0.0/${networkId}/chain/${chainId}/pact`
-    console.log(`host: ${host}`)
-    const client = createClient(host);
-    return {networkId, client};
+    const client = createClient(host)
+    return { networkId, client }
   }
 
   private getKadenaNetworkId() {
@@ -72,7 +70,7 @@ export class KadenaWalletProvider extends TatumSdkWalletProvider<KadenaWallet, K
       default:
         throw new Error(`Unsupported network: ${this.sdkConfig.network}`)
     }
-    return networkId;
+    return networkId
   }
 
   supportedNetworks: Network[] = [Network.KADENA, Network.KADENA_TESTNET]
