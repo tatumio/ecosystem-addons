@@ -12,9 +12,7 @@
     "@tatumio/hello-world": "^1.0.5",
     "@tatumio/configurable-extension": "^1.0.5",
     "bignumber.js": "^9.1.1",
-    "csv-parser": "^3.0.0",
-    "@types/node": "^20.6.3",
-    "fast-csv": "^4.3.6"
+    "@types/node": "^20.6.3"
   },
   "devDependencies": {
     "ts-node": "^10.9.1",
