@@ -35,29 +35,7 @@ It is built upon popular packages like `@kadena/client`, ensuring a robust and s
 
 ## 🛠️ How to Use
 
-1. **Generate Mnemonic**
-
-   ```typescript
-   const mnemonic = tatumSdk.walletProvider.use(KadenaWalletProvider).generateMnemonic()
-   ```
-
-2. **Generate Private Key from Mnemonic**
-
-   ```typescript
-   const privateKey = await tatumSdk.walletProvider
-     .use(KadenaWalletProvider)
-     .generatePrivateKeyFromMnemonic(mnemonic)
-   ```
-
-3. **Generate Address from Private key**
-
-   ```typescript
-   const address = await tatumSdk.walletProvider
-     .use(KadenaWalletProvider)
-     .generateAddressFromPrivateKey(privateKey)
-   ```
-
-4. **Get Private Key, Address and Mnemonic**
+1. **Get Serret Key, Public Key and Address**
 
    ```typescript
    const { privateKey, address, mnemonic } = await tatumSdk.walletProvider
@@ -65,21 +43,20 @@ It is built upon popular packages like `@kadena/client`, ensuring a robust and s
      .getWallet()
    ```
 
-5. **Sign and Broadcast a Transaction**
+2. **Sign and Broadcast a Transaction**
 
-   Define your payload according to the `EvmTxPayload` type:
+   Define your payload according to the `KadenaTxPayload` type:
 
    ```typescript
    const kadenaTxPayload = {
-        privateKey: privateKey,
-        to: address,
-        amount: 0.1,
+        secretKey: privateKey,
+        command: unsignedCommand
       }
 
    const txHash = await tatumSdk.walletProvider.use(KadenaWalletProvider).signAndBroadcast(kadenaTxPayload)
    ```
 
-Remember to always ensure the safety of mnemonics, private keys, and other sensitive data. Never expose them in client-side code or public repositories.
+Remember to always ensure the safety of private keys and other sensitive data. Never expose them in client-side code or public repositories.
 
 ## 🔗🔗 Supported Networks
 
