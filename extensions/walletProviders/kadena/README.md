@@ -42,6 +42,7 @@ It is built upon popular packages like `@kadena/client`, ensuring a robust and s
      .use(KadenaWalletProvider)
      .getWallet()
    ```
+**Note:** To fully use Kadena Account address it needs to be activated first.
 
 2. **Sign and Broadcast a Transaction**
 

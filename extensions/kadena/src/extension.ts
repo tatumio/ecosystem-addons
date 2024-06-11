@@ -13,7 +13,7 @@ import {
   NFT_BURN_AMOUNT,
   NFT_PRECISION,
 } from './consts'
-import { KadenaGuard, KadenaNetworkId } from './types'
+import { KadenaGuard, KadenaNetworkId, KadenaTransferParams } from './types'
 
 export class KadenaUtils extends TatumSdkExtension {
   private readonly kadenaRpc: KadenaLoadBalancerRpc
@@ -81,16 +81,7 @@ export class KadenaUtils extends TatumSdkExtension {
       .createTransaction()
   }
 
-  private getTatumKadenaClient(chainId: ChainId) {
-    const networkId = this.getKadenaNetworkId()
-    const nodeUrl = this.kadenaRpc.getRpcNodeUrl()
-    const host = `${nodeUrl}/chainweb/0.0/${networkId}/chain/${chainId}/pact`
-    const client = createClient(host)
-    return { networkId, client }
-  }
-
   public async burnNFT(id: string, publicKey: string, chainId: ChainId): Promise<IUnsignedCommand> {
-    const networkId = this.getKadenaNetworkId()
     const guard: KadenaGuard = this.getGuardFromKey(publicKey)
 
     return Pact.builder
@@ -104,8 +95,35 @@ export class KadenaUtils extends TatumSdkExtension {
         chainId: chainId,
         senderAccount: guard.account,
       })
-      .setNetworkId(networkId)
+      .setNetworkId(this.getKadenaNetworkId())
       .createTransaction()
+  }
+
+  public async transferKadena(params: KadenaTransferParams) {
+    return Pact.builder
+      .execution(
+        Pact.modules.coin.transfer(params.senderAccount, params.receiverAccount, { decimal: params.amount }),
+      )
+      .addSigner(params.senderPublicKey, (withCapability) => [
+        withCapability(COIN_GAS_CAPABILITY),
+        withCapability('coin.TRANSFER', params.senderAccount, params.receiverAccount, {
+          decimal: params.amount,
+        }),
+      ])
+      .setMeta({
+        chainId: params.chainId,
+        senderAccount: params.senderAccount,
+      })
+      .setNetworkId(this.getKadenaNetworkId())
+      .createTransaction()
+  }
+
+  private getTatumKadenaClient(chainId: ChainId) {
+    const networkId = this.getKadenaNetworkId()
+    const nodeUrl = this.kadenaRpc.getRpcNodeUrl()
+    const host = `${nodeUrl}/chainweb/0.0/${networkId}/chain/${chainId}/pact`
+    const client = createClient(host)
+    return { networkId, client }
   }
 
   private getGuardFromKey(publicKey: string): KadenaGuard {

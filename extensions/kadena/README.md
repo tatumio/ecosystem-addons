@@ -8,6 +8,7 @@ The Kadena Utilities is designed to bolster the efficiency and security of block
 
 - Minting NFTs on Kadena network
 - Burning NFTs on Kadena network
+- Transferring KDA between accounts
 
 It is built upon popular packages like `@kadena/client`, ensuring a robust, reliable, and secure foundation for all activities.
 
@@ -37,6 +38,35 @@ It is built upon popular packages like `@kadena/client`, ensuring a robust, reli
 ## 🛠️ How to Use
 
 KadenaUtils provides range of methods to streamline Kadena network interactions. Below is a guide on how to utilize these functionalities:
+
+### Transfer KDA:
+
+```typescript
+import { Kadena, Network, TatumSDK } from "@tatumio/tatum";
+import { KadenaUtils } from "@tatum/kadena-utils";
+import { KadenaWalletProvider } from "@tatumio/kadena-wallet-provider";
+
+const tatumSdk = await TatumSDK.init<Kadena>({
+  network: Network.KADENA_TESTNET,
+  configureExtensions: [KadenaUtils],
+  configureWalletProviders: [KadenaWalletProvider]
+  })
+
+const kadenaTransferParams : KadenaTransferParams = {
+  senderAccount: 'your-sender-account',
+  receiverAccount: 'your-receiver-account',
+  amount: '1000000000000000000',
+  senderPublicKey: 'your-sender-public-key',
+  chainId: '1'
+}
+
+const secretKey = 'your-secret-key';
+
+const command = await tatumSdk.extension(KadenaUtils).transferKadena(kadenaTransferParams)
+const txId = await tatumSdk.walletProvider.use(KadenaWalletProvider).signAndBroadcast({command, secretKey})
+
+console.log(txId)
+```
 
 ### Mint NFT:
 

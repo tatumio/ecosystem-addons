@@ -1,4 +1,4 @@
-import { BuiltInPredicate } from '@kadena/client'
+import { BuiltInPredicate, ChainId } from '@kadena/client'
 
 export interface KadenaGuard {
   account: string
@@ -6,6 +6,14 @@ export interface KadenaGuard {
     keys: string[]
     pred: BuiltInPredicate
   }
+}
+
+export interface KadenaTransferParams {
+  senderAccount: string
+  receiverAccount: string
+  amount: string
+  senderPublicKey: string
+  chainId: ChainId
 }
 
 export enum KadenaNetworkId {
