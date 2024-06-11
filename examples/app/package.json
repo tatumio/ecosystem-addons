@@ -8,16 +8,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tatum/kadena-utils": "/Users/piotrsmreczynski/Sandbox/ecosystem-addons/extensions/kadena/tatumio-kadena-utils-v1.0.0.tgz",
-    "@tatumio/kadena-wallet-provider": "/Users/piotrsmreczynski/Sandbox/ecosystem-addons/extensions/walletProviders/kadena/tatumio-kadena-wallet-provider-v1.0.1.tgz",
-    "@tatumio/configurable-extension": "^1.0.5",
+    "@tatumio/tatum": "v4.0.4",
     "@tatumio/hello-world": "^1.0.5",
-    "@tatumio/tatum": "^4.2.32",
-    "@types/node": "^20.6.3",
-    "bignumber.js": "^9.1.1"
+    "@tatumio/configurable-extension": "^1.0.5",
+    "bignumber.js": "^9.1.1",
+    "@types/node": "^20.6.3"
   },
   "devDependencies": {
-    "@kadena/types": "^0.6.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }
