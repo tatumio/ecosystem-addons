@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/kadena-wallet-provider",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Kadena provider with local wallet operations",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/kadena/README.md",

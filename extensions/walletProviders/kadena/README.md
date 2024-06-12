@@ -6,8 +6,7 @@ Kadena Wallet Provider integrates seamlessly with Tatum SDK to provide extended 
 
 The Kadena Wallet Provider provides an array of tools for:
 
-- Generating mnemonics for seed phrases.
-- Generating and deriving private keys and addresses from mnemonics.
+- Generating public and private keys.
 - Signing and broadcasting transactions to the Kadena network.
 
 It is built upon popular packages like `@kadena/client`, ensuring a robust and secure foundation.
