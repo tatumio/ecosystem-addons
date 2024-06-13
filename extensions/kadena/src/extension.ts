@@ -100,16 +100,21 @@ export class KadenaUtils extends TatumSdkExtension {
   }
 
   public async transferKadena(params: KadenaTransferParams) {
+    const guard: KadenaGuard = this.getGuardFromKey(params.receiverPublicKey)
+
     return Pact.builder
       .execution(
-        Pact.modules.coin.transfer(params.senderAccount, params.receiverAccount, { decimal: params.amount }),
+        Pact.modules.coin['transfer-create'](params.senderAccount, guard.account, readKeyset(guard.account), {
+          decimal: params.amount,
+        }),
       )
       .addSigner(params.senderPublicKey, (withCapability) => [
         withCapability(COIN_GAS_CAPABILITY),
-        withCapability('coin.TRANSFER', params.senderAccount, params.receiverAccount, {
+        withCapability('coin.TRANSFER', params.senderAccount, guard.account, {
           decimal: params.amount,
         }),
       ])
+      .addKeyset(guard.account, guard.keyset.pred, ...guard.keyset.keys)
       .setMeta({
         chainId: params.chainId,
         senderAccount: params.senderAccount,
