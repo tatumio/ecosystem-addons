@@ -1,5 +1,12 @@
 import { BuiltInPredicate, ChainId } from '@kadena/client'
 
+export type KadenaChainId = ChainId
+
+export enum KadenaNetworkId {
+  MAINNET = 'mainnet01',
+  TESTNET = 'testnet04',
+}
+
 export interface KadenaGuard {
   account: string
   keyset: {
@@ -10,13 +17,8 @@ export interface KadenaGuard {
 
 export interface KadenaTransferParams {
   senderAccount: string
-  receiverAccount: string
-  amount: string
+  receiverPublicKey: string
   senderPublicKey: string
-  chainId: ChainId
-}
-
-export enum KadenaNetworkId {
-  MAINNET = 'mainnet01',
-  TESTNET = 'testnet04',
+  amount: string
+  chainId: KadenaChainId
 }
