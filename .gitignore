@@ -7,4 +7,5 @@
 .DS_Store
 coverage
 *.log
+*.tgz
 .env
