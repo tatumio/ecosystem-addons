@@ -5,13 +5,12 @@ import { KadenaLoadBalancerRpc } from '@tatumio/tatum/dist/src/service/rpc/other
 import {
   COIN_GAS_CAPABILITY,
   CREATE_TOKEN_ID_POLICIES,
-  MARMALADE_BURN_CAPABILITY,
-  MARMALADE_BURN_POLICY,
   MARMALADE_CREATE_TOKEN_CAPABILITY,
   MARMALADE_MINT_CAPABILITY,
   NFT_AMOUNT,
   NFT_BURN_AMOUNT,
   NFT_PRECISION,
+  NULL_BURN_ADDRESS,
 } from './consts'
 import { KadenaGuard, KadenaNetworkId, KadenaTransferParams } from './types'
 
@@ -84,6 +83,9 @@ export class KadenaUtils extends TatumSdkExtension {
   public async burnNFT(id: string, publicKey: string, chainId: ChainId): Promise<IUnsignedCommand> {
     const guard: KadenaGuard = this.getGuardFromKey(publicKey)
 
+    // Marmalade team don’t allow burning of tokens created with the non-fungible-policy,
+    // this is being discussed now and if they ever decide to allow it this way of burning NFTs will be better
+    /*
     return Pact.builder
       .execution(Pact.modules['marmalade-v2.ledger'].burn(id, guard.account, NFT_BURN_AMOUNT))
       .addSigner(guard.keyset.keys, (signFor) => [
@@ -91,6 +93,36 @@ export class KadenaUtils extends TatumSdkExtension {
         signFor(MARMALADE_BURN_CAPABILITY, id, guard.account, NFT_BURN_AMOUNT),
         signFor(MARMALADE_BURN_POLICY, id, guard.account, NFT_BURN_AMOUNT),
       ])
+      .setMeta({
+        chainId: chainId,
+        senderAccount: guard.account,
+      })
+      .setNetworkId(this.getKadenaNetworkId())
+      .createTransaction()
+    */
+
+    return Pact.builder
+      .execution(
+        Pact.modules['marmalade-v2.ledger']['transfer-create'](
+          id,
+          guard.account,
+          () => '(create-principal (read-keyset "ks"))',
+          readKeyset('ks'),
+          NFT_BURN_AMOUNT,
+        ),
+      )
+      .addSigner(guard.keyset.keys, (signFor) => [
+        signFor(COIN_GAS_CAPABILITY),
+        signFor('marmalade-v2.ledger.TRANSFER', id, guard.account, NULL_BURN_ADDRESS, NFT_BURN_AMOUNT),
+        signFor(
+          'marmalade-v2.guard-policy-v1.TRANSFER',
+          id,
+          guard.account,
+          NULL_BURN_ADDRESS,
+          NFT_BURN_AMOUNT,
+        ),
+      ])
+      .addKeyset('ks', 'keys-all', ...[])
       .setMeta({
         chainId: chainId,
         senderAccount: guard.account,
