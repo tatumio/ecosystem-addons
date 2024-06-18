@@ -9,7 +9,8 @@ import {
   MARMALADE_MINT_CAPABILITY,
   NFT_AMOUNT,
   NFT_BURN_AMOUNT,
-  NFT_PRECISION, NULL_BURN_ADDRESS,
+  NFT_PRECISION,
+  NULL_BURN_ADDRESS,
 } from './consts'
 import { KadenaGuard, KadenaNetworkId, KadenaTransferParams } from './types'
 
