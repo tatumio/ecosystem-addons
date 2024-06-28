@@ -8,4 +8,4 @@ export const MARMALADE_CREATE_TOKEN_CAPABILITY = 'marmalade-v2.ledger.CREATE-TOK
 export const MARMALADE_MINT_CAPABILITY = 'marmalade-v2.ledger.MINT'
 export const MARMALADE_BURN_CAPABILITY = 'marmalade-v2.ledger.BURN'
 export const MARMALADE_BURN_POLICY = 'marmalade-v2.guard-policy-v1.BURN'
-export const NULL_BURN_ADDRESS = 'w:DldRwCblQ7Loqy6wYJnaodHl30d3j3eH-qtFzfEv46g:keys-all'
+export const NULL_BURN_ADDRESS= 'u:marmalade-v2.guard-policy-v1.failure:DldRwCblQ7Loqy6wYJnaodHl30d3j3eH-qtFzfEv46g'
