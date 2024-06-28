@@ -106,8 +106,8 @@ export class KadenaUtils extends TatumSdkExtension {
         Pact.modules['marmalade-v2.ledger']['transfer-create'](
           id,
           guard.account,
-          () => '(create-principal (read-keyset "ks"))',
-          readKeyset('ks'),
+          () => '(create-principal marmalade-v2.guard-policy-v1.GUARD_FAILURE)',
+          () => 'marmalade-v2.guard-policy-v1.GUARD_FAILURE',
           NFT_BURN_AMOUNT,
         ),
       )
@@ -122,7 +122,6 @@ export class KadenaUtils extends TatumSdkExtension {
           NFT_BURN_AMOUNT,
         ),
       ])
-      .addKeyset('ks', 'keys-all', ...[])
       .setMeta({
         chainId: chainId,
         senderAccount: guard.account,
