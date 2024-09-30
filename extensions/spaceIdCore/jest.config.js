@@ -7,6 +7,7 @@ module.exports = {
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest"
   },
+  transformIgnorePatterns: ['node_modules/(?!(@web3-name-sdk/core)/)'],
   testTimeout: 30000,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts']
 }

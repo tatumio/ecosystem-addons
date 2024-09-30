@@ -24,8 +24,13 @@
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx -f json && prettier --write src/",
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",
+    "test": "jest",
     "build": "node_modules/.bin/tsc -p tsconfig.json",
     "build-all": "yarn clean && yarn build"
+  },
+  "dependencies": {
+    "@web3-name-sdk/core": "^0.2.0",
+    "viem": "^1.20"
   },
   "devDependencies": {
     "@tatumio/tatum": "^4.2.42",
