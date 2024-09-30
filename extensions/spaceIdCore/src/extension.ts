@@ -1,19 +1,24 @@
-import { ITatumSdkContainer, Network, TatumConfig, TatumSdkExtension } from '@tatumio/tatum'
+import { ITatumSdkContainer, Network, TatumSdkExtension } from '@tatumio/tatum'
+import { LoadBalancer } from '@tatumio/tatum/dist/src/service/rpc/generic/LoadBalancer'
 
 import { TEST } from './consts'
 import { Test } from './types'
 
 export class SpaceIdCore extends TatumSdkExtension {
-  private readonly sdkConfig: TatumConfig
+  private readonly loadBalancer: LoadBalancer
 
   constructor(tatumSdkContainer: ITatumSdkContainer) {
     super(tatumSdkContainer)
-    this.sdkConfig = this.tatumSdkContainer.getConfig()
+    this.loadBalancer = this.tatumSdkContainer.get(LoadBalancer)
   }
 
   public test(): Test {
-    console.log(this.sdkConfig)
+    console.log(this.getRpcUrl())
     return { test: TEST }
+  }
+
+  private getRpcUrl() {
+    return this.loadBalancer.getRpcNodeUrl()
   }
 
   supportedNetworks: Network[] = [Network.ETHEREUM]
