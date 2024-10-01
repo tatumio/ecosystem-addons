@@ -1,8 +1,10 @@
 import { Ethereum, Network, TatumSDK } from '@tatumio/tatum'
+
 import { SpaceIdCore } from './extension'
 
-const ETH_NAME = 'bitgetwallet.eth'
 const ETH_ADDR = '0x5228BC5B84754f246Fc7265787511ae9C0afEBC5'
+const ETH_NAME = 'bitgetwallet.eth'
+const NEW_NAME = 'tatumrandomtest'
 
 describe('SPACE ID Core', () => {
   let tatumSdk: Ethereum
@@ -12,8 +14,6 @@ describe('SPACE ID Core', () => {
       network: Network.ETHEREUM,
       configureExtensions: [SpaceIdCore],
       quiet: true,
-      // TODO: for testing purposes, should be removed later
-      rpc: { nodes: [{ url: 'https://eth.public-rpc.com', type: 0 }] },
     })
   })
 
@@ -40,6 +40,27 @@ describe('SPACE ID Core', () => {
     it('should fetch metadata by domain name', async () => {
       const result = await tatumSdk.extension(SpaceIdCore).getMetadata(ETH_NAME)
       expect(result?.name).toBe(ETH_NAME)
+    })
+  })
+
+  // in order to run these tests, private key needs to be provided
+  describe.skip('Registration Integration', () => {
+    const privateKey = ''
+
+    it('should check availability of the domain name', async () => {
+      const result = await tatumSdk.extension(SpaceIdCore).isDomainAvailable(NEW_NAME, privateKey)
+      expect(result).toBe(true)
+    })
+
+    it('should query registration fee of the domain', async () => {
+      const result = await tatumSdk.extension(SpaceIdCore).getRegistrationFee(NEW_NAME, 1, privateKey)
+      expect(result?.gt(0)).toBe(true)
+    })
+
+    it('should fail to register new domain due to unavailability', async () => {
+      const name = ETH_NAME.replace('.eth', 'copy')
+      const result = await tatumSdk.extension(SpaceIdCore).registerDomain(name, 1, privateKey)
+      expect(result).toBe(false)
     })
   })
 })

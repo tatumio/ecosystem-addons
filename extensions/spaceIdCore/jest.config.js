@@ -1,15 +1,11 @@
 export default {
   roots: ['<rootDir>/src'],
-  testMatch: [
-    "**/__tests__/**/*.+(ts|tsx|js)",
-    "**/?(*.)+(spec|test).+(ts|tsx|js)"
-  ],
+  testMatch: ['**/__tests__/**/*.+(ts|tsx|js)', '**/?(*.)+(spec|test).+(ts|tsx|js)'],
   transform: {
-    "^.+\\.(ts|tsx)$": ["ts-jest", { useESM: true }],
+    '^.+\\.(ts|tsx)$': ['ts-jest', { useESM: true }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(@web3-name-sdk/core)/)'],
+  transformIgnorePatterns: ['node_modules/(?!(@web3-name-sdk/core|@web3-name-sdk/register)/)'],
   testTimeout: 30000,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  extensionsToTreatAsEsm: ['.ts']
+  extensionsToTreatAsEsm: ['.ts'],
 }
-
