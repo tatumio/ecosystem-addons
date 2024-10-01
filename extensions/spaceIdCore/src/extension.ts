@@ -2,6 +2,8 @@ import { EVM_BASED_NETWORKS, ITatumSdkContainer, Network, TatumSdkExtension } fr
 import { LoadBalancer } from '@tatumio/tatum/dist/src/service/rpc/generic/LoadBalancer'
 import { createWeb3Name } from '@web3-name-sdk/core'
 
+import { GetDomainNameOptionalProps } from './types'
+
 export class SpaceIdCore extends TatumSdkExtension {
   private readonly loadBalancer: LoadBalancer
 
@@ -10,18 +12,29 @@ export class SpaceIdCore extends TatumSdkExtension {
     this.loadBalancer = this.tatumSdkContainer.get(LoadBalancer)
   }
 
-  public async getAddressFrom(name: string) {
+  public async getAddress(name: string) {
     const web3name = createWeb3Name()
     return web3name.getAddress(name, this.getSpaceIdConfig())
   }
 
-  public async getNameFrom(address: string) {
+  public async getDomainName(address: string, optional?: GetDomainNameOptionalProps) {
     const web3name = createWeb3Name()
-    return web3name.getDomainName({ address, ...this.getSpaceIdConfig() })
+    return web3name.getDomainName({ address, ...optional, ...this.getSpaceIdConfig() })
+  }
+
+  public async getDomainRecord(name: string, key: string) {
+    const web3name = createWeb3Name()
+    return web3name.getDomainRecord({ name, key, ...this.getSpaceIdConfig() })
+  }
+
+  public async getMetadata(name: string) {
+    const web3name = createWeb3Name()
+    return web3name.getMetadata({ name, ...this.getSpaceIdConfig() })
   }
 
   private getSpaceIdConfig() {
-    return { rpcUrl: this.loadBalancer.getRpcNodeUrl() }
+    const rpcUrl = this.loadBalancer.getRpcNodeUrl()
+    return { rpcUrl }
   }
 
   supportedNetworks: Network[] = EVM_BASED_NETWORKS

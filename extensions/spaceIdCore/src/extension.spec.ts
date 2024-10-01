@@ -1,6 +1,9 @@
 import { Ethereum, Network, TatumSDK } from '@tatumio/tatum'
 import { SpaceIdCore } from './extension'
 
+const ETH_NAME = 'bitgetwallet.eth'
+const ETH_ADDR = '0x5228BC5B84754f246Fc7265787511ae9C0afEBC5'
+
 describe('SPACE ID Core', () => {
   let tatumSdk: Ethereum
 
@@ -8,7 +11,9 @@ describe('SPACE ID Core', () => {
     tatumSdk = await TatumSDK.init({
       network: Network.ETHEREUM,
       configureExtensions: [SpaceIdCore],
-      verbose: true,
+      quiet: true,
+      // TODO: for testing purposes, should be removed later
+      rpc: { nodes: [{ url: 'https://eth.public-rpc.com', type: 0 }] },
     })
   })
 
@@ -16,19 +21,25 @@ describe('SPACE ID Core', () => {
     await tatumSdk.destroy()
   })
 
-  describe('Get address from domain name', () => {
+  describe('Web3 Name SDK', () => {
     it('should resolve address from domain name', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).getAddressFrom('spaceid.bnb')
-      expect(result).toBe('0xb5932a6b7d50a966aec6c74c97385412fb497540')
+      const result = await tatumSdk.extension(SpaceIdCore).getAddress(ETH_NAME)
+      expect(result).toBe(ETH_ADDR)
     })
-  })
 
-  describe('Get domain name from address', () => {
     it('should resolve domain name from address', async () => {
-      const result = await tatumSdk
-        .extension(SpaceIdCore)
-        .getNameFrom('0x2886D6792503e04b19640C1f1430d23219AF177F')
-      expect(result).toBe('lydia.gno')
+      const result = await tatumSdk.extension(SpaceIdCore).getDomainName(ETH_ADDR, { queryChainIdList: [1] })
+      expect(result).toBe(ETH_NAME)
+    })
+
+    it('should fetch text record by domain name and key', async () => {
+      const result = await tatumSdk.extension(SpaceIdCore).getDomainRecord(ETH_NAME, 'avatar')
+      expect(result).toContain(ETH_NAME)
+    })
+
+    it('should fetch metadata by domain name', async () => {
+      const result = await tatumSdk.extension(SpaceIdCore).getMetadata(ETH_NAME)
+      expect(result?.name).toBe(ETH_NAME)
     })
   })
 })
