@@ -1,27 +1,27 @@
-import { Ethereum, Network, TatumSDK } from '@tatumio/tatum'
+import { Network, TatumSDK, TatumSdkChain } from '@tatumio/tatum'
 
 import { SpaceIdCore } from './extension'
 
-const ETH_ADDR = '0x5228BC5B84754f246Fc7265787511ae9C0afEBC5'
-const ETH_NAME = 'bitgetwallet.eth'
-const NEW_NAME = 'tatumrandomtest'
-
 describe('SPACE ID Core', () => {
-  let tatumSdk: Ethereum
+  let tatumSdk: TatumSdkChain
 
-  beforeAll(async () => {
-    tatumSdk = await TatumSDK.init({
-      network: Network.ETHEREUM,
-      configureExtensions: [SpaceIdCore],
-      quiet: true,
+  describe('Web3 Name SDK (Ethereum)', () => {
+    const ETH_ADDR = '0x5228BC5B84754f246Fc7265787511ae9C0afEBC5'
+    const ETH_NAME = 'bitgetwallet.eth'
+
+    beforeAll(async () => {
+      tatumSdk = await TatumSDK.init({
+        network: Network.ETHEREUM,
+        configureExtensions: [SpaceIdCore],
+        quiet: true,
+        rpc: { nodes: [{ url: 'https://eth.public-rpc.com', type: 0 }] }, // TODO: remove later
+      })
     })
-  })
 
-  afterAll(async () => {
-    await tatumSdk.destroy()
-  })
+    afterAll(async () => {
+      await tatumSdk.destroy()
+    })
 
-  describe('Web3 Name SDK', () => {
     it('should resolve address from domain name', async () => {
       const result = await tatumSdk.extension(SpaceIdCore).getAddress(ETH_NAME)
       expect(result).toBe(ETH_ADDR)
@@ -43,23 +43,63 @@ describe('SPACE ID Core', () => {
     })
   })
 
-  // in order to run these tests, private key needs to be provided
-  describe.skip('Registration Integration', () => {
-    const privateKey = ''
+  describe('Web3 Name SDK (Solana)', () => {
+    beforeAll(async () => {
+      tatumSdk = await TatumSDK.init({
+        network: Network.SOLANA,
+        configureExtensions: [SpaceIdCore],
+        quiet: true,
+        rpc: { nodes: [{ url: 'https://api.mainnet-beta.solana.com', type: 0 }] }, // TODO: remove later
+      })
+    })
+
+    afterAll(async () => {
+      await tatumSdk.destroy()
+    })
+
+    it('should resolve address from domain name', async () => {
+      const result = await tatumSdk.extension(SpaceIdCore).getAddress('coinshares')
+      expect(result?.toString()).toBe('6gjFy9Gp3mMN8uTLtfAyMmxdDfUe74YTo8cUTDXJtBUH')
+    })
+
+    it('should resolve domain name from address', async () => {
+      const result = await tatumSdk
+        .extension(SpaceIdCore)
+        .getDomainName('Crf8hzfthWGbGbLTVCiqRqV5MVnbpHB1L9KQMd6gsinb')
+      expect(result).toBe('bonfida')
+    })
+  })
+
+  describe('Registration Integration (Binance)', () => {
+    const PRIV_KEY = process.env.PRIVATE_KEY_FOR_TESTS || ''
+    const BSC_NAME = 'spaceid'
+    const NEW_NAME = 'tatumrandomtest'
+
+    beforeAll(async () => {
+      tatumSdk = await TatumSDK.init({
+        network: Network.BINANCE_SMART_CHAIN,
+        configureExtensions: [SpaceIdCore],
+        quiet: true,
+        rpc: { nodes: [{ url: 'https://binance.llamarpc.com', type: 0 }] }, // TODO: remove later
+      })
+    })
+
+    afterAll(async () => {
+      await tatumSdk.destroy()
+    })
 
     it('should check availability of the domain name', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).isDomainAvailable(NEW_NAME, privateKey)
+      const result = await tatumSdk.extension(SpaceIdCore).isDomainAvailable(NEW_NAME, PRIV_KEY)
       expect(result).toBe(true)
     })
 
     it('should query registration fee of the domain', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).getRegistrationFee(NEW_NAME, 1, privateKey)
+      const result = await tatumSdk.extension(SpaceIdCore).getRegistrationFee(NEW_NAME, 1, PRIV_KEY)
       expect(result?.gt(0)).toBe(true)
     })
 
     it('should fail to register new domain due to unavailability', async () => {
-      const name = ETH_NAME.replace('.eth', 'copy')
-      const result = await tatumSdk.extension(SpaceIdCore).registerDomain(name, 1, privateKey)
+      const result = await tatumSdk.extension(SpaceIdCore).registerDomain(BSC_NAME, 1, PRIV_KEY)
       expect(result).toBe(false)
     })
   })

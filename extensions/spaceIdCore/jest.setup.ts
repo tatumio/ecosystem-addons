@@ -1,4 +1,7 @@
-import { fetch, Headers } from 'undici';
+import dotenv from 'dotenv'
+import { fetch, Headers } from 'undici'
+
+dotenv.config()
 
 // @ts-ignore
 global.fetch = fetch

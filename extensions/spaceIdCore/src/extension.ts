@@ -1,7 +1,9 @@
 import {
   EVM_BASED_NETWORKS,
+  isSolanaNetwork,
   ITatumSdkContainer,
   Network,
+  SOLANA_NETWORKS,
   TatumConfig,
   TatumSdkExtension,
 } from '@tatumio/tatum'
@@ -9,6 +11,7 @@ import { LoadBalancer } from '@tatumio/tatum/dist/src/service/rpc/generic/LoadBa
 import { NetworkUtils } from '@tatumio/tatum/dist/src/util/network.utils'
 
 import { createWeb3Name } from '@web3-name-sdk/core'
+import { createSolName } from '@web3-name-sdk/core/solName'
 import SIDRegister, { SupportedChainId } from '@web3-name-sdk/register'
 import { ethers } from 'ethers'
 
@@ -25,23 +28,31 @@ export class SpaceIdCore extends TatumSdkExtension {
   }
 
   public async getAddress(name: string) {
-    const web3name = createWeb3Name()
-    return web3name.getAddress(name, this.getSpaceIdConfig())
+    if (isSolanaNetwork(this.sdkConfig.network)) {
+      return createSolName().getAddress({ name })
+    }
+    return createWeb3Name().getAddress(name, this.getSpaceIdConfig())
   }
 
   public async getDomainName(address: string, optional?: GetDomainNameOptionalProps) {
-    const web3name = createWeb3Name()
-    return web3name.getDomainName({ address, ...optional, ...this.getSpaceIdConfig() })
+    if (isSolanaNetwork(this.sdkConfig.network)) {
+      return createSolName().getDomainName({ address })
+    }
+    return createWeb3Name().getDomainName({ address, ...optional, ...this.getSpaceIdConfig() })
   }
 
   public async getDomainRecord(name: string, key: string) {
-    const web3name = createWeb3Name()
-    return web3name.getDomainRecord({ name, key, ...this.getSpaceIdConfig() })
+    if (isSolanaNetwork(this.sdkConfig.network)) {
+      throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
+    }
+    return createWeb3Name().getDomainRecord({ name, key, ...this.getSpaceIdConfig() })
   }
 
   public async getMetadata(name: string) {
-    const web3name = createWeb3Name()
-    return web3name.getMetadata({ name, ...this.getSpaceIdConfig() })
+    if (isSolanaNetwork(this.sdkConfig.network)) {
+      throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
+    }
+    return createWeb3Name().getMetadata({ name, ...this.getSpaceIdConfig() })
   }
 
   public async isDomainAvailable(name: string, privateKey: string) {
@@ -100,5 +111,5 @@ export class SpaceIdCore extends TatumSdkExtension {
     return { client: new SIDRegister({ signer, chainId }), address: await signer.getAddress() }
   }
 
-  supportedNetworks: Network[] = EVM_BASED_NETWORKS
+  supportedNetworks: Network[] = [...EVM_BASED_NETWORKS, ...SOLANA_NETWORKS]
 }
