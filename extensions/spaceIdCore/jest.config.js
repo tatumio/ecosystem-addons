@@ -4,7 +4,6 @@ export default {
   transform: {
     '^.+\\.(ts|tsx)$': ['ts-jest', { useESM: true }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(@web3-name-sdk/core|@web3-name-sdk/register)/)'],
   testTimeout: 30000,
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   extensionsToTreatAsEsm: ['.ts'],

@@ -1,7 +1,7 @@
 {
   "name": "@tatumio/space-id-core",
-  "type": "module",
   "version": "1.0.0",
+  "type": "module",
   "description": "SPACE ID Core by Tatum",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/spaceIdCore/README.md",
@@ -19,21 +19,25 @@
     "node": ">=18.0.0"
   },
   "main": "dist/main.js",
-  "types": "./dist/main.d.ts",
+  "module": "dist/main.mjs",
+  "typings": "dist/main.d.ts",
+  "types": "dist/main.d.ts",
   "scripts": {
     "cli": "ts-node src/cli.ts",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx -f json && prettier --write src/",
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "build": "node_modules/.bin/tsc -p tsconfig.json",
+    "build": "tsup-node src/main.ts --tsconfig tsconfig.json --format cjs,esm --dts",
     "build-all": "yarn clean && yarn build"
   },
   "dependencies": {
     "@web3-name-sdk/core": "^0.2.0",
     "@web3-name-sdk/register": "^0.0.2-beta.2",
-    "ethers": "5.7.2",
-    "viem": "^2.21.16"
+    "ethers": "5.7.2"
+  },
+  "peerDependencies": {
+    "viem": "^2.15.1"
   },
   "devDependencies": {
     "@tatumio/tatum": "^4.2.42",
@@ -49,7 +53,9 @@
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.2",
     "tslib": "^2.5.0",
+    "tsup": "^8.3.0",
     "typescript": "^5.4.5",
-    "undici": "^5.21.0"
+    "undici": "^5.21.0",
+    "viem": "^2.15.1"
   }
 }

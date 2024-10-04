@@ -12,7 +12,7 @@ The SPACE ID Core extension integrates seamlessly with Tatum SDK to provide core
 
 1. **Installation**
 
-   Firstly, ensure that the `@tatumio/space-id-core` package is set as a dependency within your project. Next, import the SPACE ID extension:
+   Firstly, ensure that `viem` and the `@tatumio/space-id-core` package is set as a dependency within your project. Next, import the SPACE ID extension:
 
    ```typescript
    import { SpaceIdCore } from '@tatumio/space-id-core';
