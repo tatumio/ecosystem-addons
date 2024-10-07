@@ -4,6 +4,7 @@ import { SpaceIdCore } from './extension'
 
 describe('SPACE ID Core', () => {
   let tatumSdk: TatumSdkChain
+  const privateKey = process.env.PRIVATE_KEY_FOR_TESTS || ''
 
   describe('Web3 Name SDK (Ethereum)', () => {
     const ETH_ADDR = '0x5228BC5B84754f246Fc7265787511ae9C0afEBC5'
@@ -71,7 +72,6 @@ describe('SPACE ID Core', () => {
   })
 
   describe('Registration Integration (Binance)', () => {
-    const PRIV_KEY = process.env.PRIVATE_KEY_FOR_TESTS || ''
     const BSC_NAME = 'spaceid'
     const NEW_NAME = 'tatumrandomtest'
 
@@ -80,7 +80,7 @@ describe('SPACE ID Core', () => {
         network: Network.BINANCE_SMART_CHAIN,
         configureExtensions: [SpaceIdCore],
         quiet: true,
-        rpc: { nodes: [{ url: 'https://binance.llamarpc.com', type: 0 }] }, // TODO: remove later
+        rpc: { nodes: [{ url: 'https://bsc-rpc.publicnode.com', type: 0 }] }, // TODO: remove later
       })
     })
 
@@ -89,17 +89,17 @@ describe('SPACE ID Core', () => {
     })
 
     it('should check availability of the domain name', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).isDomainAvailable(NEW_NAME, PRIV_KEY)
+      const result = await tatumSdk.extension(SpaceIdCore).isDomainAvailable(NEW_NAME, privateKey)
       expect(result).toBe(true)
     })
 
     it('should query registration fee of the domain', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).getRegistrationFee(NEW_NAME, 1, PRIV_KEY)
+      const result = await tatumSdk.extension(SpaceIdCore).getRegistrationFee(NEW_NAME, 1, privateKey)
       expect(result?.gt(0)).toBe(true)
     })
 
     it('should fail to register new domain due to unavailability', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).registerDomain(BSC_NAME, 1, PRIV_KEY)
+      const result = await tatumSdk.extension(SpaceIdCore).registerDomain(BSC_NAME, 1, privateKey)
       expect(result).toBe(false)
     })
   })
