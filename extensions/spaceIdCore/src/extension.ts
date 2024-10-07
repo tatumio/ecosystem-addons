@@ -31,28 +31,28 @@ export class SpaceIdCore extends TatumSdkExtension {
     if (isSolanaNetwork(this.sdkConfig.network)) {
       return createSolName().getAddress({ name })
     }
-    return createWeb3Name().getAddress(name, this.getSpaceIdConfig())
+    return createWeb3Name().getAddress(name)
   }
 
   public async getDomainName(address: string, optional?: GetDomainNameOptionalProps) {
     if (isSolanaNetwork(this.sdkConfig.network)) {
       return createSolName().getDomainName({ address })
     }
-    return createWeb3Name().getDomainName({ address, ...optional, ...this.getSpaceIdConfig() })
+    return createWeb3Name().getDomainName({ address, ...optional })
   }
 
   public async getDomainRecord(name: string, key: string) {
     if (isSolanaNetwork(this.sdkConfig.network)) {
       throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
     }
-    return createWeb3Name().getDomainRecord({ name, key, ...this.getSpaceIdConfig() })
+    return createWeb3Name().getDomainRecord({ name, key })
   }
 
   public async getMetadata(name: string) {
     if (isSolanaNetwork(this.sdkConfig.network)) {
       throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
     }
-    return createWeb3Name().getMetadata({ name, ...this.getSpaceIdConfig() })
+    return createWeb3Name().getMetadata({ name })
   }
 
   public async isDomainAvailable(name: string, privateKey: string) {
@@ -93,9 +93,11 @@ export class SpaceIdCore extends TatumSdkExtension {
     return false
   }
 
-  private getSpaceIdConfig() {
-    const rpcUrl = this.loadBalancer.getRpcNodeUrl()
-    return { rpcUrl }
+  private getApiKey() {
+    if (this.sdkConfig.apiKey && typeof this.sdkConfig.apiKey !== 'string') {
+      return this.sdkConfig.apiKey.v4 || this.sdkConfig.apiKey.v3 || ''
+    }
+    return this.sdkConfig.apiKey || ''
   }
 
   private async getRegisterClient(privateKey: string) {
@@ -106,7 +108,10 @@ export class SpaceIdCore extends TatumSdkExtension {
       throw new Error(`[SpaceIdCore] Domain registration not supported for selected chain`)
     }
 
-    const provider = new ethers.providers.JsonRpcProvider(this.loadBalancer.getRpcNodeUrl(), chainId)
+    const provider = new ethers.providers.JsonRpcProvider(
+      { url: this.loadBalancer.getRpcNodeUrl(), headers: { 'x-api-key': this.getApiKey() } },
+      chainId,
+    )
     const signer = new ethers.Wallet(privateKey, provider)
     return { client: new SIDRegister({ signer, chainId }), address: await signer.getAddress() }
   }

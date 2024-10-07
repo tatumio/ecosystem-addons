@@ -5,6 +5,11 @@ import { SpaceIdCore } from './extension'
 describe('SPACE ID Core', () => {
   let tatumSdk: TatumSdkChain
   const privateKey = process.env.PRIVATE_KEY_FOR_TESTS || ''
+  const config = {
+    apiKey: process.env.TATUM_KEY_FOR_TESTS,
+    configureExtensions: [SpaceIdCore],
+    quiet: true,
+  }
 
   describe('Web3 Name SDK (Ethereum)', () => {
     const ETH_ADDR = '0x5228BC5B84754f246Fc7265787511ae9C0afEBC5'
@@ -12,10 +17,8 @@ describe('SPACE ID Core', () => {
 
     beforeAll(async () => {
       tatumSdk = await TatumSDK.init({
+        ...config,
         network: Network.ETHEREUM,
-        configureExtensions: [SpaceIdCore],
-        quiet: true,
-        rpc: { nodes: [{ url: 'https://eth.public-rpc.com', type: 0 }] }, // TODO: remove later
       })
     })
 
@@ -47,10 +50,8 @@ describe('SPACE ID Core', () => {
   describe('Web3 Name SDK (Solana)', () => {
     beforeAll(async () => {
       tatumSdk = await TatumSDK.init({
+        ...config,
         network: Network.SOLANA,
-        configureExtensions: [SpaceIdCore],
-        quiet: true,
-        rpc: { nodes: [{ url: 'https://api.mainnet-beta.solana.com', type: 0 }] }, // TODO: remove later
       })
     })
 
@@ -77,10 +78,8 @@ describe('SPACE ID Core', () => {
 
     beforeAll(async () => {
       tatumSdk = await TatumSDK.init({
+        ...config,
         network: Network.BINANCE_SMART_CHAIN,
-        configureExtensions: [SpaceIdCore],
-        quiet: true,
-        rpc: { nodes: [{ url: 'https://bsc-rpc.publicnode.com', type: 0 }] }, // TODO: remove later
       })
     })
 
