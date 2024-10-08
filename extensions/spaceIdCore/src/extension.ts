@@ -15,7 +15,7 @@ import { createSolName } from '@web3-name-sdk/core/solName'
 import SIDRegister, { SupportedChainId } from '@web3-name-sdk/register'
 import { ethers } from 'ethers'
 
-import { GetDomainNameOptionalProps } from './types'
+import { CommonOptionalProps, GetAddressOptionalProps, GetDomainNameOptionalProps } from './types'
 
 export class SpaceIdCore extends TatumSdkExtension {
   private readonly loadBalancer: LoadBalancer
@@ -27,11 +27,11 @@ export class SpaceIdCore extends TatumSdkExtension {
     this.sdkConfig = this.tatumSdkContainer.getConfig()
   }
 
-  public async getAddress(name: string) {
+  public async getAddress(name: string, optional?: GetAddressOptionalProps) {
     if (isSolanaNetwork(this.sdkConfig.network)) {
       return createSolName().getAddress({ name })
     }
-    return createWeb3Name().getAddress(name)
+    return createWeb3Name().getAddress(name, optional)
   }
 
   public async getDomainName(address: string, optional?: GetDomainNameOptionalProps) {
@@ -41,18 +41,29 @@ export class SpaceIdCore extends TatumSdkExtension {
     return createWeb3Name().getDomainName({ address, ...optional })
   }
 
-  public async getDomainRecord(name: string, key: string) {
-    if (isSolanaNetwork(this.sdkConfig.network)) {
-      throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
-    }
-    return createWeb3Name().getDomainRecord({ name, key })
+  public async getDomainNames(address: string, optional?: GetDomainNameOptionalProps) {
+    this.validateIfNotSolana()
+    return createWeb3Name().getDomainNames({ address, ...optional })
   }
 
-  public async getMetadata(name: string) {
-    if (isSolanaNetwork(this.sdkConfig.network)) {
-      throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
-    }
-    return createWeb3Name().getMetadata({ name })
+  public async getDomainNameBatch(addresses: string[], optional?: GetDomainNameOptionalProps) {
+    this.validateIfNotSolana()
+    return createWeb3Name().batchGetDomainName({ addressList: addresses, ...optional })
+  }
+
+  public async getDomainRecord(name: string, key: string, optional?: CommonOptionalProps) {
+    this.validateIfNotSolana()
+    return createWeb3Name().getDomainRecord({ name, key, ...optional })
+  }
+
+  public async getMetadata(name: string, optional?: CommonOptionalProps) {
+    this.validateIfNotSolana()
+    return createWeb3Name().getMetadata({ name, ...optional })
+  }
+
+  public async getContentHash(name: string, optional?: CommonOptionalProps) {
+    this.validateIfNotSolana()
+    return createWeb3Name().getContentHash({ name, ...optional })
   }
 
   public async isDomainAvailable(name: string, privateKey: string) {
@@ -91,6 +102,12 @@ export class SpaceIdCore extends TatumSdkExtension {
     }
     console.error(`[SpaceIdCore] Domain ${name} is unavailable`)
     return false
+  }
+
+  private validateIfNotSolana() {
+    if (isSolanaNetwork(this.sdkConfig.network)) {
+      throw new Error(`[SpaceIdCore] Method not supported for selected chain`)
+    }
   }
 
   private getApiKey() {
