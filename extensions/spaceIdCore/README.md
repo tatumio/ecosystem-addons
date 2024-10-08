@@ -4,9 +4,10 @@ The SPACE ID Core extension integrates seamlessly with Tatum SDK to provide core
 
 ## 📖 Description
 
-...
+The SPACE ID Core extension aims to bring the [Web3 Name SDK](https://docs.space.id) to Tatum, providing developers with a multi-chain name service to easily build and create a web3 identity without any blockchain knowledge due to the integration with Tatum RPC services and libraries.
 
-- ...
+- [Web3 Name SDK Core](https://docs.space.id/developer-guide/web3-name-sdk/web3-name-sdk): The extension supports various reading methods for discovering already existing domains (e.g. getting domain name by address or vice versa) and their metadata (e.g. avatar or hash content).
+- [Registration Integration](https://docs.space.id/developer-guide/registration-integration): The extension also supports registering a new domain along with all the related utils (e.g. finding out if the domain is available in the first place or querying the registration fee of the domain).
 
 ## 🚀 Quick Start
 
@@ -24,34 +25,98 @@ The SPACE ID Core extension integrates seamlessly with Tatum SDK to provide core
 
    ```typescript
     const tatumSdk = await TatumSDK.init<Ethereum>({
-        network: Network.ETHEREUM_MAINNET,
-        configureExtensions: [
-            SpaceIdCore,
-        ]
+      network: Network.ETHEREUM,
+      configureExtensions: [SpaceIdCore]
     })
    ```
 
 ## 🛠️ How to Use
 
-The SPACE ID Core provides methods to ...
+The SPACE ID Core extension provides most [Web3 Name SDK Core](https://docs.space.id/developer-guide/web3-name-sdk/web3-name-sdk) and [Registration](https://docs.space.id/developer-guide/registration-integration) methods. It should therefore be possible to use almost anything mentioned in the SPACE ID docs with only minimal changes.
 
-### Example:
+### Get address by domain name example:
 
 ```typescript
-import { Ethereum, Network, TatumSDK } from "@tatumio/tatum";
-import { SpaceIdCore } from "@tatum/space-id-core";
+import { TatumSDK, Network, Solana } from "@tatumio/tatum";
+import { SpaceIdCore } from "@tatumio/space-id-core";
 
-const tatumSdk = await TatumSDK.init<Ethereum>({
+const tatum = await TatumSDK.init<Solana>({
+  network: Network.SOLANA,
+  configureExtensions: [SpaceIdCore],
+  apiKey: ****,
+});
+
+try {
+  const result = await tatum.extension(SpaceIdCore).getAddress("spaceid");
+  console.log(result);
+} catch (e) {
+  console.error(e);
+}
+
+tatum.destroy();
+```
+
+### Get domain name by address example:
+
+```typescript
+import { TatumSDK, Network, Ethereum } from "@tatumio/tatum";
+import { SpaceIdCore } from "@tatumio/space-id-core";
+
+const tatum = await TatumSDK.init<Ethereum>({
   network: Network.ETHEREUM,
-  configureExtensions: [SpaceIdCore]
-})
+  configureExtensions: [SpaceIdCore],
+  apiKey: ****,
+});
 
-...
+try {
+  const result = await tatum
+    .extension(SpaceIdCore)
+    .getDomainName("0x5228BC5B84754f246Fc7265787511ae9C0afEBC5");
+  console.log(result);
+} catch (e) {
+  console.error(e);
+}
+
+tatum.destroy();
+```
+
+### Register a new domain example:
+
+```typescript
+import { TatumSDK, Network, ArbitrumOne } from "@tatumio/tatum";
+import { SpaceIdCore } from "@tatumio/space-id-core";
+
+const tatum = await TatumSDK.init<ArbitrumOne>({
+  network: Network.ARBITRUM_ONE,
+  configureExtensions: [SpaceIdCore],
+  apiKey: ****,
+});
+const privateKey = ****
+
+try {
+  await tatum.extension(SpaceIdCore).registerDomain('spaceid', 1, privateKey)
+} catch (e) {
+  console.error(e);
+}
+
+tatum.destroy();
 ```
 
 ## 🔗🔗 Supported Networks
 
+The extension is partially supported for most EVM chains and even Solana. However, different methods have different support as detailed below.
+
+### Web3 Name SDK Core
+
+Methods for getting address by domain name and vice versa are supported on most EVM chains (e.g. `Network.ETHEREUM`) and Solana (`Network.SOLANA`). However, every other method such as getting domain metadata is currently **NOT** available on Solana.
+
+### Registration Integration
+
+Registration of new domain and all the utilities around it as detailed above are supported on all chains both SPACE ID and Tatum currently supports:
+
 ```typescript
 Network.ETHEREUM,
-...
+Network.ARBITRUM_ONE,
+Network.BINANCE_SMART_CHAIN,
+Network.BINANCE_SMART_CHAIN_TESTNET
 ```
