@@ -1,7 +1,6 @@
 {
   "name": "@tatumio/space-id-core",
   "version": "1.0.0",
-  "type": "module",
   "description": "SPACE ID Core by Tatum",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/spaceIdCore/README.md",
