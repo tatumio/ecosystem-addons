@@ -104,19 +104,28 @@ tatum.destroy();
 
 ## 🔗🔗 Supported Networks
 
-The extension is partially supported for most EVM chains and even Solana. However, different methods have different support as detailed below.
-
-### Web3 Name SDK Core
-
-Methods for getting address by domain name and vice versa are supported on most EVM chains (e.g. `Network.ETHEREUM`) and Solana (`Network.SOLANA`). However, every other method such as getting domain metadata is currently **NOT** available on Solana.
-
-### Registration Integration
-
-Registration of new domain and all the utilities around it as detailed above are supported on all chains both SPACE ID and Tatum currently supports:
+The extension can be initialized on the following chains:
 
 ```typescript
 Network.ETHEREUM,
 Network.ARBITRUM_ONE,
 Network.BINANCE_SMART_CHAIN,
-Network.BINANCE_SMART_CHAIN_TESTNET
+Network.GNOSIS,
+Network.SOLANA,
+```
+
+However, different methods have different support as detailed below.
+
+### Web3 Name SDK Core
+
+Methods for getting address by domain name and vice versa are supported on all the chains listed above. However, every other method such as getting domain metadata is currently **NOT** available on Solana (`Network.SOLANA`).
+
+### Registration Integration
+
+Registration of new domain and all the utilities around it as detailed above are supported on the following chains:
+
+```typescript
+Network.ETHEREUM,
+Network.ARBITRUM_ONE,
+Network.BINANCE_SMART_CHAIN,
 ```

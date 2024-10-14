@@ -86,7 +86,7 @@ describe('SPACE ID Core', () => {
     })
 
     it('should resolve address from domain name', async () => {
-      const result = await tatumSdk.extension(SpaceIdCore).getAddress('coinshares')
+      const result = await tatumSdk.extension(SpaceIdCore).getAddress('coinshares.sol')
       expect(result?.toString()).toBe('6gjFy9Gp3mMN8uTLtfAyMmxdDfUe74YTo8cUTDXJtBUH')
     })
 

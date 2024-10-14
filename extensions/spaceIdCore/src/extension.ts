@@ -1,12 +1,4 @@
-import {
-  EVM_BASED_NETWORKS,
-  isSolanaNetwork,
-  ITatumSdkContainer,
-  Network,
-  SOLANA_NETWORKS,
-  TatumConfig,
-  TatumSdkExtension,
-} from '@tatumio/tatum'
+import { isSolanaNetwork, ITatumSdkContainer, Network, TatumConfig, TatumSdkExtension } from '@tatumio/tatum'
 import { LoadBalancer } from '@tatumio/tatum/dist/src/service/rpc/generic/LoadBalancer'
 import { NetworkUtils } from '@tatumio/tatum/dist/src/util/network.utils'
 
@@ -118,7 +110,7 @@ export class SpaceIdCore extends TatumSdkExtension {
   }
 
   private async getRegisterClient(privateKey: string) {
-    const supportedChainIds: SupportedChainId[] = [1, 56, 42161, 97, 421613]
+    const supportedChainIds: SupportedChainId[] = [1, 56, 97]
     const chainId = NetworkUtils.getChainId(this.sdkConfig.network) as SupportedChainId
 
     if (!supportedChainIds.includes(chainId)) {
@@ -133,5 +125,11 @@ export class SpaceIdCore extends TatumSdkExtension {
     return { client: new SIDRegister({ signer, chainId }), address: await signer.getAddress() }
   }
 
-  supportedNetworks: Network[] = [...EVM_BASED_NETWORKS, ...SOLANA_NETWORKS]
+  supportedNetworks: Network[] = [
+    Network.ETHEREUM,
+    Network.ARBITRUM_ONE,
+    Network.BINANCE_SMART_CHAIN,
+    Network.GNOSIS,
+    Network.SOLANA,
+  ]
 }
