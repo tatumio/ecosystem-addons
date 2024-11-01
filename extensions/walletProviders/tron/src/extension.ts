@@ -1,7 +1,7 @@
 import { ITatumSdkContainer, Network, TatumSdkWalletProvider } from '@tatumio/tatum'
 import { BIP32Factory, BIP32Interface } from 'bip32'
 import { generateMnemonic, mnemonicToSeed } from 'bip39'
-import * as ecc from 'tiny-secp256k1'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import { TRON_DERIVATION_PATH } from './consts'
 import {
   TronTransactionHeaderInfo,
