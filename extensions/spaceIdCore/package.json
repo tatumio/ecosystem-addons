@@ -1,7 +1,8 @@
 {
   "name": "@tatumio/space-id-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SPACE ID Core by Tatum",
+  "type": "module",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/spaceIdCore/README.md",
   "files": [
@@ -17,8 +18,8 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "main": "dist/main.js",
-  "module": "dist/main.mjs",
+  "main": "dist/main.cjs",
+  "module": "dist/main.js",
   "typings": "dist/main.d.ts",
   "types": "dist/main.d.ts",
   "scripts": {
@@ -27,12 +28,12 @@
     "clean": "rm -rf dist build package",
     "ts-node": "ts-node",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "build": "tsup-node src/main.ts --tsconfig tsconfig.json --format cjs,esm --dts",
+    "build": "tsup-node",
     "build-all": "yarn clean && yarn build"
   },
   "dependencies": {
-    "@bonfida/spl-name-service": "^3.0.3",
-    "@solana/web3.js": "^1.95.3",
+    "@bonfida/spl-name-service": "^3.0.6",
+    "@solana/web3.js": "^1.95.4",
     "@web3-name-sdk/core": "^0.2.0",
     "@web3-name-sdk/register": "^0.0.2-beta.2",
     "ethers": "5.7.2"
@@ -41,6 +42,7 @@
     "viem": "^2.15.1"
   },
   "devDependencies": {
+    "@swc/core": "^1.8.0",
     "@tatumio/tatum": "^4.2.42",
     "@types/elliptic": "^6.4.15",
     "@types/jest": "^29.5.5",
