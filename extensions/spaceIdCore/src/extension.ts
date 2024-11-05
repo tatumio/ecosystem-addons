@@ -4,7 +4,7 @@ import { NetworkUtils } from '@tatumio/tatum/dist/src/util/network.utils'
 
 import { createWeb3Name } from '@web3-name-sdk/core'
 import { createSolName } from '@web3-name-sdk/core/solName'
-import SIDRegister, { SupportedChainId } from '@web3-name-sdk/register'
+import { SIDRegister, SupportedChainId } from '@web3-name-sdk/register'
 import { ethers } from 'ethers'
 
 import { CommonOptionalProps, GetAddressOptionalProps, GetDomainNameOptionalProps } from './types'
