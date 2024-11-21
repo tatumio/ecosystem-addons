@@ -20,7 +20,7 @@ import { PrivateKey as DogePrivateKey, Script as DogeScript, Transaction as Doge
 // @ts-ignore
 import { PrivateKey as LtcPrivateKey, Script as LtcScript, Transaction as LtcTransaction, } from 'bitcore-lib-ltc'
 import ECPairFactory from 'ecpair'
-import * as ecc from 'tiny-secp256k1'
+import * as ecc from '@bitcoinerlab/secp256k1'
 import {
   BtcBasedTransaction,
   DogeUTXO,

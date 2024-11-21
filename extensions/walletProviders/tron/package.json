@@ -1,6 +1,6 @@
 {
   "name": "@tatumio/tron-wallet-provider",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Tron provider with local wallet operations",
   "author": "Tatum",
   "repository": "https://github.com/tatumio/ecosystem-addons/blob/master/extensions/walletProviders/tron/README.md",
@@ -35,7 +35,7 @@
   "dependencies": {
     "bip39": "^3.1.0",
     "bip32": "^4.0.0",
-    "tiny-secp256k1": "^2.2.3",
+    "@bitcoinerlab/secp256k1": "^1.1.1",
     "tronweb": "^5.3.0"
   },
   "devDependencies": {
