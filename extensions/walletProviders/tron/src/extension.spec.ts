@@ -88,7 +88,7 @@ describe('TronWalletProvider', () => {
   describe('signAndBroadcast', () => {
     it('should sign and broadcast transaction', async () => {
       const payload = {
-        fromPrivateKey: privateKey,
+        privateKey,
         to: address,
         amount: '0.001',
       }

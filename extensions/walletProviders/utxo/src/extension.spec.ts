@@ -27,6 +27,7 @@ describe('UtxoWalletProvider', () => {
       expect(result.split(' ')).toHaveLength(24)
     })
   })
+
   describe('generateXpub', () => {
     it('should generate xpub', async () => {
       const result = await tatumSdk.walletProvider.use(UtxoWalletProvider).generateXpub()
