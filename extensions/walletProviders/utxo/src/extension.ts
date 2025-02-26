@@ -137,7 +137,7 @@ export class UtxoWalletProvider extends TatumSdkWalletProvider<UtxoWallet, UtxoT
   /**
    * Generates an address from a given private key.
    * @param {string} privateKey - The private key in string format.
-   * @returns {string} An Ethereum address in string format.
+   * @returns {string} An UTXO address in string format.
    */
   public generateAddressFromPrivateKey(privateKey: string): string {
     const pubkey = ECPair.fromWIF(privateKey, getNetworkConfig(this.sdkConfig.network)).publicKey
